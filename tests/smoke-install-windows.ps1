@@ -11,6 +11,19 @@ function Assert-True([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw "FAIL: $Message" }
 }
 try {
+    $validHome = $env:CODEX_HOME
+    foreach ($invalid in @('C:CodexHome', '\CodexHome', 'relative/path')) {
+        $env:CODEX_HOME = $invalid
+        $rejected = $false
+        try { & $installer -Action install -DryRun | Out-Null } catch {
+            $rejected = $_.Exception.Message -eq 'CODEX_HOME must be an absolute Windows path.'
+        }
+        Assert-True $rejected "accepted non-absolute path: $invalid"
+    }
+    $env:CODEX_HOME = $validHome
+    foreach ($file in @('scripts/install-linux.sh', 'tests/smoke-install-linux.sh', 'visual-design-review/SKILL.md')) {
+        Assert-True (-not ([IO.File]::ReadAllText((Join-Path $repo $file))).Contains([string][char]13)) "CRLF in Linux input: $file"
+    }
     & $installer -Action install -DryRun | Out-Null
     Assert-True (-not (Test-Path -LiteralPath $env:CODEX_HOME)) 'dry-run wrote to filesystem'
     & $installer -Action install | Out-Null

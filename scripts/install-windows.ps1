@@ -11,7 +11,7 @@ if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
 }
 $source = Join-Path (Split-Path -Parent $PSScriptRoot) 'visual-design-review'
 $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }
-if (-not [IO.Path]::IsPathRooted($codexHome)) { throw 'CODEX_HOME must be an absolute Windows path.' }
+if ($codexHome -notmatch '^(?:[A-Za-z]:[\\/]|[\\/]{2}[^\\/]+[\\/][^\\/]+(?:[\\/]|$))') { throw 'CODEX_HOME must be an absolute Windows path.' }
 $skillsRoot = Join-Path $codexHome 'skills'
 $target = Join-Path $skillsRoot 'visual-design-review'
 $backupsRoot = Join-Path $codexHome 'skill-backups/visual-design-review'

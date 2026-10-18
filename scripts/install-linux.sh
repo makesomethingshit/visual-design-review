@@ -25,7 +25,7 @@ target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
-  local root="$1" path
+  local root="$1" path links
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
   [[ "$(head -n 1 "$root/SKILL.md")" == '---' ]] || return 1
   awk 'NR > 1 && $0 == "---" { found=1; exit } END { exit !found }' "$root/SKILL.md" || return 1
@@ -33,7 +33,8 @@ check_layout() {
   grep -qx 'metadata:' "$root/SKILL.md" || return 1
   grep -Eq '^[[:space:]]+version: "[^"]+"$' "$root/SKILL.md" || return 1
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
-  [[ -z "$(find "$root" -type l -print -quit)" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }
+  links="$(find "$root" -type l -print -quit)" || return 1
+  [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }
   [[ -f "$root/references/review-protocol.md" && -f "$root/references/critique-rubric.md" ]] || return 1
   while IFS= read -r path; do
     [[ -f "$root/$path" ]] || { echo "Broken reference: $path" >&2; return 1; }
@@ -41,16 +42,20 @@ check_layout() {
 }
 
 file_list() {
-  (cd -- "$1" && find . -type f -printf '%P\n' | LC_ALL=C sort)
+  (cd -- "$1" && find . -type f -print | sed 's|^./||' | LC_ALL=C sort)
 }
 same_tree() {
-  local rel
+  local rel left_files right_files left_hash right_hash
   [[ -d "$2" && ! -L "$2" ]] || return 1
   check_layout "$2" || return 1
-  diff -q <(file_list "$1") <(file_list "$2") >/dev/null || return 1
+  left_files="$(file_list "$1")" || return 1
+  right_files="$(file_list "$2")" || return 1
+  [[ -n "$left_files" && "$left_files" == "$right_files" ]] || return 1
   while IFS= read -r rel; do
-    [[ "$(sha256sum "$1/$rel" | cut -d' ' -f1)" == "$(sha256sum "$2/$rel" | cut -d' ' -f1)" ]] || return 1
-  done < <(file_list "$1")
+    left_hash="$(sha256sum "$1/$rel")" || return 1
+    right_hash="$(sha256sum "$2/$rel")" || return 1
+    [[ "${left_hash%% *}" == "${right_hash%% *}" ]] || return 1
+  done <<< "$left_files"
 }
 backup_name() {
   printf '%s/%s.%s.%s' "$backups_dir" "$(date -u +%Y%m%dT%H%M%SZ)" "$$" "$RANDOM"
