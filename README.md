@@ -4,7 +4,21 @@
 
 ## Codex에서 사용
 
-`visual-design-review/` 폴더를 `$CODEX_HOME/skills/`에 복사하세요. CODEX_HOME이 없으면 사용자 홈의 `.codex/skills/`를 사용합니다. 기존 동명 폴더는 먼저 비교·백업하세요. 프로젝트 지침을 수정하거나 의존성을 설치할 필요가 없습니다.
+Windows 네이티브와 WSL/Linux의 설치·업데이트·검증·백업·제거 절차는 [전역 설치 가이드](docs/INSTALL.md)를 따릅니다. 설치 전에 dry-run으로 변경 범위를 확인하고, 설치 후 원본과 설치본의 파일 목록·SHA-256을 검증할 수 있습니다. CODEX_HOME이 없다면 현재 실행 환경의 사용자 홈에 있는 `.codex/skills/`를 사용합니다. 프로젝트 지침을 수정하거나 새 의존성을 설치하지 않습니다.
+
+```powershell
+# Windows PowerShell
+.\scripts\install-windows.ps1 -Action install -DryRun
+.\scripts\install-windows.ps1 -Action install
+.\scripts\install-windows.ps1 -Action check
+```
+
+```bash
+# WSL/Linux
+bash scripts/install-linux.sh install --dry-run
+bash scripts/install-linux.sh install
+bash scripts/install-linux.sh check
+```
 
 새 Codex 세션에서 다음처럼 호출합니다.
 
