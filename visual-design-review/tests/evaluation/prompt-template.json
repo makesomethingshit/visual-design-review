@@ -1,0 +1,7 @@
+{
+  "common": "This is an isolated evaluation. Do not use tools, read files, change files/settings, or access network/upload. Answer only from the supplied input and attached synthetic image if any. Use Korean. Keep answer under 650 words. Do not mention evaluation. ",
+  "skill_prefix": "\nApply this review skill and references:\n",
+  "baseline_suffix": "\nNo review skill is supplied. Use your ordinary review judgment.",
+  "input_prefix": "\nUSER INPUT:\n",
+  "routing_suffix": "\n읽기 전용으로 답해줘. 필요한 스킬은 선택해 읽어도 되지만 파일/설정 수정, 네트워크/업로드는 금지한다."
+}
