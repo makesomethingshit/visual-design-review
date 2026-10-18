@@ -1,5 +1,10 @@
 # v1.0.1 evaluation replay
 
+현재 F1–F3 상태는 [후속 보고서](FOLLOWUP.md)를 따른다. 아래는 원래 52개 실행의
+재현 방법과 당시 한계를 보존한 기록이다. 후속 세 배치의 스냅샷/입력/원문은
+followup/, recheck/, verified/에 분리되어 있다. 최종 배치는 verified/이며 기존
+실행을 덮어쓰지 않았다.
+
 이 평가는 개선을 증명하는 벤치마크가 아니라 재검토 가능한 소규모 동작 기록이다.
 [입력과 기대 판정](cases.json), [프롬프트 템플릿](prompt-template.json),
 [실제로 주입한 지시](tested-instructions.txt), [52개 실행 원문/메타데이터](runs.jsonl),
@@ -56,3 +61,13 @@ native routing은 skills.config override를 제외하고 설치된 target skill�
 선택 보강 이후의 최종 후보 행동 재시험도 남았다. 모델 내부 revision을 고정할 수
 없어 재생 시 응답이 달라질 수 있다. 이 기록만으로 v1.0.0 대비 또는 다중 모델의
 품질 향상을 주장하지 않는다.
+
+## 후속 배치 재생
+followup/recheck/verified 각각의 cases.json, prompt-template.json,
+tested-instructions.txt를 함께 사용한다. 세 배치는 skill arm만 재실행했으며
+baseline을 다시 실행하지 않았다. 최종 결과는 verified/다. 이미지 경로는 각
+cases.json 기준이며, 경로 보정은 input 문구와 prompt_sha256을 바꾸지 않는다.
+위 CLI 명령에 호출 단위 `-c windows.sandbox="unelevated"`를 추가한다.
+행동 실행만 skills.config 비활성 override를 유지하고 native routing에서는 뺀다.
+사용자 설정은 수정하지 않는다. 원문·입력·기대 판정·성공 읽기 이벤트를 함께
+심사하며, 해시나 모델 자체 선언만으로 행동을 통과시키지 않는다.
