@@ -43,6 +43,8 @@ Main reviewer read all eight raw responses. A separate read-only agent also comp
 eight with the cases and synthetic PNG; no writes, new model executions, or network
 access were delegated. Its adjudication agrees on these scoped outcomes. This is an
 agent-assisted judgment, not a human-user study or proof of general quality improvement.
+A further read-only report-consistency audit was stopped without a final response;
+it adds no validation evidence.
 
 Remaining differences: F uses Major in repeat 1 and Critical in repeat 2. Detection is
 stable, exact severity is not. Both G responses distinguish RGB compliance from visual
