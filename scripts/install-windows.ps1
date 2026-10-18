@@ -14,6 +14,7 @@ $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.c
 if (-not [IO.Path]::IsPathRooted($codexHome)) { throw 'CODEX_HOME must be an absolute Windows path.' }
 $skillsRoot = Join-Path $codexHome 'skills'
 $target = Join-Path $skillsRoot 'visual-design-review'
+$backupsRoot = Join-Path $codexHome 'skill-backups/visual-design-review'
 
 function Assert-Layout([string]$Root) {
     if (-not (Test-Path -LiteralPath $Root -PathType Container)) { throw "Missing directory: $Root" }
@@ -66,7 +67,7 @@ function Test-SameTree([string]$Left, [string]$Right) {
 }
 function New-BackupName {
     $stamp = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
-    return "$target.backup.$stamp.$PID.$([guid]::NewGuid().ToString('N').Substring(0, 6))"
+    return Join-Path $backupsRoot "$stamp.$PID.$([guid]::NewGuid().ToString('N').Substring(0, 6))"
 }
 
 Assert-Layout $source
@@ -85,6 +86,7 @@ switch ($Action) {
         if (-not (Test-Path -LiteralPath $target)) { Write-Output 'Already absent; nothing changed.'; break }
         $backup = New-BackupName
         if ($DryRun) { Write-Output "DRY RUN: would move installed skill to $backup"; break }
+        New-Item -ItemType Directory -Path $backupsRoot -Force | Out-Null
         Move-Item -LiteralPath $target -Destination $backup
         Write-Output "Removed from active skills; preserved at $backup"
     }
@@ -105,6 +107,7 @@ switch ($Action) {
             if (-not (Test-SameTree $source $stage)) { throw 'Staging verification failed.' }
             if (Test-Path -LiteralPath $target) {
                 $backup = New-BackupName
+                New-Item -ItemType Directory -Path $backupsRoot -Force | Out-Null
                 Move-Item -LiteralPath $target -Destination $backup
             }
             try {

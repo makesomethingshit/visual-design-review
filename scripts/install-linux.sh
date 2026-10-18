@@ -22,6 +22,7 @@ codex_home="${CODEX_HOME:-${HOME:?}/.codex}"
 [[ "$codex_home" == /* ]] || { echo 'CODEX_HOME must be an absolute Linux path.' >&2; exit 2; }
 skills_dir="$codex_home/skills"
 target="$skills_dir/visual-design-review"
+backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
   local root="$1" path
@@ -52,7 +53,7 @@ same_tree() {
   done < <(file_list "$1")
 }
 backup_name() {
-  printf '%s.backup.%s.%s.%s' "$target" "$(date -u +%Y%m%dT%H%M%SZ)" "$$" "$RANDOM"
+  printf '%s/%s.%s.%s' "$backups_dir" "$(date -u +%Y%m%dT%H%M%SZ)" "$$" "$RANDOM"
 }
 
 check_layout "$source_dir" || { echo 'Source package structure is invalid.' >&2; exit 1; }
@@ -68,6 +69,7 @@ case "$action" in
     if [[ ! -e "$target" ]]; then echo 'Already absent; nothing changed.'; exit 0; fi
     backup="$(backup_name)"
     if $dry_run; then echo "DRY RUN: would move installed skill to $backup"; exit 0; fi
+    mkdir -p -- "$backups_dir"
     mv -- "$target" "$backup"
     echo "Removed from active skills; preserved at $backup"
     ;;
@@ -87,6 +89,7 @@ case "$action" in
     backup=''
     if [[ -e "$target" ]]; then
       backup="$(backup_name)"
+      mkdir -p -- "$backups_dir"
       mv -- "$target" "$backup"
     fi
     if mv -- "$stage" "$target"; then

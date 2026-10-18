@@ -6,6 +6,7 @@ $previous = $env:CODEX_HOME
 $work = Join-Path ([IO.Path]::GetTempPath()) ('vdr-smoke-' + [guid]::NewGuid().ToString('N'))
 $env:CODEX_HOME = Join-Path $work 'custom-home'
 $target = Join-Path $env:CODEX_HOME 'skills/visual-design-review'
+$backupsRoot = Join-Path $env:CODEX_HOME 'skill-backups/visual-design-review'
 function Assert-True([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw "FAIL: $Message" }
 }
@@ -22,15 +23,23 @@ try {
     Assert-True ((Get-Content -LiteralPath (Join-Path $target 'SKILL.md') -Tail 1) -eq 'local-change') 'dry-run changed existing files'
     & $installer -Action install | Out-Null
     & $installer -Action check | Out-Null
-    $backups = @(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Directory -Filter 'visual-design-review.backup.*')
+    $backups = @(Get-ChildItem -LiteralPath $backupsRoot -Directory)
     Assert-True ($backups.Count -eq 1) 'update backup missing'
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq 1) 'duplicate skill after update'
     Assert-True ((Get-Content -LiteralPath (Join-Path $backups[0].FullName 'SKILL.md') -Tail 1) -eq 'local-change') 'backup lost local edit'
     & $installer -Action remove -DryRun | Out-Null
     Assert-True (Test-Path -LiteralPath $target) 'remove dry-run changed files'
     & $installer -Action remove | Out-Null
     Assert-True (-not (Test-Path -LiteralPath $target)) 'removed skill still active'
-    $backups = @(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Directory -Filter 'visual-design-review.backup.*')
+    $backups = @(Get-ChildItem -LiteralPath $backupsRoot -Directory)
     Assert-True ($backups.Count -eq 2) 'removal backup missing'
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq 0) 'backup discoverable after remove'
+    $restore = @($backups | Where-Object { (Get-Content -LiteralPath (Join-Path $_.FullName 'SKILL.md') -Tail 1) -ne 'local-change' })
+    Assert-True ($restore.Count -eq 1) 'removal backup ambiguous'
+    Move-Item -LiteralPath $restore[0].FullName -Destination $target
+    & $installer -Action check | Out-Null
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq 1) 'restored skill not unique'
+    & $installer -Action remove | Out-Null
     $checkFailed = $false
     try { & $installer -Action check | Out-Null } catch { $checkFailed = $true }
     Assert-True $checkFailed 'check succeeded after remove'
