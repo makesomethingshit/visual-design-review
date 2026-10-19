@@ -1,0 +1,2 @@
+*.sh text eol=lf
+visual-design-review/**/*.md text eol=lf
