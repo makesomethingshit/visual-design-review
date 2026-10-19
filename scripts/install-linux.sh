@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Linux/WSL only. No network access, no package installation.
+# Linux/WSL/macOS. No network access, no package installation.
 set -euo pipefail
 
 usage() {
@@ -15,11 +15,14 @@ for arg in "$@"; do
     *) usage; exit 2 ;;
   esac
 done
-[[ "$(uname -s)" == Linux ]] || { echo 'Use install-windows.ps1 on native Windows.' >&2; exit 2; }
+case "$(uname -s)" in
+  Linux|Darwin) ;;
+  *) echo 'Supported environments: Linux/WSL/macOS.' >&2; exit 2 ;;
+esac
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 source_dir="$(cd -- "$script_dir/../visual-design-review" && pwd -P)"
 codex_home="${CODEX_HOME:-${HOME:?}/.codex}"
-[[ "$codex_home" == /* ]] || { echo 'CODEX_HOME must be an absolute Linux path.' >&2; exit 2; }
+[[ "$codex_home" == /* ]] || { echo 'CODEX_HOME must be an absolute Unix path.' >&2; exit 2; }
 skills_dir="$codex_home/skills"
 target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
@@ -41,6 +44,13 @@ check_layout() {
   done < <(grep -oE '\]\(references/[^)#]+\.md\)' "$root/SKILL.md" | sed -E 's/^\]\((.*)\)$/\1/' || true)
 }
 
+hash_file() {
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$1"
+  else
+    shasum -a 256 "$1"
+  fi
+}
 file_list() {
   (cd -- "$1" && find . -type f -print | sed 's|^./||' | LC_ALL=C sort)
 }
@@ -52,8 +62,8 @@ same_tree() {
   right_files="$(file_list "$2")" || return 1
   [[ -n "$left_files" && "$left_files" == "$right_files" ]] || return 1
   while IFS= read -r rel; do
-    left_hash="$(sha256sum "$1/$rel")" || return 1
-    right_hash="$(sha256sum "$2/$rel")" || return 1
+    left_hash="$(hash_file "$1/$rel")" || return 1
+    right_hash="$(hash_file "$2/$rel")" || return 1
     [[ "${left_hash%% *}" == "${right_hash%% *}" ]] || return 1
   done <<< "$left_files"
 }
