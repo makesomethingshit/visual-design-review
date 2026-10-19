@@ -21,7 +21,7 @@ try {
         Assert-True $rejected "accepted non-absolute path: $invalid"
     }
     $env:CODEX_HOME = $validHome
-    foreach ($file in @('scripts/install-linux.sh', 'tests/smoke-install-linux.sh', 'visual-design-review/SKILL.md')) {
+    foreach ($file in @('scripts/install-linux.sh', 'tests/smoke-install-linux.sh', 'tests/smoke-install-macos.sh', 'visual-design-review/SKILL.md')) {
         Assert-True (-not ([IO.File]::ReadAllText((Join-Path $repo $file))).Contains([string][char]13)) "CRLF in Linux input: $file"
     }
     & $installer -Action install -DryRun | Out-Null
@@ -56,7 +56,35 @@ try {
     $checkFailed = $false
     try { & $installer -Action check | Out-Null } catch { $checkFailed = $true }
     Assert-True $checkFailed 'check succeeded after remove'
-    Write-Output 'PASS: Windows dry-run, custom home, install, SHA check, idempotence, backup, remove'
+    # Force activation and rollback to fail; the backup path must be reported.
+    & $installer -Action install | Out-Null
+    Add-Content -LiteralPath (Join-Path $target 'SKILL.md') -Value 'rollback-test' -Encoding UTF8
+    $rollbackWarnings = @()
+    function Move-Item {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory)][string]$LiteralPath,
+            [Parameter(Mandatory)][string]$Destination
+        )
+        if ($LiteralPath -like '*.visual-design-review.stage.*') { throw 'injected activation failure' }
+        if ($LiteralPath -like '*skill-backups*' -and $Destination -eq $target) { throw 'injected rollback failure' }
+        Microsoft.PowerShell.Management\Move-Item -LiteralPath $LiteralPath -Destination $Destination
+    }
+    $installFailed = $false
+    try {
+        & $installer -Action install -WarningVariable rollbackWarnings -WarningAction Continue | Out-Null
+    } catch {
+        $installFailed = $true
+    }
+    if (Test-Path Function:\Move-Item) { Remove-Item Function:\Move-Item }
+    Assert-True $installFailed 'injected activation/rollback failure reported success'
+    $stuck = @(Get-ChildItem -LiteralPath $backupsRoot -Directory | Where-Object {
+        (Get-Content -LiteralPath (Join-Path $_.FullName 'SKILL.md') -Tail 1) -eq 'rollback-test'
+    })
+    Assert-True ($stuck.Count -eq 1) 'rollback backup not found'
+    Assert-True (($rollbackWarnings -join ' ') -match [regex]::Escape($stuck[0].FullName)) 'rollback backup path not reported'
+    Assert-True (-not (Test-Path -LiteralPath $target)) 'failed rollback left an active target'
+    Write-Output 'PASS: Windows dry-run, custom home, install, SHA check, idempotence, backup, remove, rollback'
 } finally {
     $env:CODEX_HOME = $previous
     if (Test-Path -LiteralPath $work) { Remove-Item -LiteralPath $work -Recurse -Force }

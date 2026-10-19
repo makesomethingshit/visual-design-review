@@ -28,20 +28,21 @@ target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
-  local root="$1" path links
+  local root="$1" path links skill_text
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
-  [[ "$(head -n 1 "$root/SKILL.md")" == '---' ]] || return 1
-  awk 'NR > 1 && $0 == "---" { found=1; exit } END { exit !found }' "$root/SKILL.md" || return 1
-  grep -qx 'name: visual-design-review' "$root/SKILL.md" || return 1
-  grep -qx 'metadata:' "$root/SKILL.md" || return 1
-  grep -Eq '^[[:space:]]+version: "[^"]+"$' "$root/SKILL.md" || return 1
+  skill_text="$(tr -d '\r' < "$root/SKILL.md")" || return 1
+  [[ "$(printf '%s\n' "$skill_text" | head -n 1)" == '---' ]] || return 1
+  printf '%s\n' "$skill_text" | awk 'NR > 1 && $0 == "---" { found=1; exit } END { exit !found }' || return 1
+  printf '%s\n' "$skill_text" | grep -qx 'name: visual-design-review' || return 1
+  printf '%s\n' "$skill_text" | grep -qx 'metadata:' || return 1
+  printf '%s\n' "$skill_text" | grep -Eq '^[[:space:]]+version: "[^"]+"$' || return 1
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
   links="$(find "$root" -type l -print -quit)" || return 1
   [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }
   [[ -f "$root/references/review-protocol.md" && -f "$root/references/critique-rubric.md" ]] || return 1
   while IFS= read -r path; do
     [[ -f "$root/$path" ]] || { echo "Broken reference: $path" >&2; return 1; }
-  done < <(grep -oE '\]\(references/[^)#]+\.md\)' "$root/SKILL.md" | sed -E 's/^\]\((.*)\)$/\1/' || true)
+  done < <(printf '%s\n' "$skill_text" | grep -oE '\]\(references/[^)#]+\.md\)' | sed -E 's/^\]\((.*)\)$/\1/' || true)
 }
 
 hash_file() {
@@ -100,7 +101,7 @@ case "$action" in
       exit 0
     fi
     mkdir -p -- "$skills_dir"
-    stage="$(mktemp -d "$skills_dir/.visual-design-review.stage.XXXXXXXX")"
+    stage="$(mktemp -d "$codex_home/.visual-design-review.stage.XXXXXXXX")"
     trap 'if [[ -n "${stage:-}" && -d "$stage" ]]; then rm -rf -- "$stage"; fi' EXIT
     cp -a -- "$source_dir/." "$stage/"
     same_tree "$source_dir" "$stage" || { echo 'Staging verification failed.' >&2; exit 1; }

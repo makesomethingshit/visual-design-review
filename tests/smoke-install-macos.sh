@@ -13,7 +13,7 @@ bash "$root/tests/smoke-install-linux.sh"
 # Force the shasum fallback using native commands only, even if sha256sum is installed.
 native_bin="$sandbox/native-bin"
 mkdir "$native_bin"
-for name in awk bash cat chmod cp date dirname find grep head ln mkdir mktemp mv rm sed shasum sort tail uname wc; do
+for name in awk bash cat chmod cp date dirname find grep head ln mkdir mktemp mv rm sed shasum sort tail tr uname wc; do
   command_path=''
   for dir in /usr/bin /bin /usr/sbin /sbin; do
     if [[ -x "$dir/$name" ]]; then command_path="$dir/$name"; break; fi
@@ -50,7 +50,7 @@ if PATH="$sandbox/fault-bin:$native_bin" /bin/bash "$installer" install >"$sandb
 fi
 grep -q 'Attempting rollback' "$sandbox/rollback.log" || fail 'rollback branch did not execute'
 /usr/bin/cmp "$sandbox/expected-skill.md" "$target/SKILL.md" || fail 'rollback lost local edit'
-[[ -z "$(find "$CODEX_HOME/skills" -name '.visual-design-review.stage.*' -print)" ]] || fail 'staging directory remains'
+[[ -z "$(find "$CODEX_HOME" -name '.visual-design-review.stage.*' -print)" ]] || fail 'staging directory remains'
 # Both hash tools absent must be a clear dependency failure, not a false "not synced".
 rm "$native_bin/shasum"
 if PATH="$native_bin" /bin/bash "$installer" check >/dev/null 2>"$sandbox/no-hash.log"; then

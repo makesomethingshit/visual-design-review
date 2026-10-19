@@ -14,6 +14,7 @@
 - 설치 원본은 visual-design-review/ 디렉터리이며, 이름·상대 reference 경로·스킬 내용은 그대로 유지한다.
 - 설치 스크립트는 대상 스킬 폴더 외 다른 스킬, 프로젝트의 .agents/skills, AGENTS.md, Codex 설정을 수정하지 않는다.
 - PowerShell 실행 정책은 바꾸지 않는다. 시스템 정책이 실행을 막으면 관리자 정책을 우회하지 않는다.
+- 저장소를 설치 대상 경로($CODEX_HOME/skills/visual-design-review)에 두지 않는다. 그 경로에 저장소가 있으면 설치기가 저장소 루트를 백업으로 옮기고 스킬 폴더로 교체한다.
 
 ## Windows PowerShell
 
@@ -87,6 +88,8 @@ macOS 실제 파일 시스템·스킬 검색 검증의 범위와 한계는 [검�
 ~~~
 
 각 테스트는 신규 설치·dry-run 무변경·내용 대조·멱등성·사용자 변경본 백업·제거와 백업 보존을 확인한다. Linux 테스트는 상대 CODEX_HOME 거부와 대상 심볼릭 링크 거부도 검사한다. 특정 환경에서 실행하지 못한 테스트를 성공으로 기록하지 않는다.
+
+기존 Windows 체크아웃에서 CRLF in Linux input으로 Windows 스모크 테스트가 실패하면 새로 클론하거나 .gitattributes가 적용된 상태로 해당 파일을 다시 체크아웃한다. Linux 설치는 CRLF SKILL.md도 읽도록 정규화하지만, 테스트는 LF 입력을 계속 확인한다.
 
 ## 새 Codex 세션에서 라우팅 확인
 

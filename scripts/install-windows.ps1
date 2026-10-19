@@ -7,7 +7,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
-    throw 'Use install-linux.sh on Linux/WSL; this script is for native Windows.'
+    throw 'Use install-linux.sh on Linux/WSL/macOS; this script is for native Windows.'
 }
 $source = Join-Path (Split-Path -Parent $PSScriptRoot) 'visual-design-review'
 $codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }
@@ -100,7 +100,7 @@ switch ($Action) {
             break
         }
         New-Item -ItemType Directory -Path $skillsRoot -Force | Out-Null
-        $stage = Join-Path $skillsRoot ('.visual-design-review.stage.' + [guid]::NewGuid().ToString('N'))
+        $stage = Join-Path $codexHome ('.visual-design-review.stage.' + [guid]::NewGuid().ToString('N'))
         $backup = $null
         try {
             Copy-Item -LiteralPath $source -Destination $stage -Recurse -Force
@@ -113,10 +113,19 @@ switch ($Action) {
             try {
                 Move-Item -LiteralPath $stage -Destination $target
             } catch {
-                if ($backup -and (Test-Path -LiteralPath $backup) -and -not (Test-Path -LiteralPath $target)) {
-                    Move-Item -LiteralPath $backup -Destination $target
+                $activationError = $_
+                if ($backup -and (Test-Path -LiteralPath $backup)) {
+                    if (-not (Test-Path -LiteralPath $target)) {
+                        try {
+                            Move-Item -LiteralPath $backup -Destination $target
+                        } catch {
+                            Write-Warning "Rollback failed; previous installation is at $backup"
+                        }
+                    } else {
+                        Write-Warning "Rollback skipped because the target exists; previous installation is at $backup"
+                    }
                 }
-                throw
+                throw $activationError
             }
             Write-Output 'Installed and SHA-256-verified.'
             if ($backup) { Write-Output "Previous installation preserved at $backup" }
