@@ -81,6 +81,14 @@ backup_name() {
   printf '%s/%s.%s.%s' "$backups_dir" "$(date -u +%Y%m%dT%H%M%SZ)" "$$" "$RANDOM"
 }
 
+# Managed roots must not redirect moves into another tree.
+for managed_root in "$skills_dir" "$codex_home/skill-backups" "$backups_dir"; do
+  if [[ -L "$managed_root" ]]; then
+    echo "Refusing linked install or backup directory: $managed_root" >&2
+    exit 2
+  fi
+done
+
 if [[ "$action" != remove ]]; then
   [[ -n "$source_dir" ]] || { echo 'Source package is missing.' >&2; exit 1; }
   codex_home_real="$(cd -- "$codex_home" 2>/dev/null && pwd -P || printf '%s' "$codex_home")"

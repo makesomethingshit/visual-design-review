@@ -95,6 +95,20 @@ if CODEX_HOME="$nested_home" bash "$root/scripts/install-linux.sh" install --dry
   fail 'CODEX_HOME inside source accepted'
 fi
 [[ ! -e "$nested_home" ]] || fail 'nested CODEX_HOME was created'
+# Parent links must not redirect install/remove into the source or backups elsewhere.
+link_home="$sandbox/link-home"
+mkdir -p "$link_home"
+for linked in skills skill-backups skill-backups/visual-design-review; do
+  mkdir -p "$(dirname "$link_home/$linked")"
+  ln -s "$root" "$link_home/$linked"
+  for action in install remove; do
+    if CODEX_HOME="$link_home" bash "$installer" "$action" >/dev/null 2>&1; then
+      fail "linked root accepted: $linked ($action)"
+    fi
+  done
+  [[ -f "$root/visual-design-review/SKILL.md" ]] || fail 'linked remove moved source'
+  rm "$link_home/$linked"
+done
 ln -s "$sandbox/not-installed" "$target"
 if bash "$installer" install >/dev/null 2>&1; then fail 'symlink install target accepted'; fi
 [[ -L "$target" ]] || fail 'symlink was changed'

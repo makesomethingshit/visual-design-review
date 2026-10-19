@@ -126,6 +126,29 @@ try {
     Assert-True (-not (Test-Path -LiteralPath $nestedHome)) 'nested CODEX_HOME was created'
     $env:CODEX_HOME = $validHome
 
+    # Parent junctions must not redirect install/remove into the source or backups elsewhere.
+    $linkHome = Join-Path $work 'link-home'
+    New-Item -ItemType Directory -Path $linkHome -Force | Out-Null
+    $env:CODEX_HOME = $linkHome
+    foreach ($linked in @('skills', 'skill-backups', 'skill-backups/visual-design-review')) {
+        $linkPath = Join-Path $linkHome $linked
+        New-Item -ItemType Directory -Path (Split-Path -Parent $linkPath) -Force | Out-Null
+        New-Item -ItemType Junction -Path $linkPath -Target $repo | Out-Null
+        try {
+            foreach ($action in @('install', 'remove')) {
+                $rejected = $false
+                try { & $installer -Action $action | Out-Null } catch {
+                    $rejected = $_.Exception.Message -match 'Refusing linked install or backup directory'
+                }
+                Assert-True $rejected "linked root accepted: $linked ($action)"
+            }
+            Assert-True (Test-Path -LiteralPath (Join-Path $repo 'visual-design-review/SKILL.md')) 'linked remove moved source'
+        } finally {
+            [IO.Directory]::Delete($linkPath)
+        }
+    }
+    $env:CODEX_HOME = $validHome
+
     # Force activation and rollback to fail; the backup path must be reported.
     & $installer -Action install | Out-Null
     Add-Content -LiteralPath (Join-Path $target 'SKILL.md') -Value 'rollback-test' -Encoding UTF8

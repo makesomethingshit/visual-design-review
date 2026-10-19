@@ -105,3 +105,5 @@ macOS 실제 파일 시스템·스킬 검색 검증의 범위와 한계는 [검�
 | 제외: 웹 UI | 웹 버튼의 접근 가능한 이름만 감사해줘. | 스킬 미적용 |
 
 선택 선언이나 답변에 스킬 이름이 나온 사실만으로 합격으로 보지 않는다. 미실행·차단·실패는 그대로 기록하고, 기존 평가 원문을 덮어쓰지 않는다. 자세한 이전 평가 기록은 [evaluation/README.md](../visual-design-review/tests/evaluation/README.md) 및 [VALIDATION.md](../VALIDATION.md)를 참조한다.
+
+Linked `skills`, `skill-backups`, and `skill-backups/visual-design-review` directories are refused for every action, including remove, to keep moves from affecting another tree.

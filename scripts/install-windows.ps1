@@ -79,6 +79,14 @@ function New-BackupName {
     return Join-Path $backupsRoot "$stamp.$PID.$([guid]::NewGuid().ToString('N').Substring(0, 6))"
 }
 
+# Managed roots must not redirect moves into another tree.
+foreach ($managedRoot in @($skillsRoot, (Join-Path $codexHome 'skill-backups'), $backupsRoot)) {
+    $managedItem = Get-Item -LiteralPath $managedRoot -Force -ErrorAction SilentlyContinue
+    if ($managedItem -and ($managedItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+        throw "Refusing linked install or backup directory: $managedRoot"
+    }
+}
+
 if ($Action -ne 'remove') {
     $sourceFull = [IO.Path]::GetFullPath($source).TrimEnd([char[]]@('\','/'))
     $homeFull = [IO.Path]::GetFullPath($codexHome).TrimEnd([char[]]@('\','/'))
