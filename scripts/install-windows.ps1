@@ -36,10 +36,11 @@ function Assert-Layout([string]$Root) {
     }
     if ($close -lt 2) { throw "Invalid skill frontmatter: $skill" }
     $frontmatter = @($lines[1..($close - 1)])
+    $metadata = [regex]::Match(($frontmatter -join "`n"), '(?m)^metadata:\n((?:[ \t]+[^\n]*(?:\n|$))*)')
     if (-not ($frontmatter -ccontains 'name: visual-design-review') -or
         -not (@($frontmatter | Where-Object { $_ -match '^description:' }).Count -gt 0) -or
         -not ($frontmatter -ccontains 'metadata:') -or
-        -not (@($frontmatter | Where-Object { $_ -match '^\s+version: "[^"]+"$' }).Count -gt 0)) {
+        -not ($metadata.Success -and $metadata.Groups[1].Value -cmatch '(?m)^  version: "[^"]+"$')) {
         throw "Invalid skill frontmatter: $skill"
     }
     foreach ($required in @('references/review-protocol.md', 'references/critique-rubric.md')) {

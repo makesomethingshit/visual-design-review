@@ -37,7 +37,11 @@ check_layout() {
   printf '%s\n' "$frontmatter" | grep -qx 'name: visual-design-review' || return 1
   printf '%s\n' "$frontmatter" | grep -Eq '^description:' || return 1
   printf '%s\n' "$frontmatter" | grep -qx 'metadata:' || return 1
-  printf '%s\n' "$frontmatter" | grep -Eq '^[[:space:]]+version: "[^"]+"$' || return 1
+  printf '%s\n' "$frontmatter" | awk '
+    /^[^[:space:]]/ { metadata = ($0 == "metadata:") }
+    metadata && /^  version: "[^"]+"$/ { found=1 }
+    END { exit !found }
+  ' || return 1
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
   links="$(find "$root" -type l -print -quit)" || return 1
   [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }

@@ -86,6 +86,15 @@ try {
     }
     Assert-True $badFailed 'frontmatter fields outside block accepted'
     Assert-True ($badMessage -match 'Invalid skill frontmatter') 'wrong frontmatter failure'
+    # A version belonging to another mapping is not metadata.version.
+    $originalSkill = [IO.File]::ReadAllText((Join-Path $repo 'visual-design-review/SKILL.md'))
+    [IO.File]::WriteAllText($badSkill, $originalSkill.Replace('metadata:', "metadata:`nother:"), (New-Object Text.UTF8Encoding($false)))
+    $badFailed = $false
+    try { & (Join-Path $badRepo 'scripts/install-windows.ps1') -Action install -DryRun | Out-Null } catch {
+        $badFailed = $_.Exception.Message -match 'Invalid skill frontmatter'
+    }
+    Assert-True $badFailed 'version outside metadata accepted'
+    Assert-True (-not (Test-Path -LiteralPath $env:CODEX_HOME)) 'invalid metadata created files'
     $env:CODEX_HOME = $validHome
 
     # F-02: remove must not depend on a valid source package.

@@ -73,6 +73,13 @@ fi
 [[ "$output" == *'Source package structure is invalid.'* ]] || fail 'wrong frontmatter failure'
 [[ ! -e "$sandbox/bad-frontmatter-home" ]] || fail 'invalid frontmatter dry-run created files'
 
+# A version belonging to another mapping is not metadata.version.
+awk '{ print; if ($0 == "metadata:") print "other:" }' "$root/visual-design-review/SKILL.md" > "$fake_repo/visual-design-review/SKILL.md"
+if CODEX_HOME="$sandbox/bad-frontmatter-home" bash "$fake_repo/scripts/install-linux.sh" install --dry-run >/dev/null 2>&1; then
+  fail 'version outside metadata accepted'
+fi
+[[ ! -e "$sandbox/bad-frontmatter-home" ]] || fail 'invalid metadata created files'
+
 # F-02: remove must not depend on a valid source package.
 rm -rf "$fake_repo/visual-design-review"
 remove_home="$sandbox/remove-home"
