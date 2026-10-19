@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | Windows 네이티브 PowerShell 5.1+ | scripts/install-windows.ps1 | $HOME\.codex\skills\visual-design-review |
 | WSL / Linux Bash | scripts/install-linux.sh | $HOME/.codex/skills/visual-design-review |
+| macOS Bash (기본 /bin/bash 포함) | scripts/install-linux.sh | $HOME/.codex/skills/visual-design-review |
 
 - CODEX_HOME이 설정된 경우 **현재 환경의 절대 경로**를 우선 사용한다. Windows 경로를 WSL에 직접 넘기거나 그 반대로 사용하지 않는다. Windows와 WSL의 설치는 별개이며 **요청하지 않은 환경에는 설치하지 않는다**.
 - 설치 원본은 visual-design-review/ 디렉터리이며, 이름·상대 reference 경로·스킬 내용은 그대로 유지한다.
@@ -35,7 +36,7 @@ $env:CODEX_HOME = 'D:\CodexHome'
 .\scripts\install-windows.ps1 -Action install -DryRun
 ~~~
 
-## WSL / Linux Bash
+## macOS / WSL / Linux Bash
 
 ~~~bash
 bash scripts/install-linux.sh install --dry-run
@@ -50,6 +51,8 @@ CODEX_HOME 변경 예:
 ~~~bash
 CODEX_HOME="$HOME/codex-custom" bash scripts/install-linux.sh install --dry-run
 ~~~
+
+스크립트 이름은 기존 명령과의 호환성을 위해 유지하며 macOS에서도 같은 명령을 사용한다. SHA-256은 `sha256sum`이 있으면 사용하고, 없으면 `shasum -a 256`을 사용한다. 설치기는 GitHub의 최신 버전을 자동으로 내려받지 않는다. 업데이트하려면 저장소 원본을 갱신한 뒤 install 명령을 다시 실행한다.
 
 ## 안전성·복구·버전 확인
 
@@ -70,6 +73,14 @@ CODEX_HOME="$HOME/codex-custom" bash scripts/install-linux.sh install --dry-run
 ~~~bash
 bash tests/smoke-install-linux.sh
 ~~~
+
+macOS에서는 기본 Bash와 네이티브 명령, shasum 대체 경로, 한글·공백 경로 및 활성화 실패 시 복원도 확인한다.
+
+~~~bash
+/bin/bash tests/smoke-install-macos.sh
+~~~
+
+macOS 실제 파일 시스템·스킬 검색 검증의 범위와 한계는 [검증 기록](validation/install-macos-2026-10-19.md)을 참조한다.
 
 ~~~powershell
 .\tests\smoke-install-windows.ps1

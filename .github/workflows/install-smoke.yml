@@ -8,6 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: bash tests/smoke-install-linux.sh
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - run: /bin/bash tests/smoke-install-macos.sh
   windows:
     runs-on: windows-latest
     steps:
