@@ -101,6 +101,22 @@ try {
     Assert-True (Test-Path -LiteralPath (Join-Path $removeHome 'skill-backups/visual-design-review')) 'remove without source lost backup'
     $env:CODEX_HOME = $validHome
 
+    # CODEX_HOME nested under the source tree must be rejected before creation.
+    $nestedHome = Join-Path $repo 'visual-design-review/.nested-codex-home'
+    $env:CODEX_HOME = $nestedHome
+    $nestedFailed = $false
+    $nestedMessage = ''
+    try {
+        & $installer -Action install -DryRun | Out-Null
+    } catch {
+        $nestedFailed = $true
+        $nestedMessage = $_.Exception.Message
+    }
+    Assert-True $nestedFailed 'CODEX_HOME inside source accepted'
+    Assert-True ($nestedMessage -match 'must not be inside the source directory') 'wrong nested source failure'
+    Assert-True (-not (Test-Path -LiteralPath $nestedHome)) 'nested CODEX_HOME was created'
+    $env:CODEX_HOME = $validHome
+
     # Force activation and rollback to fail; the backup path must be reported.
     & $installer -Action install | Out-Null
     Add-Content -LiteralPath (Join-Path $target 'SKILL.md') -Value 'rollback-test' -Encoding UTF8

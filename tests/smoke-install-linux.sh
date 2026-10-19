@@ -81,7 +81,14 @@ CODEX_HOME="$remove_home" bash "$fake_repo/scripts/install-linux.sh" remove >/de
 [[ ! -e "$remove_home/skills/visual-design-review" ]] || fail 'remove failed without source'
 [[ -d "$remove_home/skill-backups/visual-design-review" ]] || fail 'remove without source lost backup'
 
+
+# CODEX_HOME nested under the source tree must be rejected before creation.
+nested_home="$root/visual-design-review/.nested-codex-home"
+if CODEX_HOME="$nested_home" bash "$root/scripts/install-linux.sh" install --dry-run >/dev/null 2>&1; then
+  fail 'CODEX_HOME inside source accepted'
+fi
+[[ ! -e "$nested_home" ]] || fail 'nested CODEX_HOME was created'
 ln -s "$sandbox/not-installed" "$target"
 if bash "$installer" install >/dev/null 2>&1; then fail 'symlink install target accepted'; fi
 [[ -L "$target" ]] || fail 'symlink was changed'
-echo 'PASS: dry-run, custom home, install, hash check, idempotence, backup, remove, symlink refusal, frontmatter, source-less remove'
+echo 'PASS: dry-run, custom home, install, hash check, idempotence, backup, remove, symlink refusal, frontmatter, source-less remove, nested source'

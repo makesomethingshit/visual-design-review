@@ -79,6 +79,12 @@ function New-BackupName {
 }
 
 if ($Action -ne 'remove') {
+    $sourceFull = [IO.Path]::GetFullPath($source).TrimEnd([char[]]@('\','/'))
+    $homeFull = [IO.Path]::GetFullPath($codexHome).TrimEnd([char[]]@('\','/'))
+    $sep = [IO.Path]::DirectorySeparatorChar
+    if ($homeFull -eq $sourceFull -or $homeFull.StartsWith($sourceFull + $sep, [StringComparison]::OrdinalIgnoreCase)) {
+        throw 'CODEX_HOME must not be inside the source directory.'
+    }
     Assert-Layout $source
     Write-Output "Source: $source"
 }
@@ -110,7 +116,7 @@ switch ($Action) {
             break
         }
         New-Item -ItemType Directory -Path $skillsRoot -Force | Out-Null
-        $stage = Join-Path $codexHome ('.visual-design-review.stage.' + [guid]::NewGuid().ToString('N'))
+        $stage = Join-Path $skillsRoot ('.visual-design-review.stage.' + [guid]::NewGuid().ToString('N'))
         $backup = $null
         try {
             Copy-Item -LiteralPath $source -Destination $stage -Recurse -Force
@@ -125,14 +131,16 @@ switch ($Action) {
             } catch {
                 $activationError = $_
                 if ($backup -and (Test-Path -LiteralPath $backup)) {
-                    if (-not (Test-Path -LiteralPath $target)) {
-                        try {
-                            Move-Item -LiteralPath $backup -Destination $target
-                        } catch {
-                            Write-Warning "Rollback failed; previous installation is at $backup"
+                    try {
+                        # A failed cross-device move can leave a partial target; clear it before restoring.
+                        if (Test-Path -LiteralPath $target -PathType Container) {
+                            Remove-Item -LiteralPath $target -Recurse -Force
+                        } elseif (Test-Path -LiteralPath $target) {
+                            Remove-Item -LiteralPath $target -Force
                         }
-                    } else {
-                        Write-Warning "Rollback skipped because the target exists; previous installation is at $backup"
+                        Move-Item -LiteralPath $backup -Destination $target
+                    } catch {
+                        Write-Warning "Rollback failed; previous installation is at $backup"
                     }
                 }
                 throw $activationError

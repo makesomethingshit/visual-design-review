@@ -79,6 +79,18 @@ backup_name() {
 
 if [[ "$action" != remove ]]; then
   [[ -n "$source_dir" ]] || { echo 'Source package is missing.' >&2; exit 1; }
+  codex_home_real="$(cd -- "$codex_home" 2>/dev/null && pwd -P || printf '%s' "$codex_home")"
+  if [[ "$codex_home_real" == "$source_dir" || "$codex_home_real" == "$source_dir"/* ]]; then
+    echo 'CODEX_HOME must not be inside the source directory.' >&2
+    exit 2
+  fi
+  if [[ -d "$skills_dir" ]]; then
+    skills_real="$(cd -- "$skills_dir" && pwd -P)" || { echo 'Cannot resolve skills directory.' >&2; exit 2; }
+    if [[ "$skills_real" == "$source_dir" || "$skills_real" == "$source_dir"/* ]]; then
+      echo 'Skills directory must not be inside the source directory.' >&2
+      exit 2
+    fi
+  fi
   check_layout "$source_dir" || { echo 'Source package structure is invalid.' >&2; exit 1; }
   echo "Source: $source_dir"
 fi
@@ -106,7 +118,7 @@ case "$action" in
       exit 0
     fi
     mkdir -p -- "$skills_dir"
-    stage="$(mktemp -d "$codex_home/.visual-design-review.stage.XXXXXXXX")"
+    stage="$(mktemp -d "$skills_dir/.visual-design-review.stage.XXXXXXXX")"
     trap 'if [[ -n "${stage:-}" && -d "$stage" ]]; then rm -rf -- "$stage"; fi' EXIT
     cp -a -- "$source_dir/." "$stage/"
     same_tree "$source_dir" "$stage" || { echo 'Staging verification failed.' >&2; exit 1; }
@@ -122,7 +134,9 @@ case "$action" in
       [[ -z "$backup" ]] || echo "Previous installation preserved at $backup"
     else
       echo 'Activation failed. Attempting rollback.' >&2
-      if [[ -n "$backup" && -d "$backup" && ! -e "$target" ]]; then
+      if [[ -n "$backup" && -d "$backup" ]]; then
+        # A failed cross-device mv can leave a partial target; clear it before restoring.
+        if [[ -e "$target" ]]; then rm -rf -- "$target"; fi
         mv -- "$backup" "$target" || { echo "Rollback failed; previous installation is at $backup" >&2; exit 1; }
       fi
       exit 1
