@@ -17,7 +17,7 @@ for arg in "$@"; do
 done
 case "$(uname -s)" in
   Linux|Darwin) ;;
-  *) echo 'Supported environments: Linux/WSL/macOS.' >&2; exit 2 ;;
+  *) echo 'Unsupported OS. Use install-windows.ps1 on native Windows; otherwise Linux/WSL/macOS is required.' >&2; exit 2 ;;
 esac
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 source_dir="$(cd -- "$script_dir/../visual-design-review" && pwd -P)"
@@ -47,8 +47,11 @@ check_layout() {
 hash_file() {
   if command -v sha256sum >/dev/null 2>&1; then
     sha256sum "$1"
-  else
+  elif command -v shasum >/dev/null 2>&1; then
     shasum -a 256 "$1"
+  else
+    echo 'sha256sum or shasum is required.' >&2
+    return 1
   fi
 }
 file_list() {
@@ -113,7 +116,9 @@ case "$action" in
       [[ -z "$backup" ]] || echo "Previous installation preserved at $backup"
     else
       echo 'Activation failed. Attempting rollback.' >&2
-      if [[ -n "$backup" && -d "$backup" && ! -e "$target" ]]; then mv -- "$backup" "$target"; fi
+      if [[ -n "$backup" && -d "$backup" && ! -e "$target" ]]; then
+        mv -- "$backup" "$target" || { echo "Rollback failed; previous installation is at $backup" >&2; exit 1; }
+      fi
       exit 1
     fi
     ;;

@@ -51,4 +51,10 @@ fi
 grep -q 'Attempting rollback' "$sandbox/rollback.log" || fail 'rollback branch did not execute'
 /usr/bin/cmp "$sandbox/expected-skill.md" "$target/SKILL.md" || fail 'rollback lost local edit'
 [[ -z "$(find "$CODEX_HOME/skills" -name '.visual-design-review.stage.*' -print)" ]] || fail 'staging directory remains'
-echo 'PASS: macOS native commands, shasum fallback, Unicode/spaces, forced rollback'
+# Both hash tools absent must be a clear dependency failure, not a false "not synced".
+rm "$native_bin/shasum"
+if PATH="$native_bin" /bin/bash "$installer" check >/dev/null 2>"$sandbox/no-hash.log"; then
+  fail 'check passed without a hash tool'
+fi
+grep -q 'sha256sum or shasum is required' "$sandbox/no-hash.log" || fail 'missing hash tool not reported'
+echo 'PASS: macOS native commands, shasum fallback, Unicode/spaces, forced rollback, missing hash tool'
