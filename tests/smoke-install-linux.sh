@@ -56,7 +56,32 @@ printf '#!/usr/bin/env bash\nexit 1\n' > "$sandbox/bin/sha256sum"
 chmod +x "$sandbox/bin/sha256sum"
 if PATH="$sandbox/bin:$PATH" bash "$installer" check >/dev/null 2>&1; then fail 'hash failure reported synced'; fi
 bash "$installer" remove >/dev/null
+
+# F-01: fields outside the first frontmatter block must be rejected.
+fake_repo="$sandbox/fake-repo"
+mkdir -p "$fake_repo/scripts"
+cp "$root/scripts/install-linux.sh" "$fake_repo/scripts/"
+cp -a "$root/visual-design-review" "$fake_repo/"
+awk '
+  $0 == "name: visual-design-review" { next }
+  { print }
+  !closed && NR > 1 && $0 == "---" { print "name: visual-design-review"; closed=1 }
+' "$root/visual-design-review/SKILL.md" > "$fake_repo/visual-design-review/SKILL.md"
+if output="$(CODEX_HOME="$sandbox/bad-frontmatter-home" bash "$fake_repo/scripts/install-linux.sh" install --dry-run 2>&1)"; then
+  fail 'frontmatter fields outside block accepted'
+fi
+[[ "$output" == *'Source package structure is invalid.'* ]] || fail 'wrong frontmatter failure'
+[[ ! -e "$sandbox/bad-frontmatter-home" ]] || fail 'invalid frontmatter dry-run created files'
+
+# F-02: remove must not depend on a valid source package.
+rm -rf "$fake_repo/visual-design-review"
+remove_home="$sandbox/remove-home"
+CODEX_HOME="$remove_home" bash "$root/scripts/install-linux.sh" install >/dev/null
+CODEX_HOME="$remove_home" bash "$fake_repo/scripts/install-linux.sh" remove >/dev/null
+[[ ! -e "$remove_home/skills/visual-design-review" ]] || fail 'remove failed without source'
+[[ -d "$remove_home/skill-backups/visual-design-review" ]] || fail 'remove without source lost backup'
+
 ln -s "$sandbox/not-installed" "$target"
 if bash "$installer" install >/dev/null 2>&1; then fail 'symlink install target accepted'; fi
 [[ -L "$target" ]] || fail 'symlink was changed'
-echo 'PASS: dry-run, custom home, install, hash check, idempotence, backup, remove, symlink refusal'
+echo 'PASS: dry-run, custom home, install, hash check, idempotence, backup, remove, symlink refusal, frontmatter, source-less remove'

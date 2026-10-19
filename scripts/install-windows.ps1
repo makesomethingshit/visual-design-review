@@ -27,11 +27,19 @@ function Assert-Layout([string]$Root) {
     $skill = Join-Path $Root 'SKILL.md'
     if (-not (Test-Path -LiteralPath $skill -PathType Leaf)) { throw "Missing SKILL.md in $Root" }
     $lines = @(Get-Content -LiteralPath $skill -Encoding UTF8)
-    if ($lines.Count -lt 4 -or $lines[0] -cne '---' -or
-        -not ($lines -ccontains 'name: visual-design-review') -or
-        -not ($lines -ccontains 'metadata:') -or
-        -not ($lines[1..($lines.Count - 1)] -ccontains '---') -or
-        -not (@($lines | Where-Object { $_ -match '^\s+version: "[^"]+"$' }).Count -gt 0)) {
+    if ($lines.Count -lt 4 -or $lines[0] -cne '---') {
+        throw "Invalid skill frontmatter: $skill"
+    }
+    $close = -1
+    for ($i = 1; $i -lt $lines.Count; $i++) {
+        if ($lines[$i] -ceq '---') { $close = $i; break }
+    }
+    if ($close -lt 2) { throw "Invalid skill frontmatter: $skill" }
+    $frontmatter = @($lines[1..($close - 1)])
+    if (-not ($frontmatter -ccontains 'name: visual-design-review') -or
+        -not (@($frontmatter | Where-Object { $_ -match '^description:' }).Count -gt 0) -or
+        -not ($frontmatter -ccontains 'metadata:') -or
+        -not (@($frontmatter | Where-Object { $_ -match '^\s+version: "[^"]+"$' }).Count -gt 0)) {
         throw "Invalid skill frontmatter: $skill"
     }
     foreach ($required in @('references/review-protocol.md', 'references/critique-rubric.md')) {
@@ -70,8 +78,10 @@ function New-BackupName {
     return Join-Path $backupsRoot "$stamp.$PID.$([guid]::NewGuid().ToString('N').Substring(0, 6))"
 }
 
-Assert-Layout $source
-Write-Output "Source: $source"
+if ($Action -ne 'remove') {
+    Assert-Layout $source
+    Write-Output "Source: $source"
+}
 Write-Output "Target: $target"
 if (Test-Path -LiteralPath $target) {
     $existing = Get-Item -LiteralPath $target -Force

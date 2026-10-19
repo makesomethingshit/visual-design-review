@@ -20,7 +20,7 @@ case "$(uname -s)" in
   *) echo 'Unsupported OS. Use install-windows.ps1 on native Windows; otherwise Linux/WSL/macOS is required.' >&2; exit 2 ;;
 esac
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-source_dir="$(cd -- "$script_dir/../visual-design-review" && pwd -P)"
+source_dir="$(cd -- "$script_dir/../visual-design-review" 2>/dev/null && pwd -P || true)"
 codex_home="${CODEX_HOME:-${HOME:?}/.codex}"
 [[ "$codex_home" == /* ]] || { echo 'CODEX_HOME must be an absolute Unix path.' >&2; exit 2; }
 skills_dir="$codex_home/skills"
@@ -28,14 +28,16 @@ target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
-  local root="$1" path links skill_text
+  local root="$1" path links skill_text frontmatter
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
   skill_text="$(tr -d '\r' < "$root/SKILL.md")" || return 1
   [[ "$(printf '%s\n' "$skill_text" | head -n 1)" == '---' ]] || return 1
-  printf '%s\n' "$skill_text" | awk 'NR > 1 && $0 == "---" { found=1; exit } END { exit !found }' || return 1
-  printf '%s\n' "$skill_text" | grep -qx 'name: visual-design-review' || return 1
-  printf '%s\n' "$skill_text" | grep -qx 'metadata:' || return 1
-  printf '%s\n' "$skill_text" | grep -Eq '^[[:space:]]+version: "[^"]+"$' || return 1
+  frontmatter="$(printf '%s\n' "$skill_text" | awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; exit } inside { print } END { exit !found }')" || return 1
+  [[ -n "$frontmatter" ]] || return 1
+  printf '%s\n' "$frontmatter" | grep -qx 'name: visual-design-review' || return 1
+  printf '%s\n' "$frontmatter" | grep -Eq '^description:' || return 1
+  printf '%s\n' "$frontmatter" | grep -qx 'metadata:' || return 1
+  printf '%s\n' "$frontmatter" | grep -Eq '^[[:space:]]+version: "[^"]+"$' || return 1
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
   links="$(find "$root" -type l -print -quit)" || return 1
   [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }
@@ -75,8 +77,11 @@ backup_name() {
   printf '%s/%s.%s.%s' "$backups_dir" "$(date -u +%Y%m%dT%H%M%SZ)" "$$" "$RANDOM"
 }
 
-check_layout "$source_dir" || { echo 'Source package structure is invalid.' >&2; exit 1; }
-echo "Source: $source_dir"
+if [[ "$action" != remove ]]; then
+  [[ -n "$source_dir" ]] || { echo 'Source package is missing.' >&2; exit 1; }
+  check_layout "$source_dir" || { echo 'Source package structure is invalid.' >&2; exit 1; }
+  echo "Source: $source_dir"
+fi
 echo "Target: $target"
 if [[ -L "$target" ]]; then echo 'Refusing symlink at install target.' >&2; exit 1; fi
 case "$action" in

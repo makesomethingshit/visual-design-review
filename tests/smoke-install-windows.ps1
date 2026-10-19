@@ -56,6 +56,51 @@ try {
     $checkFailed = $false
     try { & $installer -Action check | Out-Null } catch { $checkFailed = $true }
     Assert-True $checkFailed 'check succeeded after remove'
+
+    # F-01: fields outside the first frontmatter block must be rejected.
+    $badRepo = Join-Path $work 'bad-repo'
+    New-Item -ItemType Directory -Path (Join-Path $badRepo 'scripts') -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $repo 'scripts/install-windows.ps1') -Destination (Join-Path $badRepo 'scripts/install-windows.ps1')
+    Copy-Item -LiteralPath (Join-Path $repo 'visual-design-review') -Destination $badRepo -Recurse
+    $badSkill = Join-Path $badRepo 'visual-design-review/SKILL.md'
+    $badLines = @(Get-Content -LiteralPath $badSkill -Encoding UTF8)
+    $badOut = New-Object System.Collections.Generic.List[string]
+    $closed = $false
+    for ($i = 0; $i -lt $badLines.Count; $i++) {
+        if ($badLines[$i] -ceq 'name: visual-design-review') { continue }
+        $badOut.Add($badLines[$i])
+        if (-not $closed -and $i -gt 0 -and $badLines[$i] -ceq '---') {
+            $badOut.Add('name: visual-design-review')
+            $closed = $true
+        }
+    }
+    [IO.File]::WriteAllLines($badSkill, $badOut, (New-Object Text.UTF8Encoding($false)))
+    $env:CODEX_HOME = Join-Path $work 'bad-frontmatter-home'
+    $badFailed = $false
+    $badMessage = ''
+    try {
+        & (Join-Path $badRepo 'scripts/install-windows.ps1') -Action install -DryRun | Out-Null
+    } catch {
+        $badFailed = $true
+        $badMessage = $_.Exception.Message
+    }
+    Assert-True $badFailed 'frontmatter fields outside block accepted'
+    Assert-True ($badMessage -match 'Invalid skill frontmatter') 'wrong frontmatter failure'
+    $env:CODEX_HOME = $validHome
+
+    # F-02: remove must not depend on a valid source package.
+    $removeRepo = Join-Path $work 'remove-repo'
+    New-Item -ItemType Directory -Path (Join-Path $removeRepo 'scripts') -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $repo 'scripts/install-windows.ps1') -Destination (Join-Path $removeRepo 'scripts/install-windows.ps1')
+    $removeHome = Join-Path $work 'remove-home'
+    $env:CODEX_HOME = $removeHome
+    & $installer -Action install | Out-Null
+    $removeTarget = Join-Path $removeHome 'skills/visual-design-review'
+    & (Join-Path $removeRepo 'scripts/install-windows.ps1') -Action remove | Out-Null
+    Assert-True (-not (Test-Path -LiteralPath $removeTarget)) 'remove failed without source'
+    Assert-True (Test-Path -LiteralPath (Join-Path $removeHome 'skill-backups/visual-design-review')) 'remove without source lost backup'
+    $env:CODEX_HOME = $validHome
+
     # Force activation and rollback to fail; the backup path must be reported.
     & $installer -Action install | Out-Null
     Add-Content -LiteralPath (Join-Path $target 'SKILL.md') -Value 'rollback-test' -Encoding UTF8
