@@ -1,5 +1,7 @@
-# 스킬 아키텍처 초안 — Issue #2
+# 스킬 리팩터링 구현 경계 — Issue #2 / PR #6
 
+> **상태: Draft / Proposed.** 이 문서는 [PR #5의 아키텍처 설계](https://github.com/makesomethingshit/visual-design-review/pull/5)를 바탕으로 한 #6의 구현·확장 경계를 다룬다. #5의 기술적 의존 구조를 보존하되, 확인되지 않은 조판 배율을 기본값으로 채택하지 않는다.
+>
 > **상태: Draft / Proposed.** 문서와 지식 라우팅의 최초 리팩터링이며 실제 계산기, 자동 레이어 분석,
 > 렌더링 검증 또는 Adobe·Penpot·Figma 플러그인 구현을 포함하지 않는다.
 
@@ -29,10 +31,20 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 - **Review:** review-protocol → critique-rubric → review-output, 실제 관련 분야 refs.
 - **Analyze reference:** reference-analysis → 필요하면 formula-relations와 관련 분야 refs.
 - **Specify design:** formula-relations → design-handoff, 필요하면 원본 분석·분야 refs.
+- **Quantitative typography:** formula-relations → typography-relations (T-METRICS → T-SPACING/T-LEADING → T-MEASURE → T-CAPACITY; 작업별 필요 의존성만).
 - 요청이 일부 변경될 때 의존성을 다시 평가한다. '포스터'라는 이유만으로 본문 조판이나 인쇄
   모듈을 자동 선택/제외하지 않는다.
 - 성능은 컨텍스트 절약뿐 아니라 **필수 모듈 누락·불필요 활성화·출처/근거 정확성**으로 평가한다.
   현재 라우팅 표는 **지침**이며 모델이 항상 올바르게 선택함을 실측한 결과가 아니다.
+
+## PR #5 타이포그래피 설계의 수용/보류
+
+- **채택:** UPM/advance·간격·어간·행 길이·혼식·행간·수용량·크기 위계의 관계와 선행 의존성.
+  [typography-relations](visual-design-review/references/typography-relations.md)로 모듈화한다.
+- **보류:** 한글 1.7·영문 1.5·일/중문 2.0배, 10pt/30칸/tracking 0/왼끝맞춤 등의 기본값.
+  원문 대조·사용자 승인 또는 명시한 비교 시안 조건이 없으면 자동 적용하지 않는다.
+- **기여 이력:** PR #5의 협업자 제안은 별도 리뷰 및 머지 판단을 유지한다. 두 PR 모두
+  ARCHITECTURE.md를 새로 생성하는 충돌을 방지하기 위해 #6의 확장 설명은 본 문서로 분리한다.
 
 ## 2. 수학적 레퍼런스 역분석
 
@@ -76,4 +88,4 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 3. 같은 관계를 다른 판형/문자열에 적용했을 때 유효성·예외 검증.
 4. 이전 Review 평가 세트 전체 재실행, 정확 심각도 차이와 관찰 날조 여부 확인.
 
-이 문서는 **아키텍처 제안**이지 릴리스 일정이나 기능 구현 완료 보고가 아니다.
+이 문서는 **아키텍처 확장 및 리팩터링 제안**이지 릴리스 일정이나 기능 구현 완료 보고가 아니다.

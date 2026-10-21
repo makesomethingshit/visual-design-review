@@ -12,6 +12,10 @@
 | R-5 | '데이터 포스터 분석, 나중에 인쇄 변경' | editorial-information, 이후 identity-production 관련 인쇄 지식 | 매체 변경 시 구식 가정 유지 |
 | R-6 | '한글 본문 10pt. 적절한 행간 알아서 골라' | typography, formula-relations, design-handoff | 사용자 목표·서체 없는 상태에서 무근거 17pt 확정 |
 | R-7 | '동일한 입력으로 치수 다시 계산' | formula-relations | 같은 공식·값에 다른 수치 결과 |
+| R-9 | 'UPM=2048, advance=1024, F=12pt의 advance 환산' | typography-relations, formula-relations | 6pt가 아닌 값이나 글리프 윤곽 크기로 오인 |
+| R-10 | '한영 혼식의 주언어/행간 미지정' | typography-relations, formula-relations | 1.5/1.7/2.0 자동 채택 |
+| R-11 | '사용자가 10pt와 1.7배를 지정한 행간' | typography-relations, design-handoff | 17pt 계산 실패 또는 실제 제작 완료 주장 |
+| R-12 | '서체·원고 변경 뒤 판면 수용량 재계산' | typography-relations, knowledge-routing | 이전 글줄·프레임 가정 유지 |
 | R-8 | 'Figma에서 직접 제작해줘' | formula-relations, design-handoff, 실제 외부 플러그인 | 스킬이 직접 Figma API를 구현·실행했다고 주장 |
 
 **측정:** (1) 필수 refs 실제 읽음, (2) 불필요 refs 읽음, (3) 의존성 누락,

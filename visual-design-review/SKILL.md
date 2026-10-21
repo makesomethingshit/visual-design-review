@@ -38,7 +38,8 @@ metadata:
 | --- | --- |
 | 콘셉트·디자인사·맥락 | [concept-context](references/concept-context.md) |
 | 구성·배치·여백 | [composition](references/composition.md) |
-| 타이포그래피·한글/라틴 조판·레터링 | [typography](references/typography.md) |
+| 타이포그래피의 **비평/레터링** | [typography](references/typography.md) |
+| 서체·행간·어간·행 길이의 **정량 설계/역분석** | [typography-relations](references/typography-relations.md), [formula-relations](references/formula-relations.md) |
 | 편집·정보 계층·시각화 | [editorial-information](references/editorial-information.md) |
 | 아이덴티티·색 재현·인쇄 제작 | [identity-production](references/identity-production.md) |
 | 방법론 근거·라이선스 | [sources](references/sources.md) |
