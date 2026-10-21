@@ -6,6 +6,8 @@ sandbox="$(mktemp -d)"
 trap 'rm -rf -- "$sandbox"' EXIT
 export CODEX_HOME="$sandbox/custom-codex-home"
 installer="$root/scripts/install-linux.sh"
+# Catch shell parse regressions before any install/dry-run assertions.
+bash -n "$installer" || { echo "FAIL: installer syntax check" >&2; exit 1; }
 target="$CODEX_HOME/skills/visual-design-review"
 backups_dir="$CODEX_HOME/skill-backups/visual-design-review"
 fail() { echo "FAIL: $*" >&2; exit 1; }
