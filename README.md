@@ -57,4 +57,6 @@ v1.0.1은 내용 계약·관찰 범위·심각도 판단을 보강했습니다. 
 초안에서는 모드별 references 선택, 이미지/편집 원본의 조형 관계에 대한 증거 기반 역분석,
 수식의 출처·적용 조건 관리 및 외부 디자인 플러그인 전달 계약을 추가로 제안합니다.
 자동 이미지 분해·솔버·Adobe/Penpot/Figma 어댑터를 구현했다고 주장하지 않습니다.
+초기 본문 조판에는 사용자가 승인한 [A~H 프로젝트 조건부 시작값](visual-design-review/references/typography-presets.md)을 사용할 수 있지만,
+이는 모든 서체·매체에 성립하는 가독성 법칙이나 최종 디자인 최적값이 아닙니다.
 자세한 책임 경계 및 아직 검증하지 않은 항목은 [스킬 확장 설계](docs/skill-architecture-extension.md)와 [PR #5의 기반 아키텍처](https://github.com/makesomethingshit/visual-design-review/pull/5)를 참조하세요.

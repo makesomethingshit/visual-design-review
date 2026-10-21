@@ -12,6 +12,8 @@
 | **수치 설계·외부 도구 전달** | formula-relations + design-handoff | 원본에서 관계를 추출할 때 reference-analysis |
 | 장문 본문·조판·문자 위계의 **비평** | typography | 실제 본문이 없으면 장문 조판 검사 제외 |
 | **수치 타이포그래피 관계/설계** | typography-relations + formula-relations | 필요시 font metrics→spacing/leading→measure→capacity를 의존성별 로드 |
+| **새 본문의 초기 행간을 결정** | typography-presets + typography-relations | 주언어/쓰기 방향 확인; A~D만 조건부 사용 |
+| **새 인쇄 본문 첫 비교 시안** | typography-presets + typography-relations | E~H 초기 설정 후보 적용; 그 외 장르 기본 제외 |
 | 그리드·공간·정렬 | composition | 판면/잡지/정보 구조는 editorial-information 추가 |
 | 데이터/그래프·정보 계층 | editorial-information | 시각화에서만 데이터 인코딩 수식 적용 |
 | 아이덴티티/로고·출력 규격 | identity-production (실제 관련 시) | 심볼만 있으면 인쇄 프리플라이트 생략 |
@@ -26,6 +28,8 @@
 
 - review-output은 review-protocol 및 critique-rubric의 정의와 결합해야 한다.
 - design-handoff는 formula-relations의 근거 분류·단위 규칙을 따른다.
+- typography-presets는 사용자 승인 정책이고, 주언어·본문/매체 범위, 다른 사용자·제작 제약을 먼저 확인한다.
+  비평과 레퍼런스 역분석에서 원작의 속성을 정책값으로 덮어쓰지 않는다.
 - typography-relations는 formula-relations의 단위·근거 계약을 따른다. T-MEASURE는 T-SPACING과 실제 폭에 의존하고,
   T-CAPACITY는 T-MEASURE 및 T-LEADING에 의존한다. 개별 관계에서 입력이 없으면 적용을 유보한다.
 - reference-analysis가 구체적 관계식/재구성을 요청하는 경우 formula-relations를 로드한다.

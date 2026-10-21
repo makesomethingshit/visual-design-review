@@ -1,6 +1,6 @@
 # 스킬 리팩터링 구현 경계 — Issue #2 / PR #6
 
-> **상태: Draft / Proposed.** [PR #5의 아키텍처 설계](https://github.com/makesomethingshit/visual-design-review/pull/5)를 바탕으로 한 #6의 구현·확장 경계를 다룬다. 확인되지 않은 조판 배율을 자동 기본값으로 채택하지 않는다.
+> **상태: Draft / Proposed.** [PR #5의 아키텍처 설계](https://github.com/makesomethingshit/visual-design-review/pull/5)를 바탕으로 한 #6의 구현·확장 경계를 다룬다. 2026-10-21 사용자가 A~H 전부를 프로젝트 내부 조건부 초기 정책으로 승인했다. 보편적 실증 법칙으로 주장하지 않으며 PR #5는 수정하지 않는다.
 >
 > 문서와 지식 라우팅의 최초 리팩터링이며 실제 계산기, 자동 레이어 분석,
 > 렌더링 검증 또는 Adobe·Penpot·Figma 플러그인 구현을 포함하지 않는다.
@@ -41,8 +41,10 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 
 - **채택:** UPM/advance·간격·어간·행 길이·혼식·행간·수용량·크기 위계의 관계와 선행 의존성.
   [typography-relations](visual-design-review/references/typography-relations.md)로 모듈화한다.
-- **보류:** 한글 1.7·영문 1.5·일/중문 2.0배, 10pt/30칸/tracking 0/왼끝맞춤 등의 기본값.
-  원문 대조·사용자 승인 또는 명시한 비교 시안 조건이 없으면 자동 적용하지 않는다.
+- **사용자 승인 A~D:** 한글 1.7·영문 1.5·일/중문 2.0배는 주언어가 확인된 새 가로 본문의 조건부 시작 행간.
+- **사용자 승인 E~H:** 10pt·전각 30칸·tracking 0·왼끝맞춤은 새 인쇄 본문의 최초 비교 시안 설정.
+- **여전히 미검증:** 언어별 배율의 보편적/실증적 타당성, 개인 메모 N1/N2의 원문 대조,
+  혼식 언어 비중의 수치 임계값, 최종 조판의 실제 판독. 정책은 [typography-presets](../visual-design-review/references/typography-presets.md)에서 관리한다.
 - **기여 이력:** PR #5의 협업자 제안은 별도 리뷰 및 머지 판단을 유지한다. 두 PR 모두
   ARCHITECTURE.md를 새로 생성하는 충돌을 방지하기 위해 #6의 확장 설명은 본 문서로 분리한다.
 
