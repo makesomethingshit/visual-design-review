@@ -1,8 +1,8 @@
 # 스킬 리팩터링 구현 경계 — Issue #2 / PR #6
 
-> **상태: Draft / Proposed.** 이 문서는 [PR #5의 아키텍처 설계](https://github.com/makesomethingshit/visual-design-review/pull/5)를 바탕으로 한 #6의 구현·확장 경계를 다룬다. #5의 기술적 의존 구조를 보존하되, 확인되지 않은 조판 배율을 기본값으로 채택하지 않는다.
+> **상태: Draft / Proposed.** [PR #5의 아키텍처 설계](https://github.com/makesomethingshit/visual-design-review/pull/5)를 바탕으로 한 #6의 구현·확장 경계를 다룬다. 확인되지 않은 조판 배율을 자동 기본값으로 채택하지 않는다.
 >
-> **상태: Draft / Proposed.** 문서와 지식 라우팅의 최초 리팩터링이며 실제 계산기, 자동 레이어 분석,
+> 문서와 지식 라우팅의 최초 리팩터링이며 실제 계산기, 자동 레이어 분석,
 > 렌더링 검증 또는 Adobe·Penpot·Figma 플러그인 구현을 포함하지 않는다.
 
 ## 목표와 책임 경계

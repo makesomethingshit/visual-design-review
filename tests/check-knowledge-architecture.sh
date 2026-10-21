@@ -14,7 +14,8 @@ done
 grep -Fq 'UNVERIFIED' "$package/references/typography-relations.md" || fail 'unverified state contract missing'
 grep -Fq 'PR #5' "$root/docs/skill-architecture-extension.md" || fail 'source attribution missing'
 grep -Fq 'reference-analysis' "$root/docs/skill-architecture-extension.md" || fail 'reference reverse engineering omitted'
-[[ ! -e "$root/ARCHITECTURE.md" ]] || fail 'PR #6 must leave canonical ARCHITECTURE.md to PR #5'
+# The canonical root ARCHITECTURE.md is supplied by #5; it may exist after that PR merges.
+# Compare the PR diff to detect overlapping edits; do not require the file to be absent.
 awk 'BEGIN {
   if ((148 - 12 * 2 - 5 * 2) / 3 != 38) exit 1
   if (10 * 1.7 != 17) exit 1
