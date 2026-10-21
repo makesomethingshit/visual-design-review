@@ -96,7 +96,7 @@ def check_reference_math() -> None:
     doc = read(PKG / "references/reference-analysis.md")
     for must_have in ("Frame", "Object", "Relation", "Hypothesis",
                       "evidence_status", "UNVERIFIED", "e_x=", "median(",
-                      "경쟁 모델", "단일", "재구성"):
+                      "경쟁 모델", "임의 가중치", "재구성"):
         check(must_have in doc, f"Missing inverse-analysis contract {must_have}")
     width = Decimal(1200)
     xs = [Decimal(120), Decimal(420), Decimal(720)]
