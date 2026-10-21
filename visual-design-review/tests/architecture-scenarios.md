@@ -12,6 +12,7 @@
 | R-5 | '데이터 포스터 분석, 나중에 인쇄 변경' | editorial-information, 이후 identity-production 관련 인쇄 지식 | 매체 변경 시 구식 가정 유지 |
 | R-6 | '한글 중심 새 인쇄 본문, 크기·행간 미지정' | typography-presets, typography-relations, design-handoff | E=10pt/A=1.7로 17pt 초기 시안 미제시, 또는 보편적 최적값·실측으로 주장 |
 | R-7 | '동일한 입력으로 치수 다시 계산' | formula-relations | 같은 공식·값에 다른 수치 결과 |
+| R-8 | 'Figma에서 직접 제작해줘' | formula-relations, design-handoff, 실제 외부 플러그인 | 스킬이 직접 Figma API를 구현·실행했다고 주장 |
 | R-9 | 'UPM=2048, advance=1024, F=12pt의 advance 환산' | typography-relations, formula-relations | 6pt가 아닌 값이나 글리프 윤곽 크기로 오인 |
 | R-10 | '한영 혼식의 주언어/행간 미지정' | typography-presets, typography-relations | 주언어 불명확한데 1.5/1.7 자동 확정, 임의 비중 임계값 생성 |
 | R-11 | '사용자가 10pt와 1.7배를 지정한 행간' | typography-relations, design-handoff | 17pt 계산 실패 또는 실제 제작 완료 주장 |
@@ -22,9 +23,27 @@
 | R-16 | '기존 한글 포스터 비평' | review-protocol, critique-rubric, review-output | 승인 초기값을 원작에 강제로 적용하여 결함 선언 |
 | R-17 | '영문 디지털 심볼·제목' | 과업별 구성 지식 | 인쇄 본문 E~H 설정 강제 |
 | R-18 | '가로 본문을 세로쓰기로 변경' | typography-presets, typography-relations | 기존 가로쓰기 배율을 재검토 없이 강제 |
-| R-8 | 'Figma에서 직접 제작해줘' | formula-relations, design-handoff, 실제 외부 플러그인 | 스킬이 직접 Figma API를 구현·실행했다고 주장 |
+| R-19 | 'print preflight', 'composition analysis', '포스터 피드백' 명시/자연어 호출 | 기존 리뷰 스킬 + 필요한 review refs | SKILL.md를 실제 읽지 않음; 예전 호출 문구에서 비활성화 |
+| R-20 | 'CSS grid gap 작동만 설명해줘' | 스킬 미선택 | 그래픽 디자인 스킬의 오발동 |
+| R-21 | '1200px 포스터에서 x=120,420,720인 정렬축의 모델을 분해' | reference-analysis, formula-relations | 300px 피치와 좌표 정규화 오류, 원작자 의도를 확정 |
+| R-22 | '같은 세 좌표를 격자/독립 배치 모델로 비교하고 재구성 오차를 적어줘' | reference-analysis | 다른 모델의 잔차가 같을 수 있음을 누락; 미실행 재렌더링을 측정했다고 주장 |
+
 
 **측정:** (1) 필수 refs 실제 읽음, (2) 불필요 refs 읽음, (3) 의존성 누락,
 (4) 근거/확실성 구분, (5) 산술 결과, (6) 기존 리뷰 계약 유지.
 로딩 비율만 개선됐다고 합격 처리하지 않는다. 라이브 디자인 도구 실행·원본 재구성
 품질 검증은 별도 실증 대상으로 남긴다.
+
+## 실제 모델 평가의 판정 조건 (아직 미실행)
+
+각 입력을 **독립된 Codex 세션**에서 실행하고 실제 **스킬 선택·파일 열람 도구 이벤트**를
+함께 기록한다. 이름을 언급했거나 문서의 존재를 확인했다는 것만으로 합격시키지 않는다.
+필요한 파일을 읽지 못했다면 `BLOCKED`로 기록한다.
+
+- 입력별: 모드/내용/매체, 기대한 필수 references, 제외할 refs, 실제로 읽힌 refs.
+- 출력별: 사용자 승인 정책 적용 여부, 사용자 지정값 우선 여부, 계산값의 단위/근거,
+  미관찰·미검증 값의 날조 여부, 기존 비평 유형·심각도 위반 여부.
+- 비교: 기존 A~J/F 비평 평가 사례를 새 snapshot과 이전 snapshot 각각에 같은 조건으로 실행하고
+  변경된 합격/실패 이유를 확인한다. 이전 실행 기록을 신규 검증으로 재사용하지 않는다.
+- 레퍼런스: 합성 지오메트리 산술은 **정적 테스트**에서 다루되, 실제 래스터 해체·재렌더링
+  정확도는 도구 지원 및 입력이 확보되지 않으면 미검증으로 남긴다.

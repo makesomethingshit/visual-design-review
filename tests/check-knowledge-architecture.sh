@@ -34,4 +34,5 @@ awk 'BEGIN {
   if (10 * 30 != 300) exit 1
   if (1024 / 2048 * 12 != 6) exit 1
 }' || fail 'numeric example arithmetic regression'
+python3 "$root/tests/check-knowledge-contract.py"
 echo 'PASS: architecture references, ownership boundary, formula examples'
