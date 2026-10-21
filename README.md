@@ -42,7 +42,7 @@ $visual-design-review 이 포스터를 빡세게 리뷰해줘.
 ## 구성과 근거
 
 - 단일 [SKILL.md](visual-design-review/SKILL.md)
-- 선택적으로 읽는 references 8개
+- 작업에 따라 선택적으로 읽는 분야별·정량 설계 references
 - [A~E 회귀 기준](visual-design-review/tests/review-cases.md) 및 [A~J 비교·반복·라우팅 평가 원문](visual-design-review/tests/evaluation/README.md)
 - [SHA 고정 출처·라이선스·통합 결정](visual-design-review/references/sources.md)
 - [검증 보고서](VALIDATION.md)

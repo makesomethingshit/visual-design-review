@@ -11,7 +11,7 @@
 | Brief & constraints | 실제 콘텐츠, 매체, 판형·고정값, 사용자 목적 |
 | Design values | 객체/관계, 수치, 단위와 좌표계, 계산식 ID |
 | Provenance | USER / USER_APPROVED_PROJECT_POLICY / MEASURED / DERIVED / EMPIRICAL / INFERRED / UNKNOWN |
-| Decision status | DETERMINED / CANDIDATE / UNRESOLVED / CONFLICT — 출처 및 검증 상태와 별개 |
+| Decision status | DETERMINED / PROJECT_INITIAL_PRESET / CANDIDATE / UNRESOLVED / CONFLICT — 출처·검증 상태와 별개. PROJECT_INITIAL_PRESET은 최종 확정값이 아닌 채택된 첫 시안값 |
 | Verification status | FORMULA_CHECKED / SOURCE_MEASURED / TOOL_APPLIED / OUTPUT_INSPECTED / UNVERIFIED |
 | Unresolved | 충돌·미입력·여러 가능한 해와 적용 조건 |
 | Verification request | 외부 도구에서 가능할 경우 확인할 실제 속성, 허용 편차 |
