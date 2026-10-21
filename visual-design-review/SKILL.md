@@ -3,10 +3,12 @@ name: visual-design-review
 description: >
   Evidence-grounded visual design review, quantitative reference deconstruction,
   and formula-based design handoff for posters, editorial design, typography,
-  identities and infographics. Use for 디자인 리뷰, 시각디자인 비평,
-  레퍼런스 역분석, 조형 관계 분석, 타이포그래피 수식, 편집 그리드 설계.
-  Excludes general code review, CSS inspection and web UI accessibility audits;
-  in mixed tasks apply only to visual/graphic design work.
+  identities and infographics. Use for visual design reviews, composition analysis,
+  typography critique, print preflight, design reference reverse engineering,
+  디자인 리뷰, 시각디자인 비평, 포스터 피드백, 편집디자인 검토,
+  타이포그래피 리뷰, 레퍼런스 역분석, 조형 관계 분석, 타이포그래피 수식,
+  편집 그리드 설계. Excludes general code review, CSS inspection and web UI
+  accessibility audits; in mixed tasks apply only to visual/graphic design work.
 metadata:
   version: "1.0.1"
 ---

@@ -36,11 +36,12 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
   모듈을 자동 선택/제외하지 않는다.
 - 성능은 컨텍스트 절약뿐 아니라 **필수 모듈 누락·불필요 활성화·출처/근거 정확성**으로 평가한다.
   현재 라우팅 표는 **지침**이며 모델이 항상 올바르게 선택함을 실측한 결과가 아니다.
+  기존 리뷰의 자동 호출 키워드를 진입점에 복원했지만, 실제 Codex 스킬 선택·파일 읽기를 검증한 기록은 아직 없다.
 
 ## PR #5 타이포그래피 설계의 수용/보류
 
 - **채택:** UPM/advance·간격·어간·행 길이·혼식·행간·수용량·크기 위계의 관계와 선행 의존성.
-  [typography-relations](visual-design-review/references/typography-relations.md)로 모듈화한다.
+  [typography-relations](../visual-design-review/references/typography-relations.md)로 모듈화한다.
 - **사용자 승인 A~D:** 한글 1.7·영문 1.5·일/중문 2.0배는 주언어가 확인된 새 가로 본문의 조건부 시작 행간.
 - **사용자 승인 E~H:** 10pt·전각 30칸·tracking 0·왼끝맞춤은 새 인쇄 본문의 최초 비교 시안 설정.
 - **여전히 미검증:** 언어별 배율의 보편적/실증적 타당성, 개인 메모 N1/N2의 원문 대조,
@@ -53,6 +54,9 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 `references/reference-analysis.md`의 과정은
 입력의 신뢰도 확인 → 객체/영역 분해 → 정규화된 관측 → 관계 가설 → 재구성 가능한 모델
 → 오차/대안 기록이다.
+
+[reference-analysis의 정량 계약](../visual-design-review/references/reference-analysis.md)은 Object/Relation/Hypothesis의 식별자와 frame/단위, 관계식, 경쟁 모델, 차원별 재구성 잔차를 정의한다.
+재구성 실행이나 픽셀 품질 측정을 자동으로 수행한 것은 아니다.
 
 동일 픽셀 결과를 만드는 원래 제작 구조가 다수 존재할 수 있다. 따라서 원작자의
 숨은 의도를 **발견했다고 주장하지 않고**, 관찰을 설명하는 후보 모델과 증거를 기록한다.
@@ -83,7 +87,7 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 
 ## 다음 검증 (이 PR 밖의 실증)
 
-1. [architecture-scenarios](visual-design-review/tests/architecture-scenarios.md) 과업별
+1. [architecture-scenarios](../visual-design-review/tests/architecture-scenarios.md) 과업별
    실제 에이전트 로그로 모듈 로딩 누락/오활성화 점검.
 2. 자체 생성한 레퍼런스에서 좌표·서체/원본 메트릭의 정답과 추론값을 비교하고
    재구성 오차를 기록(인위적 가중치 없는 항목별 지표).
@@ -91,3 +95,5 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 4. 이전 Review 평가 세트 전체 재실행, 정확 심각도 차이와 관찰 날조 여부 확인.
 
 이 문서는 **아키텍처 확장 및 리팩터링 제안**이지 릴리스 일정이나 기능 구현 완료 보고가 아니다.
+현재 SKILL frontmatter 버전 1.0.1은 기존 배포본과 같은 값이므로, 실제 출시 시 변경 이력과
+버전 정책을 별도 검토해야 한다. 본 Draft와 설치 스모크의 성공은 새 기능의 모델 품질을 증명하지 않는다.

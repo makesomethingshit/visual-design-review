@@ -9,7 +9,7 @@
 | 필드 | 의미 |
 | --- | --- |
 | Brief & constraints | 실제 콘텐츠, 매체, 판형·고정값, 사용자 목적 |
-| Design values | 객체/관계, 수치, 단위와 좌표계, 계산식 ID |
+| Design values | 객체/관계 ID, 수치, 단위·원점·좌표계, 계산식 ID와 적용 조건 |
 | Provenance | USER / USER_APPROVED_PROJECT_POLICY / MEASURED / DERIVED / EMPIRICAL / INFERRED / UNKNOWN |
 | Decision status | DETERMINED / PROJECT_INITIAL_PRESET / CANDIDATE / UNRESOLVED / CONFLICT — 출처·검증 상태와 별개. PROJECT_INITIAL_PRESET은 최종 확정값이 아닌 채택된 첫 시안값 |
 | Verification status | FORMULA_CHECKED / SOURCE_MEASURED / TOOL_APPLIED / OUTPUT_INSPECTED / UNVERIFIED |
@@ -41,6 +41,8 @@ unresolved:
 
 위 값은 **예시 입력에 대한 산술 결과**이지 보편적으로 선택할 레이아웃이 아니다.
 추정한 값은 DERIVED가 아니라 INFERRED/EMPIRICAL로 표기한다.
+레퍼런스 관측에서 사용하는 프레임, 개별 좌표, 측정·추론의 구분은
+[reference-analysis](reference-analysis.md)의 증거 등급에 따른다.
 
 실제 도구가 객체를 생성했는지, 원본 폰트가 있는지, 38mm로 반영했는지는 **외부 실행 결과**가
 있어야 확인할 수 있다. 도구가 확인값을 돌려주지 않으면 스킬은 '실행 미검증'으로 남긴다.

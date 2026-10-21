@@ -33,6 +33,7 @@
 - typography-relations는 formula-relations의 단위·근거 계약을 따른다. T-MEASURE는 T-SPACING과 실제 폭에 의존하고,
   T-CAPACITY는 T-MEASURE 및 T-LEADING에 의존한다. 개별 관계에서 입력이 없으면 적용을 유보한다.
 - reference-analysis가 구체적 관계식/재구성을 요청하는 경우 formula-relations를 로드한다.
+  원본의 좌표계·객체 관측 및 불확실성 상태를 확보하지 못했다면 구조·서체·그리드 수치를 발명하지 않는다.
 - 수식의 변수 정의에 다른 모듈/측정이 필요하면 선행 조건이 충족될 때만 적용한다.
 - 인쇄 → 디지털, 단문 → 장문 등 브리프가 변하면 선택과 기존 계산의 가정을 재평가한다.
 
