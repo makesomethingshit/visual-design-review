@@ -28,10 +28,11 @@ target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
-  local root="$1" path links skill_text frontmatter
+  local root="$1" path links skill_text frontmatter first_line
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
   skill_text="$(tr -d '\r' < "$root/SKILL.md")" || return 1
-  [[ "${skill_text%% || return 1
+  IFS= read -r first_line <<< "$skill_text" || return 1
+  [[ "$first_line" == '---' ]] || return 1
   # Here-strings prevent early-reader SIGPIPE under pipefail on BSD/macOS.
   frontmatter="$(awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; inside=0; next } inside { print } END { exit !found }' <<< "$skill_text")" || return 1
   [[ -n "$frontmatter" ]] || return 1
