@@ -16,12 +16,15 @@
 | **새 인쇄 본문 첫 비교 시안** | typography-presets + typography-relations | E~H 초기 설정 후보 적용; 그 외 장르 기본 제외 |
 | 그리드·공간·정렬 | composition | 판면/잡지/정보 구조는 editorial-information 추가 |
 | 데이터/그래프·정보 계층 | editorial-information | 시각화에서만 데이터 인코딩 수식 적용 |
-| 아이덴티티/로고·출력 규격 | identity-production (실제 관련 시) | 심볼만 있으면 인쇄 프리플라이트 생략 |
+| 아이덴티티/로고·출력 규격 | identity-production (실제 관련 시) | 인쇄 프리플라이트 생략은 매체가 디지털 전용으로 확정되고 인쇄 요청·제약이 없는 경우만 |
 | 역사·제작 계보·방법론 인용 | concept-context 또는 sources | 근거가 필요한 주장에만 추가 |
 
 **조건을 조합**한다. 포스터에는 장문이 있을 수도 없을 수도 있다.
 인쇄용 장문 포스터라면 typography + composition + identity-production의 제작 부분을,
 제목 없는 디지털 심볼은 기하학 관련 지식만을 우선한다.
+텍스트 없는 인쇄용 로고 PDF도 identity-production의 제작 지식을 선택한다.
+문자 유무와 무관하게 별색·분판·오버프린트·투명도·가는 선 등 해당 출력 조건을 점검한다.
+원본 속성이나 출력 조건을 확인할 수 없으면 인쇄 적합 판정 대신 UNVERIFIED로 남긴다.
 실제 구조 파일이 없는 스크린샷은 물리 치수나 메트릭을 확정하지 않는다.
 
 ## 의존 관계

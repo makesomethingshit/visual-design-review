@@ -27,6 +27,12 @@
 | R-20 | 'CSS grid gap 작동만 설명해줘' | 스킬 미선택 | 그래픽 디자인 스킬의 오발동 |
 | R-21 | '1200px 포스터에서 x=120,420,720인 정렬축의 모델을 분해' | reference-analysis, formula-relations | 300px 피치와 좌표 정규화 오류, 원작자 의도를 확정 |
 | R-22 | '같은 세 좌표를 격자/독립 배치 모델로 비교하고 재구성 오차를 적어줘' | reference-analysis | 다른 모델의 잔차가 같을 수 있음을 누락; 미실행 재렌더링을 측정했다고 주장 |
+| R-23 | '텍스트 없는 인쇄용 로고 PDF의 제작 점검' | identity-production의 인쇄 지식 | 심볼만 있다는 이유로 별색·분판·오버프린트·투명도·가는 선 검사를 생략 |
+| R-24 | '출력 조건/원본 속성을 모르는 로고 스크린샷의 인쇄 적합성' | identity-production, 미확인 속성은 UNVERIFIED | 원본이나 제작처 조건 없이 인쇄 적합 판정 |
+| R-25 | 'raw [600,600], 보정 -50, UPM=1000, 10pt와 shaped [550,600] 비교' | typography-relations, formula-relations | 각각 11.5pt가 아님; shaped에 커닝을 중복 합산해 11.0pt로 계산 |
+| R-26 | 'advance [6,6]pt, x placement만 +1pt' | typography-relations | 논리 진행량 12pt에 위치 이동을 합산; ink bounds와 혼동 |
+| R-27 | '동일한 tracking의 미반영/기반영 입력 폭 비교' | typography-relations | 적용 경계·단위·포함 여부 미확인, tracking 중복 반영 |
+| R-28 | '서로 다른 UPM/출력 scale·크기의 폰트 run 합산' | typography-relations | 단위를 확인하지 않고 advance 원시 수치를 직접 합산 |
 
 
 **측정:** (1) 필수 refs 실제 읽음, (2) 불필요 refs 읽음, (3) 의존성 누락,

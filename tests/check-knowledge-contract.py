@@ -110,9 +110,55 @@ def check_reference_math() -> None:
           "Synthetic geometric residual mismatch")
 
 
+def check_print_routing() -> None:
+    routing = read(PKG / "references/knowledge-routing.md")
+    for guard in ("매체가 디지털 전용으로 확정되고 인쇄 요청·제약이 없는 경우만",
+                  "텍스트 없는 인쇄용 로고 PDF", "UNVERIFIED"):
+        check(guard in routing, f"Missing print routing guard: {guard}")
+    check("심볼만 있으면 인쇄 프리플라이트 생략" not in routing,
+          "Symbol-only output must not bypass print checks")
+    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    for scenario in ("| R-4 |", "| R-23 |", "| R-24 |"):
+        check(scenario in scenarios, f"Missing digital/print routing case {scenario}")
+
+
+def check_typography_widths() -> None:
+    doc = read(PKG / "references/typography-relations.md")
+    for formula in ("W_raw = Σ(a_raw_i + Δadvance_i) / S × F + T_remaining",
+                    "W_shaped = Σa_shaped_i / S × F + T_remaining"):
+        check(formula in doc, f"Missing width input contract: {formula}")
+    widths: dict[str, Decimal] = {}
+    for line in doc.splitlines():
+        if not line.startswith("| W-"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        check(len(cells) == 9, f"Malformed width example: {line}")
+        code, kind, advances, scale, size, delta, offset, tracking, expected = cells
+        check(code not in widths, f"Duplicate width example {code}")
+        check(kind in ("raw", "shaped"), f"Unknown width representation: {kind}")
+        check(Decimal(scale) > 0 and Decimal(size) > 0, f"Invalid scale/size: {code}")
+        check(kind == "raw" or Decimal(delta) == 0,
+              f"Shaped advances must not receive kerning again: {code}")
+        # Placement is parsed but excluded: it changes ink position, not pen movement.
+        Decimal(offset)
+        width = ((sum(Decimal(value) for value in advances.split(",")) + Decimal(delta))
+                 / Decimal(scale) * Decimal(size) + Decimal(tracking))
+        check(width == Decimal(expected), f"Wrong documented width: {code}: {width}")
+        widths[code] = width
+    check(widths == {"W-1": Decimal(12), "W-2": Decimal("11.5"),
+                     "W-3": Decimal("11.5"), "W-4": Decimal(12),
+                     "W-5": Decimal(12), "W-6": Decimal(6), "W-7": Decimal(6)},
+          f"Missing or changed width acceptance examples: {widths}")
+    check(widths["W-6"] + widths["W-7"] == Decimal(12),
+          "Mixed-font runs must be scaled separately before summing")
+
+
 if __name__ == "__main__":
     check_preset_mapping()
     check_links()
     check_review_invocation()
     check_reference_math()
-    print("PASS: policy mappings, local docs links, legacy triggers, reference-math examples")
+    check_print_routing()
+    check_typography_widths()
+    print("PASS: policy mappings, local docs links, legacy triggers, reference-math examples, "
+          "print routing guards, documented typography widths")
