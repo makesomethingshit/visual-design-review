@@ -69,7 +69,7 @@ initial_settings:
   alignment: {value: start, id: H, status: PROJECT_INITIAL_PRESET}
   leading_ratio: {value: 1.7, id: A, status: PROJECT_INITIAL_PRESET}
 derived:
-  baseline_distance: {value: 17, unit: pt, formula: T-LEADING, origin: DERIVED, verification: [FORMULA_CHECKED]}
+  baseline_distance: {value: 17, unit: pt, formula: T-LEADING, origin: DERIVED, decision_status: PROJECT_INITIAL_PRESET, verification: [FORMULA_CHECKED]}
 unverified: [font_metrics, shaped_line_breaks, tool_applied, final_readability]
 ```
 

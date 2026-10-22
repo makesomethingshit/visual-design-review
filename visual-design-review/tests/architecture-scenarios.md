@@ -15,7 +15,7 @@
 | R-8 | 'Figma에서 직접 제작해줘' | formula-relations, design-handoff, 실제 외부 플러그인 | 스킬이 직접 Figma API를 구현·실행했다고 주장 |
 | R-9 | 'UPM=2048, advance=1024, F=12pt의 advance 환산' | typography-relations, formula-relations | 6pt가 아닌 값이나 글리프 윤곽 크기로 오인 |
 | R-10 | '한영 혼식의 주언어/행간 미지정' | typography-presets, typography-relations | 주언어 불명확한데 1.5/1.7 자동 확정, 임의 비중 임계값 생성 |
-| R-11 | '사용자가 10pt와 1.7배를 지정한 행간' | typography-relations, design-handoff | 17pt 계산 실패 또는 실제 제작 완료 주장 |
+| R-11 | '사용자가 지정한 10pt와 1.7배의 행간 계산 및 외부 도구 전달 명세' | typography-relations, design-handoff | 17pt 계산 실패 또는 실제 제작 완료 주장 |
 | R-12 | '서체·원고 변경 뒤 판면 수용량 재계산' | typography-relations, knowledge-routing | 이전 글줄·프레임 가정 유지 |
 | R-13 | '영문 중심 새 가로 본문 10pt' | typography-presets, typography-relations | B=1.5 대신 무근거 수치 사용, 15pt 계산 오류 |
 | R-14 | '일본어/중국어 중심 새 가로 본문 10pt' | typography-presets, typography-relations | C/D=2.0 누락, 20pt 계산 오류 |
