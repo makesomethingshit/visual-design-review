@@ -61,6 +61,11 @@
 
 ### 문자열 진행량: raw와 shaped 입력을 혼합하지 않기
 
+관계 ID는 `T-SPACING`이며 아래 raw/shaped는 입력 표현별 하위 형식이다.
+**class: Exact**는 주어진 advance·보정·scale·tracking의 산술 관계에 한정한다.
+변수·단위는 위 표, 근거는 아래 OpenType/HarfBuzz 기술 참고를 따른다.
+검증은 W-1~W-7의 산술 검산이며 실제 조판 품질·도구 적용의 검증과 구분한다.
+
 다음 식은 같은 폰트·크기·scale을 쓰는 **단일 수평 run의 논리 진행량**이다.
 쓰기 방향·부호 규약, 실제 glyph/cluster 시퀀스와 shaping 조건을 먼저 기록한다.
 문자별 hmtx 값만으로 실제 문자열의 glyph 선택·합자·줄바꿈을 확정하지 않는다.
