@@ -37,6 +37,11 @@ def summarize(samples: list[dict]) -> dict:
         elif (not s.get("before_artifact_hash") or not s.get("after_artifact_hash")
               or not reference_only):
             outcome = "INCONCLUSIVE"
+        elif (s["before_artifact_hash"] == s["after_artifact_hash"]
+              and before != after):
+            # A changed result for identical artifact bytes is not repair
+            # evidence; the checker/profile or declaration may have changed.
+            outcome = "INCONCLUSIVE"
         elif domain == "perceptual":
             # A declared expert rating is evidence to review, not a machine
             # guarantee that a subjective aesthetic comparison improved.
