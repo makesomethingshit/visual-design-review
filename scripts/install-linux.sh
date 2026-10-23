@@ -31,17 +31,17 @@ check_layout() {
   local root="$1" path links skill_text frontmatter
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
   skill_text="$(tr -d '\r' < "$root/SKILL.md")" || return 1
-  [[ "$(printf '%s\n' "$skill_text" | head -n 1)" == '---' ]] || return 1
-  frontmatter="$(printf '%s\n' "$skill_text" | awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; exit } inside { print } END { exit !found }')" || return 1
+  [[ "${skill_text%%$'\n'*}" == '---' ]] || return 1
+  frontmatter="$(awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; exit } inside { print } END { exit !found }' <<< "$skill_text")" || return 1
   [[ -n "$frontmatter" ]] || return 1
-  printf '%s\n' "$frontmatter" | grep -qx 'name: visual-design-review' || return 1
-  printf '%s\n' "$frontmatter" | grep -Eq '^description:' || return 1
-  printf '%s\n' "$frontmatter" | grep -qx 'metadata:' || return 1
-  printf '%s\n' "$frontmatter" | awk '
+  grep -qx 'name: visual-design-review' <<< "$frontmatter" || return 1
+  grep -Eq '^description:' <<< "$frontmatter" || return 1
+  grep -qx 'metadata:' <<< "$frontmatter" || return 1
+  awk '
     /^[^[:space:]]/ { metadata = ($0 == "metadata:") }
     metadata && /^  version: "[^"]+"$/ { found=1 }
     END { exit !found }
-  ' || return 1
+  ' <<< "$frontmatter" || return 1
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
   links="$(find "$root" -type l -print -quit)" || return 1
   [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }
@@ -81,6 +81,25 @@ backup_name() {
   printf '%s/%s.%s.%s' "$backups_dir" "$(date -u +%Y%m%dT%H%M%SZ)" "$$" "$RANDOM"
 }
 
+# Resolve the existing ancestor even when the final home has not been created.
+# Falling back to the original path string would hide links into the source.
+resolve_future_directory() {
+  local probe="$1" suffix='' component parent physical
+  while [[ "$probe" != / && "$probe" == */ ]]; do probe="${probe%/}"; done
+  while [[ ! -d "$probe" ]]; do
+    [[ ! -e "$probe" && ! -L "$probe" ]] || return 1
+    component="${probe##*/}"
+    parent="${probe%/*}"
+    [[ -n "$parent" ]] || parent=/
+    [[ "$parent" != "$probe" ]] || return 1
+    suffix="/$component$suffix"
+    probe="$parent"
+  done
+  physical="$(cd -- "$probe" && pwd -P)" || return 1
+  if [[ -n "$suffix" ]]; then printf '%s%s\n' "${physical%/}" "$suffix"
+  else printf '%s\n' "$physical"; fi
+}
+
 # Managed roots must not redirect moves into another tree.
 for managed_root in "$skills_dir" "$codex_home/skill-backups" "$backups_dir"; do
   if [[ -L "$managed_root" ]]; then
@@ -91,7 +110,9 @@ done
 
 if [[ "$action" != remove ]]; then
   [[ -n "$source_dir" ]] || { echo 'Source package is missing.' >&2; exit 1; }
-  codex_home_real="$(cd -- "$codex_home" 2>/dev/null && pwd -P || printf '%s' "$codex_home")"
+  codex_home_real="$(resolve_future_directory "$codex_home")" || {
+    echo 'Cannot resolve CODEX_HOME or its existing ancestor.' >&2; exit 2;
+  }
   if [[ "$codex_home_real" == "$source_dir" || "$codex_home_real" == "$source_dir"/* ]]; then
     echo 'CODEX_HOME must not be inside the source directory.' >&2
     exit 2
