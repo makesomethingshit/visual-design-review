@@ -13,6 +13,8 @@
 - **validation / failure:** 입력 범위, 반례, 오차, 미지원 조건.
 - **dependencies:** 이 수식을 평가하기 전에 확인해야 하는 메트릭·선행 수식.
 
+수식의 `class`는 **모델의 계산 성격**이고, 출처의 규범적 효력은 별개의 [rule-contract](rule-contract.md)의 `knowledge_kind / rule_strength / scope / conditions / exceptions / source_version / document_status`로 다룬다. 정확한 항등식이라는 이유만으로 특정 배율이나 미적 규칙을 강제하지 않는다.
+
 2026-10-21 사용자 승인 A~H의 수치는 [typography-presets](typography-presets.md)에 별도 기록한다.
 수식의 정확성과 배율·초기값의 경험적 타당성은 다른 문제다.
 
