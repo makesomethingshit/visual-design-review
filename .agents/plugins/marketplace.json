@@ -1,0 +1,26 @@
+{
+  "name": "makesomethingshit-design",
+  "interface": {
+    "displayName": "Makesomethingshit Design"
+  },
+  "plugins": [
+    {
+      "name": "visual-design-review",
+      "source": {
+        "source": "local",
+        "path": "./plugins/visual-design-review"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "category": "Creativity",
+      "interface": {
+        "displayName": "Visual Design Review"
+      }
+    }
+  ]
+}

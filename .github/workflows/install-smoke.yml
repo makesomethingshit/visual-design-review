@@ -9,6 +9,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: bash tests/smoke-install-linux.sh
       - run: bash tests/check-knowledge-architecture.sh
+      - run: python3 scripts/sync-codex-plugin.py --check
+      - run: python3 -m unittest discover -s tests -p 'test_codex_plugin_distribution.py' -v
   macos:
     runs-on: macos-latest
     steps:

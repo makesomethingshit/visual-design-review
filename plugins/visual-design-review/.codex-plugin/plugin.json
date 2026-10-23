@@ -1,0 +1,14 @@
+{
+  "name": "visual-design-review",
+  "version": "0.1.0",
+  "description": "Evidence-grounded visual and graphic design reviews, typography critiques, reference analysis, and formula-based design handoffs.",
+  "repository": "https://github.com/makesomethingshit/visual-design-review",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Visual Design Review",
+    "shortDescription": "근거 기반 시각디자인 리뷰·조판·설계 명세",
+    "developerName": "makesomethingshit",
+    "category": "Creativity"
+  }
+}
