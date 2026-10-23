@@ -53,6 +53,22 @@ class FindingHistoryTests(unittest.TestCase):
             new = {"findings": [{"finding_id": "F1", "state": state}]}
             self.assertEqual(mod.compare(old, new)[0]["state"], state)
 
+    def test_inconclusive_then_new_requires_continuity_evidence(self):
+        old = {"findings": [{"finding_id": "F1", "state": "INCONCLUSIVE"}]}
+        for current in ({"finding_id": "F1", "state": "NEW"},
+                        {"finding_id": "F1"},
+                        {"finding_id": "F1", "state": "PERSISTING"}):
+            with self.subTest(current=current):
+                after = {"findings": [current], "review_coverage": "FULL_COMPARABLE"}
+                self.assertEqual(mod.compare(old, after)[0]["state"], "INCONCLUSIVE")
+
+    def test_inconclusive_then_missing_does_not_auto_resolve(self):
+        old = {"findings": [{"finding_id": "F1", "state": "INCONCLUSIVE"}]}
+        for coverage in ("PARTIAL", "FULL_COMPARABLE"):
+            with self.subTest(coverage=coverage):
+                after = {"findings": [], "review_coverage": coverage}
+                self.assertEqual(mod.compare(old, after)[0]["state"], "INCONCLUSIVE")
+
     def test_resolved_tombstone_does_not_become_inconclusive(self):
         old = {"findings": [{"finding_id": "F1", "state": "RESOLVED"}]}
         self.assertEqual(mod.compare(old, {"findings": []})[0]["state"], "RESOLVED")
