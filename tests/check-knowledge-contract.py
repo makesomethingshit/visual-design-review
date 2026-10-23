@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from decimal import Decimal
 from pathlib import Path
+from statistics import median
 
 ROOT = Path(__file__).resolve().parents[1]
 PKG = ROOT / "visual-design-review"
@@ -98,16 +99,35 @@ def check_reference_math() -> None:
                       "evidence_status", "UNVERIFIED", "e_x=", "median(",
                       "경쟁 모델", "임의 가중치", "재구성"):
         check(must_have in doc, f"Missing inverse-analysis contract {must_have}")
-    width = Decimal(1200)
-    xs = [Decimal(120), Decimal(420), Decimal(720)]
-    check([x / width for x in xs] ==
-          [Decimal(".10"), Decimal(".35"), Decimal(".60")],
-          "Synthetic normalized x observations mismatch")
-    gaps = [b - a for a, b in zip(xs, xs[1:])]
-    check(gaps == [Decimal(300), Decimal(300)], "Synthetic pitch mismatch")
-    check([abs(Decimal(120) + Decimal(300)*i - x) / width
-           for i, x in enumerate(xs)] == [0, 0, 0],
-          "Synthetic geometric residual mismatch")
+    rows = {}
+    for line in doc.splitlines():
+        if not line.startswith("| RA-"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        check(len(cells) == 9, f"Malformed reference example: {line}")
+        code, width, observations, normalized, deltas, pitch, origin, model_pitch, residuals = cells
+        check(code not in rows, f"Duplicate reference example: {code}")
+        width = Decimal(width)
+        check(width.is_finite() and width > 0, f"Invalid reference frame width: {code}")
+        xs = [Decimal(value) for value in observations.split(",")]
+        check(len(xs) >= 3 and all(x.is_finite() for x in xs),
+              f"Invalid reference observations: {code}")
+        documented_normalized = [Decimal(value) for value in normalized.split(",")]
+        documented_deltas = [Decimal(value) for value in deltas.split(",")]
+        documented_residuals = [Decimal(value) for value in residuals.split(",")]
+        check([x / width for x in xs] == documented_normalized,
+              f"Documented normalized x mismatch: {code}")
+        gaps = [b - a for a, b in zip(xs, xs[1:])]
+        check(gaps == documented_deltas, f"Documented adjacent deltas mismatch: {code}")
+        check(median(gaps) == Decimal(pitch), f"Documented pitch mismatch: {code}")
+        origin, model_pitch = Decimal(origin), Decimal(model_pitch)
+        check(origin.is_finite() and model_pitch.is_finite(),
+              f"Invalid reference model: {code}")
+        check([abs(origin + model_pitch * i - x) / width
+               for i, x in enumerate(xs)] == documented_residuals,
+              f"Documented geometric residual mismatch: {code}")
+        rows[code] = cells
+    check(set(rows) == {"RA-1"}, f"Missing or extra reference example: {set(rows)}")
 
 
 def check_print_routing() -> None:
