@@ -39,6 +39,24 @@ class RepairLiftTests(unittest.TestCase):
         r = mod.summarize([sample(before_status="PASS", after_status="FAIL")])
         self.assertEqual(r["declared_counts"]["REGRESSION_CANDIDATE"], 1)
 
+    def test_identical_artifact_cannot_be_resolved_candidate(self):
+        r = mod.summarize([sample(after_artifact_hash="sha256:a")])
+        self.assertEqual(r["declared_counts"]["INCONCLUSIVE"], 1)
+        self.assertEqual(r["declared_counts"]["RESOLVED_CANDIDATE"], 0)
+        self.assertIsNone(r["verified_counts"])
+        self.assertEqual(r["independent_verification"], "UNVERIFIED")
+
+    def test_identical_artifact_cannot_be_regression_candidate(self):
+        r = mod.summarize([sample(before_status="PASS", after_status="FAIL",
+                                  after_artifact_hash="sha256:a")])
+        self.assertEqual(r["declared_counts"]["INCONCLUSIVE"], 1)
+        self.assertEqual(r["declared_counts"]["REGRESSION_CANDIDATE"], 0)
+
+    def test_identical_artifact_unchanged_status_remains_candidate(self):
+        r = mod.summarize([sample(before_status="FAIL", after_status="FAIL",
+                                  after_artifact_hash="sha256:a")])
+        self.assertEqual(r["declared_counts"]["UNCHANGED_CANDIDATE"], 1)
+
     def test_unverified_external_report_is_not_a_fix(self):
         r = mod.summarize([sample(verification_evidence=[
             {"verification_status": "UNVERIFIED", "checks": [{"status": "UNVERIFIED"}]}])])
