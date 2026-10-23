@@ -24,6 +24,12 @@ grep -Fq '명시된 사용자' "$policy" || fail 'user override absent'
 grep -Fq '기존 작품 비평' "$policy" || fail 'review exclusion absent'
 grep -Fq 'PR #5' "$root/docs/skill-architecture-extension.md" || fail 'source attribution missing'
 grep -Fq 'reference-analysis' "$root/docs/skill-architecture-extension.md" || fail 'reference reverse engineering omitted'
+# Product-correct is an explicit-write opt-in; static reachability only, not GitHub agent E2E.
+[[ -f "$package/references/product-correct.md" ]] || fail 'product-correct reference missing'
+grep -Fq 'references/product-correct.md' "$package/SKILL.md" || fail 'product-correct not routed from SKILL'
+grep -Fq 'product-correct' "$package/references/knowledge-routing.md" || fail 'product-correct route missing'
+[[ -f "$package/tests/product-correct-cases.md" ]] || fail 'product-correct manual cases missing'
+grep -Fq '| PC-01 |' "$package/tests/product-correct-cases.md" || fail 'product-correct no-write negative case missing'
 # The canonical root ARCHITECTURE.md is supplied by #5; it may exist after that PR merges.
 # Compare the PR diff to detect overlapping edits; do not require the file to be absent.
 awk 'BEGIN {
