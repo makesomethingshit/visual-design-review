@@ -22,6 +22,10 @@ AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적�
 **하지 않는 일:** 자체 도구 어댑터, API 래퍼, read-back 엔진, 범용 제약 솔버, 픽셀 분석기,
 외부 디자인 도구 사용법 복제. 외부 도구가 돌려주지 않은 수치는 검증했다고 선언하지 않는다.
 
+## 규범·출처와 계산 모델의 직교 축
+
+이 리팩터링은 Review/Reference Analysis/Quantitative Design의 **작업 경로**를 유지하면서, `rule-contract.md`의 `knowledge_kind`·`rule_strength`·출처 지위/버전·scope·예외·verification_method를 필요한 경우에만 추가한다. 이 계약은 `formula-relations`의 Exact/Approximation/Empirical/Perceptual과 별개의 축이다. 표준 초안을 자동 강제 규칙으로 승격하지 않고, 혼식 본문에서 원문·script run·폰트·shaping·줄바꿈 결과가 없으면 최종 조판 수치를 확인했다고 주장하지 않는다. **실제 glyph/line-break validator, 플랫폼 adapter, optical pairing 평가 등은 후속 이슈 #8~#13으로 분리**한다. PR #5는 변경하지 않는다.
+
 ## 1. 지식 진입점과 라우팅
 
 `SKILL.md`는 최소 공통 원칙과 모드 선택으로 축약한다.
