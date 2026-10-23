@@ -32,7 +32,12 @@ When the same ID is active in both snapshots, the result is PERSISTING even if a
 followed by an active finding is REGRESSED. The legacy current-row `previous_state` fallback
 is used only when the ID is absent from the before snapshot; it is a caller-provided assertion.
 An explicitly resolved or inconclusive current row retains that declared candidate state.
-The chain RESOLVED → REGRESSED → PERSISTING is counted as one recurrence, not two.
+An immediately previous **INCONCLUSIVE** finding is *not* a confirmed active
+observation: a new row with that ID (including one labelled NEW/PERSISTING) cannot
+be silently counted as PERSISTING. If the ID disappears, even from a nominally
+FULL_COMPARABLE snapshot, the prior uncertainty alone does not prove RESOLVED.
+Both cases remain INCONCLUSIVE until continuity or actual resolution is established
+outside this ID-only helper. The chain RESOLVED → REGRESSED → PERSISTING is unchanged.
 
 **Severity:** no numeric area score automatically upgrades Critical/Major. Existing finding contract (location, observation, impact, counter-interpretation, action, verification) remains authoritative.
 
