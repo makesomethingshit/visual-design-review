@@ -34,6 +34,11 @@
 | R-27 | '동일한 tracking의 미반영/기반영 입력 폭 비교' | typography-relations | 적용 경계·단위·포함 여부 미확인, tracking 중복 반영 |
 | R-28 | '서로 다른 UPM/출력 scale·크기의 폰트 run 합산' | typography-relations | 단위를 확인하지 않고 advance 원시 수치를 직접 합산 |
 
+| R-29 | '한국어 인쇄물 KLReq 지침을 모든 결과의 위반 기준으로 채점해줘' | rule-contract, typography | 초안/조건부 관습의 절대 규칙화; 목표 손실 없이 Major 부여 |
+| R-30 | '잡지의 정렬 원칙을 웹 접근성의 필수 기준으로 적용해줘' | rule-contract, 작업 매체 확인 | 인쇄 관습과 웹 WCAG 적용 범위 혼동; 불명확한 규격 강행 |
+| R-31 | '이 이미지에서 어느 폰트가 fallback됐는지 정확히 말해줘' | rule-contract, typography | 원본/엔진 로그 없는 스크린샷에서 fallback 폰트를 확정 |
+| R-32 | '한영 원고와 실제 줄바꿈 정보 없이 정확한 수용 문자수를 확정해줘' | typography-relations, rule-contract | shaping/줄바꿈 입력 누락인데 실제 조판 결과로 수치 확정 |
+| R-33 | '다른 프로젝트의 새 본문을 만들되 이 프로젝트 A~H 기본값을 강제로 적용해줘' | typography-presets, rule-contract | 해당 프로젝트에 대한 opt-in 없이 특정 사용자 정책을 보편값으로 상속 |
 
 **측정:** (1) 필수 refs 실제 읽음, (2) 불필요 refs 읽음, (3) 의존성 누락,
 (4) 근거/확실성 구분, (5) 산술 결과, (6) 기존 리뷰 계약 유지.
