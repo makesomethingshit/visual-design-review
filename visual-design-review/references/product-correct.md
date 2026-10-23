@@ -12,12 +12,26 @@
 - 저장소/디자인 자산의 권한과 사용자 요청 범위 확인은 필수. **Issue 작성, 브랜치 수정, PR 생성, Ready 전환, merge는 각각 다른 행동**이다. 사용자의 이슈/초안 PR 요청은 Ready·merge 승인으로 해석하지 않는다.
 - 기존 [review-output](review-output.md)의 관찰·목표 손실·반대 해석·확실성·심각도 구분을 유지한다. 확인되지 않은 미적 선호를 Defect/자동 수정 대상으로 바꾸지 않는다.
 
+## 기존 모듈과의 단일 책임 경계
+
+이 경로는 **GitHub 협업 작업의 조정자(orchestrator)**이며, Finding이나 수정 품질의 별도 판정 엔진이 아니다.
+
+| 책임 | 단일 소유자 | Product Correct의 역할 |
+| --- | --- | --- |
+| 시각적 관찰·근거·심각도·반대 해석 | 기존 [review-output](review-output.md) / [review-protocol](review-protocol.md) | 확인된 Finding을 Issue 입력으로 연결; 자체 비평 기준 발명 금지 |
+| Finding ID·이전/현재 상태·불확실성 | [#11 / PR #18](https://github.com/makesomethingshit/visual-design-review/pull/18), **Draft** | 사용 가능할 때 참조·링크만 전달; 새로운 전이 규칙·별도 히스토리 저장소 추가 금지 |
+| GitHub 대상·중복 Issue/PR 조회·권한·Issue 작성·최소 패치 Draft 제출 | **현재 Product Correct (#27)** | 이 단계의 **유일한 책임**; 등록 결과는 실제 GitHub 응답으로 확인 |
+| 수정 효과/퇴행/검증 상태 집계 | [#13 / PR #20](https://github.com/makesomethingshit/visual-design-review/pull/20), **Draft** | Before/After와 CI 증거를 링크하되 품질 향상 수치나 RESOLVED를 자체 판정하지 않음 |
+| 스킬 라우팅/반복 실패의 에이전트 행동 평가 | [#7](https://github.com/makesomethingshit/visual-design-review/issues/7) | 검증용 시나리오를 제공, 평가 엔진을 중복 구현하지 않음 |
+
+**독립 Draft 의존성:** #18과 #20이 아직 main에 없으므로 PR #28은 이들 Python 모듈을 import하거나 존재를 필수로 강제하지 않는다. 현재의 review-output 형식으로도 Issue 초안을 만들 수 있다. 통합이 필요할 때는 별도 호환성 PR에서 증거 ID·이력·산출물 버전을 연결한다.
+
 ## 관찰 수집 → 문제의 종류 결정
 
 1. **실제 자료 읽기**: 최근 관련 이슈·PR 리뷰/되돌림·사용자 재수정 기록·브리프·시각 자료와 가능한 실제 구현을 확인한다. 못 본 소스나 사용자 인터뷰를 읽었다고 주장하지 않는다.
 2. **관찰 단위**: Finding ID(있다면), 제품 표면, 관측된 위치/현상, 목표/필수 제약과 손실, 제품·아티팩트 버전, 재현 방법, 실제 근거 URL/파일, 관찰 범위/확실성, 대안 해석, 수정 후 확인 조건을 기록한다.
-3. **단일 결함도 추적 가능**: 하나의 증거로 확인된 실제 손실은 `SINGLE_DEFECT` Issue 후보가 된다. 원인 미확인·취향 차이는 조사/논의 또는 `UNVERIFIED`이며 자동 결함 확정이 아니다.
-4. **반복 클래스 후보**: 같은 root cause 가설에 속한다고 독립적으로 설명 가능한 실제 발생이 **최소 2건** 있어야 `REPEATED_CANDIDATE`라고 표기한다. 같은 현상에 대한 중복 댓글·같은 스크린샷의 재게시·같은 실행 로그 복제는 한 발생이다. **2건은 공통 원인 확정의 충분조건이 아니다.** 근거 URL·버전·각 사례의 다른 맥락을 보존하고 대안 원인을 검토한다.
+3. **단일 결함도 추적 가능**: 하나의 증거로 확인된 실제 손실은 단일 결함 Issue 후보가 된다. 원인 미확인·취향 차이는 조사/논의 또는 `UNVERIFIED`이며 자동 결함 확정이 아니다.
+4. **반복 클래스 후보**: 같은 root cause 가설에 속한다고 독립적으로 설명 가능한 실제 발생이 **최소 2건** 있어야 GitHub 이슈에서 '반복 원인 후보'로 표시할 수 있다. 이는 **#18의 Finding 상태가 아니라 GitHub triage 설명**이다. 같은 현상에 대한 중복 댓글·같은 스크린샷의 재게시·같은 실행 로그 복제는 한 발생이다. **2건은 공통 원인 확정의 충분조건이 아니다.** 근거 URL·버전·각 사례의 다른 맥락을 보존하고 대안 원인을 검토한다.
 5. 범위/영향이 확인되지 않았거나 제품 결정에 속하는 사항을 유지보수 블로커로 둔갑시키지 않는다. 문제의 존재와 심각도, 원인 가설, 적용 가능한 수정 범위를 독립 판단한다.
 
 ## 교정 우선순위 — 재발 가능성을 줄이는 쪽부터
@@ -36,7 +50,7 @@
 먼저 현재 대상 저장소의 유사 **열린·닫힌 이슈와 진행 중 PR**을 실제 검색한다. 같은 결함·재현·원인일 때는 새 번호를 늘리지 않고 관련 이슈에 근거를 연결/업데이트할지 판단한다(수정 권한 필요).
 
 Issue 본문의 최소 내용:
-- **문제/범위:** 제목, 제품 표면·버전, `SINGLE_DEFECT / REPEATED_CANDIDATE / INVESTIGATE / DESIGN_DECISION` 분류(가설임을 표시).
+- **문제/범위:** 제목, 제품 표면·버전, 단일 결함/반복 후보/추가 조사/제품 결정 필요 여부를 **이슈 분류**로 설명. 이는 #18의 `NEW / PERSISTING / RESOLVED / REGRESSED / INCONCLUSIVE`와 다른 축이다.
 - **Before:** 재현 입력·작품/페이지/스크린샷 또는 파일 링크와 실제 관측, 브리프/기대 조건, 사용자에게 발생한 목표 손실·관찰 한계.
 - **원인/반대 해석:** 공통 원인은 가설/확정 분리, 반복 후보이면 서로 독립된 발생 2건 이상 링크, 유지해야 할 디자인 의도와 예외.
 - **수정 방향/수용 조건:** 가장 작은 책임 경계, 예상 영향, 위험, 확인/회귀 방법, 누가 제품 결정을 해야 하는가.
@@ -58,4 +72,4 @@ Issue 본문의 최소 내용:
 `PR_DRAFTED`(PR 본문/패치 제안) / `PR_OPEN_DRAFT`(실제 GitHub Draft PR URL 확인) /
 `BLOCKED`(권한·원본·환경 부족)을 구분한다. **외부 쓰기 도구의 결과 없이 생성됐다고 말하지 않는다.**
 
-수정 효과는 [#13](https://github.com/makesomethingshit/visual-design-review/issues/13)의 별도 repair-lift 평가 대상이다. 에이전트가 이 지침을 실제로 선택·이행하는지의 행동 검증은 [#7](https://github.com/makesomethingshit/visual-design-review/issues/7)에서 다룬다. 이 문서 추가만으로 GitHub 연동이나 실제 제품 개선은 검증되지 않는다.
+수정 효과는 [#13](https://github.com/makesomethingshit/visual-design-review/issues/13)의 별도 repair-lift 평가 대상이며, PR #20의 선언 결과를 검증된 개선으로 재해석하지 않는다. 에이전트가 이 지침을 실제로 선택·이행하는지의 행동 검증은 [#7](https://github.com/makesomethingshit/visual-design-review/issues/7)에서 다룬다. 이 문서 추가만으로 GitHub 연동이나 실제 제품 개선은 검증되지 않는다.
