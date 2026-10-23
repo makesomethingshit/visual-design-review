@@ -1,0 +1,39 @@
+{
+  "artifact_version": "poster-v2",
+  "artifact_source_id": "fixture-poster",
+  "artifact_path": "poster-v2-moved.svg",
+  "artifact_sha256": "a95653d126290cdcbf64932dbab1751593829e7ae90b1bb812eecf5b4ce6e20d",
+  "review_coverage": "FULL_COMPARABLE",
+  "findings": [
+    {
+      "finding_id": "F-ALIGN",
+      "page_id": "artboard-1",
+      "object_ids": ["title-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "title panel after layout move",
+      "bbox": [180, 96, 240, 80],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "title block remains too close to the top edge",
+      "uncertainty": "CONFIRMED",
+      "state": "PERSISTING",
+      "verification_request": "compare the title panel at the same viewBox"
+    },
+    {
+      "finding_id": "F-CAPTION",
+      "page_id": "artboard-1",
+      "object_ids": ["caption-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "caption panel after layout move",
+      "bbox": [180, 250, 320, 60],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "caption panel has enough vertical room in this version",
+      "uncertainty": "CONFIRMED",
+      "state": "RESOLVED",
+      "verification_request": "recheck at the intended reading size"
+    }
+  ]
+}
