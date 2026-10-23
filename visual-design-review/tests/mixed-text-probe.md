@@ -1,6 +1,6 @@
 # Mixed text probe: limits / examples (#9)
 
-Draft executable subset; not a full Unicode UAX #14 implementation. The public
+Versioned executable subset; not a full Unicode UAX #14 implementation. The public
 boundary is `check(payload)` plus the CLI; both are read-only.
 
 Run from repository root (Python 3.10+):
@@ -68,3 +68,19 @@ vocabulary; it is not the issue's proposed general PASS/FAIL validator contract.
 
 Callers must not coerce candidate/absence statuses into FAIL/PASS. A future full
 validator must version its result contract and retain these evidence distinctions.
+## Adopted v0 scope (2026-10-24)
+
+The adopted executable subset is source-text SI candidates under an explicit
+project profile and simple boundary candidates in caller-supplied matching lines.
+This is the minimum scope chosen for this PR, rather than a pending choice of a
+shaping engine. `MIX-003` intentionally remains `UNVERIFIED`: font files, cmap,
+fallback resolution, PDF extraction and image OCR are not runtime inputs.
+
+UAX #14 and KLReq provide rule context; this subset does not claim a pinned UAX
+implementation or full tailoring conformance. The optional local font render is
+an experiment, not part of `check(payload)` or proof of fallback. Expanding those
+capabilities requires a separately versioned implementation and evidence.
+
+Behavioral, rendering and false-positive evaluations remain unexecuted where
+recorded; the user has waived those evaluations as Ready-for-review gates.
+That waiver does not change output states or make unsupported checks pass.
