@@ -53,3 +53,15 @@ SKILL.md·red-flags.md·루트 LICENSE를 추가로 직접 확인했다.
 원본 자료를 향후 직접 복제한다면 해당 고정 SHA의 실제 허가 조건과 저작권
 표시를 다시 검토하고 필요한 고지를 동봉한다. 스킬 출처가 사용자 작품·
 서체·데이터·브랜드 자산의 재사용 권한을 부여하지 않는다.
+
+## 추가 연구 참고 문헌 — 정량적 역분석 아키텍처 (2026-10-21)
+
+아래는 신규 프로토콜의 **연구적 배경**이다. 출처 코드·이미지·데이터셋을 복제하거나
+실험 결과를 우리 스킬의 검증 결과로 간주하지 않는다.
+
+- [ReDesign (2026)](https://arxiv.org/html/2607.25565): 레이어 계층의 단계별 확장·검증과 수정 가능성.
+- [Vector Layout Transfer (2023)](https://arxiv.org/html/2309.11635v1): 레이아웃 관계의 추출·전달.
+- [Re-typograph (2015)](https://doi.org/10.1117/12.2075813): 서체 파라미터 역추정 문제의 비유일성.
+- [Reverse-engineering information presentations (2023)](https://link.springer.com/article/10.1007/s44267-023-00010-1): 계층·그룹 추론.
+- [OpenType GPOS](https://learn.microsoft.com/en-us/typography/opentype/spec/gpos), [Google Fonts metrics](https://googlefonts.github.io/gf-guide/metrics.html): 자형·조판 메트릭의 기술 정의.
+- [OERT composition](https://www.oert.org/en/composition-and-modules/), [EU Data Visualisation Guide](https://data.europa.eu/apps/data-visualisation-guide/respecting-proportions): 모듈 구조와 면적 비례 표현.

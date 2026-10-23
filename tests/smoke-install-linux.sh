@@ -6,6 +6,8 @@ sandbox="$(mktemp -d)"
 trap 'rm -rf -- "$sandbox"' EXIT
 export CODEX_HOME="$sandbox/custom-codex-home"
 installer="$root/scripts/install-linux.sh"
+# Catch shell parse regressions before any install/dry-run assertions.
+bash -n "$installer" || { echo "FAIL: installer syntax check" >&2; exit 1; }
 target="$CODEX_HOME/skills/visual-design-review"
 backups_dir="$CODEX_HOME/skill-backups/visual-design-review"
 fail() { echo "FAIL: $*" >&2; exit 1; }
@@ -62,6 +64,19 @@ fake_repo="$sandbox/fake-repo"
 mkdir -p "$fake_repo/scripts"
 cp "$root/scripts/install-linux.sh" "$fake_repo/scripts/"
 cp -a "$root/visual-design-review" "$fake_repo/"
+
+# Regression: long but valid SKILL.md must not fail validation under pipefail.
+# On macOS, printf | head (or early-exiting awk) can fail with SIGPIPE.
+awk 'BEGIN {
+  for (i = 0; i < 4096; i++) {
+    print "long-skill-body-padding-to-detect-premature-consumer-close-on-BSD"
+  }
+}' >> "$fake_repo/visual-design-review/SKILL.md"
+large_home="$sandbox/large-skill-home"
+CODEX_HOME="$large_home" bash "$fake_repo/scripts/install-linux.sh" install --dry-run >/dev/null ||
+  fail 'large valid SKILL.md failed validation (possible SIGPIPE)'
+[[ ! -e "$large_home" ]] || fail 'large-skill dry-run modified filesystem'
+
 awk '
   $0 == "name: visual-design-review" { next }
   { print }

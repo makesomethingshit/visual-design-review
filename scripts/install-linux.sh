@@ -28,20 +28,22 @@ target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
-  local root="$1" path links skill_text frontmatter
+  local root="$1" path links skill_text frontmatter first_line
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
   skill_text="$(tr -d '\r' < "$root/SKILL.md")" || return 1
-  [[ "$(printf '%s\n' "$skill_text" | head -n 1)" == '---' ]] || return 1
-  frontmatter="$(printf '%s\n' "$skill_text" | awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; exit } inside { print } END { exit !found }')" || return 1
+  IFS= read -r first_line <<< "$skill_text" || return 1
+  [[ "$first_line" == '---' ]] || return 1
+  # Avoid early-reader SIGPIPE (BSD/macOS) with pipefail enabled.
+  frontmatter="$(awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; inside=0; next } inside { print } END { exit !found }' <<< "$skill_text")" || return 1
   [[ -n "$frontmatter" ]] || return 1
-  printf '%s\n' "$frontmatter" | grep -qx 'name: visual-design-review' || return 1
-  printf '%s\n' "$frontmatter" | grep -Eq '^description:' || return 1
-  printf '%s\n' "$frontmatter" | grep -qx 'metadata:' || return 1
-  printf '%s\n' "$frontmatter" | awk '
+  grep -qx 'name: visual-design-review' <<< "$frontmatter" || return 1
+  grep -Eq '^description:' <<< "$frontmatter" || return 1
+  grep -qx 'metadata:' <<< "$frontmatter" || return 1
+  awk '
     /^[^[:space:]]/ { metadata = ($0 == "metadata:") }
     metadata && /^  version: "[^"]+"$/ { found=1 }
     END { exit !found }
-  ' || return 1
+  ' <<< "$frontmatter" || return 1
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
   links="$(find "$root" -type l -print -quit)" || return 1
   [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }

@@ -42,7 +42,7 @@ $visual-design-review 이 포스터를 빡세게 리뷰해줘.
 ## 구성과 근거
 
 - 단일 [SKILL.md](visual-design-review/SKILL.md)
-- 선택적으로 읽는 references 8개
+- 작업에 따라 선택적으로 읽는 분야별·정량 설계 references
 - [A~E 회귀 기준](visual-design-review/tests/review-cases.md) 및 [A~J 비교·반복·라우팅 평가 원문](visual-design-review/tests/evaluation/README.md)
 - [SHA 고정 출처·라이선스·통합 결정](visual-design-review/references/sources.md)
 - [검증 보고서](VALIDATION.md)
@@ -50,3 +50,13 @@ $visual-design-review 이 포스터를 빡세게 리뷰해줘.
 원본 파일·문구를 합쳐 배포하지 않고 일반 방법론을 독자적으로 재작성했습니다. 라이선스가 없는 소스는 일반적인 개념만 참고했습니다. 원본 자산·제3자 데이터·사용자 작품의 권한은 포함하지 않습니다.
 
 v1.0.1은 내용 계약·관찰 범위·심각도 판단을 보강했습니다. [F1–F3 후속 검증](visual-design-review/tests/evaluation/FOLLOWUP.md)에서 C/J/F/G를 각 2회 재실행하고 실제 Codex 라우팅 12회(명시·자연어 호출 및 CSS·UI·코드 리뷰 비활성)를 완료했습니다. 중간 실패와 정확한 심각도 반복 차이 등 남은 한계도 공개하며, 모든 품질 항목 합격이나 이전 버전 대비 일반적 우월성을 보증하지 않습니다.
+
+## 개발 중: 정량적 레퍼런스 역분석과 디자인 지식 구조 (#2)
+
+이 문서의 v1.0.1 기능 설명과 검증 범위는 기존 Review 기준입니다. 아키텍처 리팩터링
+초안에서는 모드별 references 선택, 이미지/편집 원본의 조형 관계에 대한 증거 기반 역분석,
+수식의 출처·적용 조건 관리 및 외부 디자인 플러그인 전달 계약을 추가로 제안합니다.
+자동 이미지 분해·솔버·Adobe/Penpot/Figma 어댑터를 구현했다고 주장하지 않습니다.
+초기 본문 조판에는 사용자가 승인한 [A~H 프로젝트 조건부 시작값](visual-design-review/references/typography-presets.md)을 사용할 수 있지만,
+이는 모든 서체·매체에 성립하는 가독성 법칙이나 최종 디자인 최적값이 아닙니다.
+자세한 책임 경계 및 아직 검증하지 않은 항목은 [스킬 확장 설계](docs/skill-architecture-extension.md)와 [PR #5의 기반 아키텍처](https://github.com/makesomethingshit/visual-design-review/pull/5)를 참조하세요.
