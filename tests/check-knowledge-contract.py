@@ -155,6 +155,25 @@ def check_typography_widths() -> None:
 
 
 
+def check_policy_activation() -> None:
+    # Static consistency only: actual agent reads and opt-in behavior need #7.
+    for relative in ("SKILL.md", "references/knowledge-routing.md",
+                     "references/design-handoff.md"):
+        check("명시적 opt-in" in read(PKG / relative),
+              f"Missing current-task opt-in guard: {relative}")
+    handoff = read(PKG / "references/design-handoff.md")
+    check("opt_in: true" in handoff and "activation_basis:" in handoff,
+          "Preset handoff example must include activation evidence")
+    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    rows = {line.split("|")[1].strip(): line for line in scenarios.splitlines()
+            if line.startswith("| R-")}
+    for code in ("R-6", "R-13", "R-14"):
+        check("A~H 프로젝트 프로파일을 명시적으로 적용" in rows.get(code, ""),
+              f"Positive preset scenario lacks opt-in: {code}")
+    check("opt-in 없이" in rows.get("R-33", ""),
+          "Cross-project negative scenario must preserve the opt-in guard")
+
+
 def check_rule_contract() -> None:
     contract = read(PKG / "references/rule-contract.md")
     for required in ("knowledge_kind", "rule_strength", "source_version",
@@ -181,5 +200,6 @@ if __name__ == "__main__":
     check_print_routing()
     check_typography_widths()
     check_rule_contract()
+    check_policy_activation()
     print("PASS: policy mappings, local docs links, legacy triggers, reference-math examples, "
           "print routing guards, documented typography widths")
