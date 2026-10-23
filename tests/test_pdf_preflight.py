@@ -160,6 +160,38 @@ class PdfPreflightTests(unittest.TestCase):
                 self.assertEqual(checks["trim-bleed"]["status"], "PASS")
                 self.assertEqual(report["preflight_status"], "PASS" if not required else "BLOCKED")
 
+    def test_cli_accepts_spaced_pdffonts_separator(self):
+        table = (b"name                                 type              encoding         emb sub uni object ID\n"
+                 b"------------------------------------ ----------------- ---------------- --- --- --- ---------\n")
+        pdfinfo = (b"Pages: 1\nTrimBox: 0.00 0.00 595.28 841.89\n"
+                   b"BleedBox: -8.50 -8.50 603.78 850.39\n")
+        self.profile.write_text(json.dumps({**PROFILE, "allowed_rendered_color": "any"}),
+                                encoding="utf-8")
+        for row, expected_status, expected_exit in (
+            (b"EmbeddedFont                         TrueType          WinAnsi          yes yes yes      5  0\n", "PASS", 0),
+            (b"Helvetica                            Type 1            WinAnsi          no  no  no       5  0\n", "FAIL", 1),
+            (b"", "NOT_APPLICABLE", 0),
+            (b"malformed row\n", "BLOCKED", 2),
+        ):
+            with self.subTest(font_status=expected_status):
+                def run_tool(tool, args, timeout=30):
+                    output = b"version 1.0\n" if args == ["-v"] else (
+                        pdfinfo if tool == "pdfinfo" else table + row)
+                    return subprocess.CompletedProcess([], 0, output, b"")
+
+                with patch.object(mod, "_resolve_tool", side_effect=lambda name, override:
+                                  name if name in {"pdfinfo", "pdffonts"} else None), \
+                     patch.object(mod, "_run", side_effect=run_tool), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    code = mod.main(["--pdf", str(self.good), "--profile", str(self.profile),
+                                     "--output", str(self.report)])
+                report = json.loads(self.report.read_text(encoding="utf-8"))
+                checks = {item["id"]: item for item in report["checks"]}
+                self.assertEqual(checks["font-embedding"]["status"], expected_status)
+                self.assertEqual(code, expected_exit)
+                self.assertEqual(report["preflight_status"],
+                                 "PASS" if expected_status == "NOT_APPLICABLE" else expected_status)
+
     def test_tools_inspect_private_snapshot_matching_report_hash(self):
         original_run = mod._run
         original_resolve = mod._resolve_tool

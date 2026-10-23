@@ -183,7 +183,7 @@ def _parse_fonts(text: str) -> tuple[list[dict[str, Any]], str | None]:
         if line.startswith("name") and "emb" in line.split():
             in_table = True
             continue
-        if not in_table or not line.strip() or set(line.strip()) == {"-"}:
+        if not in_table or not line.strip() or set("".join(line.split())) == {"-"}:
             continue
         parts = line.split()
         if (len(parts) < 7 or parts[-5].lower() not in {"yes", "no"} or
