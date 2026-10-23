@@ -1,4 +1,4 @@
-# 최종 PDF 프리플라이트 증거 계약 — 초안 (#12)
+# 최종 PDF 프리플라이트 증거 계약 — 제한적 v1 (#12)
 
 > **현재 구현: 외부 보고서 importer와 Poppler 기반의 제한적 read-only PDF 검사기.** Acrobat, PDF/X, ICC/source colour profile, 실제 인쇄 엔진, Adobe 파일 속성을 검사하지 않는다. `PDF_OUTPUT_PREFLIGHTED`를 선언할 수 있는 수준이 아니다.
 
@@ -47,17 +47,34 @@ PDF 프리플라이트 통과는 1번 또는 3번을 증명하지 않는다. 실
 
 Use `python visual-design-review/scripts/check_pdf_preflight.py --pdf path/to/final.pdf --profile path/to/print-contract.json` for the limited actual checks. Use `python visual-design-review/scripts/import_pdf_preflight.py --pdf path/to/final.pdf --report path/to/report.json` to **import**, not validate. The importer hashes the input PDF and report and places all imported check results in **UNVERIFIED** even when an unauthenticated report says PASS. The actual checker never consumes that external report.
 
-## Follow-up implementation gate
+## Supported v1 scope and later production checks
 
 - [x] Read-only adapter invokes Poppler for the limited TrimBox/BleedBox, font, and rendered-colour checks
 - [x] The report matches the same PDF hash and records checker/tool/profile provenance
 - [x] Checks are mapped to an explicit profile with reproducible normal/defect fixtures and machine-verifiable evidence
 - [ ] Pin a production-approved Poppler version and validate source colour/ICC, PDF/X, overprint, transparency, resolution, and other required prepress conditions
 - [ ] Only then promote evidence to `PDF_OUTPUT_PREFLIGHTED`, not `PHYSICAL_PROOFED`
-- [ ] Automated fixup remains disabled unless user explicitly authorizes it
+- [x] Automated fixup is disabled; this adapter is read-only
 
 ## Boundaries
 
 Digital-only logos do not trigger print checks. A print logo without any text can still require color, overprint, fine-stroke, transparency, PDF/X checks. Missing print context is **BLOCKED/UNVERIFIED**, not a PASS.
 
 References: [Acrobat Preflight profile](https://helpx.adobe.com/acrobat/using/preflight-profiles-acrobat-pro.html), [Adobe PDF/X overview](https://helpx.adobe.com/illustrator/using/adobe-pdf-options.html). Capabilities are documented; **not exercised** in this PR.
+
+## v1 채택 범위와 Ready 상태 (2026-10-24)
+
+이번 PR의 지원 범위는 위 `vdr-print-contract-v1`의 trim/bleed, 선택적 폰트
+포함, profile에 명시된 렌더 grayscale 검사로 확정한다. 제작처 승인 자체를
+대신하지 않으며 예시 profile은 제작처 승인 문서가 아니다. 실제 작업에서
+사용자/제작처가 제공한 조건만 입력으로 받고 도구·profile 버전/해시와
+미지원 항목을 결과에 남긴다.
+
+ICC·PDF/X·오버프린트·별색·해상도 등은 v1에서 구현하지 않은 기능이며
+`UNVERIFIED`로 남는다. 해당 조건이 필요한 실제 납품의 적합 판정이나
+`PDF_OUTPUT_PREFLIGHTED` 승격에는 추가 구현·실행 증거가 필요하다.
+기능 전체 완료나 원래 이슈의 종료를 선언하지 않는다.
+
+사용자 결정에 따라 실제 PDF/제작처 profile 검증 등 테스트·실증은 이번
+PR의 Ready 전제에서 제외한다. 위 미지원 범위와 실제 납품 조건은 계속
+명시하며, 테스트 면제가 미실행 검사의 PASS나 제작처 승인으로 바뀌지 않는다.
