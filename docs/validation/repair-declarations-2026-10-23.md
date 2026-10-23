@@ -21,7 +21,7 @@ bash tests/check-knowledge-architecture.sh
 git diff --check
 ```
 
-수정 후 9/9 단위 시험과 구조 검사 통과. 원본의 4개 사례를 선언형 계약에 맞게
+수정 후 당시 9/9 (392f861 기준; 현재 reporter 회귀 시험은 12개) 단위 시험과 구조 검사 통과. 원본의 4개 사례를 선언형 계약에 맞게
 갱신했고 미검증 보고서, 무관한 구조화 PASS, 중복 실행 ID, 명시적 반복, 잘못된 증거 컨테이너를 추가했다.
 Linux CI에 해당 unittest를 연결했다.
 
