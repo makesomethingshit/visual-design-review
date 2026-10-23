@@ -74,3 +74,7 @@ python visual-design-review/scripts/repair_lift_summary.py path/to/real-cases.js
 ```
 
 References: [UICrit](https://arxiv.org/abs/2407.08850) and work on [actionable UX critiques](https://arxiv.org/) as methodology background only. UI findings are not automatically evidence about printed graphic design.
+
+## Executed local file tasks (2026-10-23)
+
+See [actual artifact execution](../../docs/validation/repair-artifacts-2026-10-23.md): authored poster/body SVG and print PDF before/after pairs, SHA-256, source-text/page-size checks and an ineffective-repair counterexample. These are controlled file checks, not an independently conducted skill-feedback experiment. Expert blind comparison, editor/time control, actual typography and physical-print gates above remain open.
