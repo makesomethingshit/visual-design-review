@@ -35,4 +35,5 @@ awk 'BEGIN {
   if (1024 / 2048 * 12 != 6) exit 1
 }' || fail 'numeric example arithmetic regression'
 python3 "$root/tests/check-knowledge-contract.py"
+python3 -m unittest discover -s "$root/tests" -p 'test_*.py'
 echo 'PASS: architecture references, ownership boundary, formula examples'

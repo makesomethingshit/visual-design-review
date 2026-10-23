@@ -52,7 +52,9 @@ unresolved:
 여러 후보가 조건을 만족하지만 목적이 정해지지 않았으면 하나로 좁히지 않는다.
 
 **타이포그래피:** 사용자가 10pt 및 r=1.7을 명시하면 `T-LEADING`으로 17pt를 계산할 수 있다.
-'적절한 행간'만 요청하더라도 주언어와 새 가로 본문 조건이 확인되면 승인 A~D를 **초기 정책값**으로 제안할 수 있다.
+'적절한 행간'만 요청한 경우에도 현재 작업의 **명시적 opt-in** 또는 활성 프로파일 확인과
+주언어·새 가로 본문 조건이 모두 있어야 승인 A~D를 **초기 정책값**으로 제안할 수 있다.
+주언어 확인만으로 프로파일 선택을 대신하지 않는다. opt-in이 없으면 정책값을 자동 채택하지 않는다.
 주언어 불명확·다른 쓰기 방향 등의 경우 r은 UNRESOLVED로 남긴다.
 인쇄 본문 최초 비교 시안에만 E~H를 적용 가능하며 출처는 USER_APPROVED_PROJECT_POLICY,
 결정 상태는 PROJECT_INITIAL_PRESET, L=F×r로 계산한 값은 DERIVED,
@@ -64,7 +66,7 @@ unresolved:
 ```yaml
 scenario: print_body_first_comparison
 primary_language: ko
-policy: {source: USER_APPROVED_PROJECT_POLICY, approved_on: 2026-10-21}
+policy: {source: USER_APPROVED_PROJECT_POLICY, approved_on: 2026-10-21, opt_in: true, activation_basis: explicit_user_request_for_current_project}
 initial_settings:
   font_size: {value: 10, unit: pt, id: E, status: PROJECT_INITIAL_PRESET}
   line_measure: {value: 30, unit: fullwidth_equivalent, id: F, status: PROJECT_INITIAL_PRESET}

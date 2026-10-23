@@ -5,6 +5,12 @@
 
 ## 작업 신호와 모듈
 
+A~H 정책은 **명시적 opt-in** 또는 확인된 현재 작업의 활성 프로파일이 있을 때만 사용한다.
+주언어·본문·인쇄 조건 충족만으로 프로젝트 프로파일을 활성화하지 않는다.
+프로파일 적용 여부를 확인하려고 presets를 읽은 것과 초기값을 채택하는 것은 별개다.
+활성 여부가 없거나 불명확하면 해당 정책값을 자동 채택하지 않고 후보/미결정으로 남긴다.
+사용자가 개별 크기·배율을 명시한 계산은 프로파일 선택과 무관하게 USER 입력으로 처리할 수 있다.
+
 | 신호 | 로드 | 제외 또는 조건 |
 | --- | --- | --- |
 | **비평/리뷰** | review-protocol + critique-rubric + review-output | 정량 분석/설계 명세는 요청된 경우에만 |
@@ -12,8 +18,8 @@
 | **수치 설계·외부 도구 전달** | formula-relations + design-handoff | 원본에서 관계를 추출할 때 reference-analysis |
 | 장문 본문·조판·문자 위계의 **비평** | typography | 실제 본문이 없으면 장문 조판 검사 제외 |
 | **수치 타이포그래피 관계/설계** | typography-relations + formula-relations | 필요시 font metrics→spacing/leading→measure→capacity를 의존성별 로드 |
-| **새 본문의 초기 행간을 결정** | typography-presets + typography-relations | 주언어/쓰기 방향 확인; A~D만 조건부 사용 |
-| **새 인쇄 본문 첫 비교 시안** | typography-presets + typography-relations | E~H 초기 설정 후보 적용; 그 외 장르 기본 제외 |
+| **A~H를 명시적 opt-in한 새 본문의 초기 행간을 결정** | typography-presets + typography-relations | 활성 프로파일·주언어/쓰기 방향 확인; A~D만 조건부 사용 |
+| **A~H를 명시적 opt-in한 새 인쇄 본문 첫 비교 시안** | typography-presets + typography-relations | 활성 프로파일 확인 후 E~H 초기 설정 후보 적용; 그 외 장르 기본 제외 |
 | 그리드·공간·정렬 | composition | 판면/잡지/정보 구조는 editorial-information 추가 |
 | 데이터/그래프·정보 계층 | editorial-information | 시각화에서만 데이터 인코딩 수식 적용 |
 | 아이덴티티/로고·출력 규격 | identity-production (실제 관련 시) | 인쇄 프리플라이트 생략은 매체가 디지털 전용으로 확정되고 인쇄 요청·제약이 없는 경우만 |
