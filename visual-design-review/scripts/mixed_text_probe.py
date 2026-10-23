@@ -21,6 +21,9 @@ def check(payload: dict) -> dict:
     si = profile.get("si_spacing", False)
     if not isinstance(si, bool):
         raise ValueError("si_spacing must be a boolean")
+    except_tokens = profile.get("except_exact_tokens", [])
+    if not isinstance(except_tokens, list) or not all(isinstance(v, str) for v in except_tokens):
+        raise ValueError("except_exact_tokens must be a list of strings")
     if si:
         # Restricted to unambiguous unit tokens; product identifiers require
         # caller-supplied exceptions and are never rewritten automatically.
