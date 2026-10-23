@@ -7,14 +7,14 @@
     "mixed-body": "project copy exactly 35 mm",
     "print-output": "page size exactly 320 x 420 pt; no PDF/X claim"
   },
-  "checker_sha256": "sha256:8fef91d4a7e6ca53bf9c77a6a6a6e09ca027dadae95dae5ac3a63db8c84eaa38",
+  "checker_sha256": "sha256:4e4909709e6a0ad16fab40d31733315c88cc92502d4087bbb70c50ddd56a7522",
   "reporter_sha256": "sha256:718b1a10e2e6f25601d6b0921d2099b0721a8596ddea4f7dd9b659a72a181bab",
   "results": [
     {
       "fixture_id": "poster",
       "before": {
         "artifact": "tests/fixtures/repair-lift/poster-before.svg",
-        "sha256": "sha256:67b1c9a331ec89c14ef0e300f5b30d80dcd02c56784bd888ea15f272a4753352",
+        "sha256": "sha256:72df1f63744d635a8d1fc1ef3381fd9619167c353b195cb624b57eb4d0f0834a",
         "actual": "2026-10-32",
         "expected": "2026-10-23",
         "status": "FAIL",
@@ -22,7 +22,7 @@
       },
       "after": {
         "artifact": "tests/fixtures/repair-lift/poster-after.svg",
-        "sha256": "sha256:e96b0e01cf74fb2ff36aa67f07de65109b5aecf5b7928d82acdd40919b5c5fe2",
+        "sha256": "sha256:8bb60d71cb6401b019a648abea6e29c6eec8d3a7a50f1d7f59269afd66f73621",
         "actual": "2026-10-23",
         "expected": "2026-10-23",
         "status": "PASS",
@@ -33,7 +33,7 @@
       "fixture_id": "mixed-body",
       "before": {
         "artifact": "tests/fixtures/repair-lift/mixed-body-before.svg",
-        "sha256": "sha256:5f46274ae7c31a8e3cc85f558236ab5e186a9faf71b54607dbf08fc005b8d238",
+        "sha256": "sha256:7411af1febddc760e275d96f2235bd880a584dfb69f719b30dfb79c9e064beff",
         "actual": "용지 Paper: 35mm",
         "expected": "용지 Paper: 35 mm",
         "status": "FAIL",
@@ -41,7 +41,7 @@
       },
       "after": {
         "artifact": "tests/fixtures/repair-lift/mixed-body-after.svg",
-        "sha256": "sha256:6f0a7a6158a572558d7e3dabbfaa72c7b263519ca4ebd8f14e1186ab7f7b623a",
+        "sha256": "sha256:c1ab1540fe704ff4a9857819d9dc045966ed068ecee3d2a68fc7fd33c670a9ae",
         "actual": "용지 Paper: 35 mm",
         "expected": "용지 Paper: 35 mm",
         "status": "PASS",
@@ -52,7 +52,7 @@
       "fixture_id": "negative-repair",
       "before": {
         "artifact": "tests/fixtures/repair-lift/negative-repair-before.svg",
-        "sha256": "sha256:e62e9e38f7a3cfac6dff507503196540df53293e264609499378b407758d264a",
+        "sha256": "sha256:59afc6a6ee3489cc1d4257dc98afc951f6f27b52be6212b29607c37fab258738",
         "actual": "용지 Paper: 35mm",
         "expected": "용지 Paper: 35 mm",
         "status": "FAIL",
@@ -60,7 +60,7 @@
       },
       "after": {
         "artifact": "tests/fixtures/repair-lift/negative-repair-after.svg",
-        "sha256": "sha256:5f46274ae7c31a8e3cc85f558236ab5e186a9faf71b54607dbf08fc005b8d238",
+        "sha256": "sha256:7411af1febddc760e275d96f2235bd880a584dfb69f719b30dfb79c9e064beff",
         "actual": "용지 Paper: 35mm",
         "expected": "용지 Paper: 35 mm",
         "status": "FAIL",

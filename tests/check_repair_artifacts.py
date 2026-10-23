@@ -35,7 +35,7 @@ def make_fixtures():
                    f'<text id="title" x="28" y="60" font-family="sans-serif" font-size="24">'
                    f'OPEN STUDIO</text><text id="required-copy" x="28" y="130" '
                    f'font-family="sans-serif" font-size="{font_size}">{text}</text></svg>\n')
-            (FIXTURES / f"{name}-{version}.svg").write_text(svg, encoding="utf-8")
+            (FIXTURES / f"{name}-{version}.svg").write_text(svg, encoding="utf-8", newline="\n")
     for version, width in [("before", 300), ("after", 320)]:
         path = FIXTURES / f"print-output-{version}.pdf"
         pdf = canvas.Canvas(str(path), pagesize=(width, 420), invariant=1)
