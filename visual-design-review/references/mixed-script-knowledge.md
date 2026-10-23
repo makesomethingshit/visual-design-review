@@ -32,6 +32,41 @@ Each row preserves the fields required by [rule-contract](rule-contract.md): sou
 | MIX-007 | `CONTEXTUAL` / `PROJECT_POLICY` | [Typography presets](typography-presets.md), user approval recorded 2026-10-21 | Apply to an explicitly opted-in current task, or to an independently confirmed active profile for the current project, and only within its stated medium/task | Do not silently inherit to another project, existing-artwork critique, vertical writing, or a different brief; an active profile does not require repeat opt-in; this is not an empirical optimum | Confirm current-task opt-in or independently confirm the active current-project profile; preserve the policy label and report no general design conclusion |
 | MIX-008 | `CONTEXTUAL` / `ADVISORY` | WCAG 2.2 §1.4.12; KLReq §7.2.1 | WCAG applies to content implemented in markup languages and tests loss of content/functionality under user text-spacing overrides; KLReq applies only when its Korean layout context is selected | WCAG’s language/script exception and web scope do not turn print alignment into a compliance score; KLReq is a Group Note Draft | Record medium, implementation, user override, and supplied goal; cross-medium transfer is `UNVERIFIED` |
 
+## Explicit applicability fields
+
+These keyed rows supplement the conditions, exceptions, source version/status and
+verification method in the inventory. `authority` describes the source, not an
+automatic requirement or severity. Unknown per-artwork inputs stay `UNVERIFIED`.
+
+| rule_id | authority | platform | language | writing_mode |
+| --- | --- | --- | --- | --- |
+| MIX-001 | Unicode Standard Annex; W3C Group Note Draft | Unicode layout engines for print/web/mobile; selected implementation required | actual language/script required; KLReq Korean | actual direction required; horizontal/vertical KLReq choices stay separate |
+| MIX-002 | Microsoft OpenType technical specification | OpenType-capable shaping engine | actual script/language system required | actual run direction required |
+| MIX-003 | Microsoft OpenType specification; W3C CSS Working Draft | cmap for source fonts; CSS fallback only in web/mobile-web renderer | actual text and script/cluster required | renderer direction/context required; no universal vertical fallback claim |
+| MIX-004 | HarfBuzz API documentation; OpenType specification | actual HarfBuzz shaping run | actual script/language required | actual run direction required; x/y axes retained |
+| MIX-005 | KRISS institutional SI guidance; BIPM SI Brochure | SI/editorial profile in print/web/mobile | semantic quantity/unit, independent of surrounding language | source notation; no inferred vertical-layout requirement |
+| MIX-006 | independent expert judgement; no universal normative authority | fixed print/display/mobile context | Korean–Latin sample and intended readers | fixed for comparison; no transfer across directions |
+| MIX-007 | current-task user opt-in or confirmed current-project approval | only the approved project medium | only the approved project language/context | only the approved direction; no automatic vertical transfer |
+| MIX-008 | W3C Recommendation; W3C Group Note Draft | WCAG markup-based web/mobile-web; KLReq selected Korean layout | applicable language/script and WCAG exceptions | actual direction required; no cross-medium inference |
+
+## Source reuse / reproduction record
+
+Reviewed 2026-10-24. This repository contains independently worded summaries and
+links, not redistributed source documents, tables or illustrations. A source's
+license is not inherited by this repository, and a software license is not
+silently assigned to an unrelated document. Recheck the exact edition's notice
+before adding any copied material.
+
+| source | license / notice evidence | reproduction boundary adopted here |
+| --- | --- | --- |
+| Unicode UAX #14 | [Unicode license](https://www.unicode.org/license.txt): Unicode License V3 covers data/software and associated documentation | Preserve required copyright/permission notices for covered copies; confirm the report's own terms before reproduction; summary/link only here |
+| W3C KLReq, CSS Fonts, WCAG | [W3C Document License 2023](https://www.w3.org/copyright/document-license-2023/) for documents linking that notice | Copies require source URL, copyright and document status; derivative technical specifications are restricted; do not copy source text here |
+| Microsoft OpenType GPOS/cmap | [Microsoft Learn terms](https://learn.microsoft.com/en-us/legal/termsofuse); document-specific exceptions must be checked | No blanket redistribution grant inferred; technical facts summarized with source links, no copied tables or figures |
+| HarfBuzz API | [upstream COPYING](https://github.com/harfbuzz/harfbuzz/blob/main/COPYING): Old MIT terms for covered software/documentation, with file-level exceptions | Preserve applicable notices if reusing covered material; no API prose/code copied here |
+| KRISS SI | [cited page](https://www.kriss.re.kr/menu.es?mid=a10302060000); no page-specific reuse grant identified in this review | Reproduction permission remains UNVERIFIED; own summary/link only, no copied text or graphics |
+| BIPM SI Brochure | [cited edition](https://doi.org/10.59161/AUEZ1291); edition-specific reproduction permission not established in this review | Permission remains UNVERIFIED; reference and own summary only; no brochure pages copied |
+| Local project A–H policy | user-approved project policy, not an external source license | Keep approval provenance and current-project scope; no permission for other projects inferred |
+
 ## Interpretation controls
 
 - `NORMATIVE` names the source domain; it does not automatically mean `REQUIRED` for the current design. `REQUIRED` needs an applicable source, conditions, and evidence.
