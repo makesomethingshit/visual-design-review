@@ -8,7 +8,7 @@
     "print-output": "page size exactly 320 x 420 pt; no PDF/X claim"
   },
   "checker_sha256": "sha256:4e4909709e6a0ad16fab40d31733315c88cc92502d4087bbb70c50ddd56a7522",
-  "reporter_sha256": "sha256:718b1a10e2e6f25601d6b0921d2099b0721a8596ddea4f7dd9b659a72a181bab",
+  "reporter_sha256": "sha256:c8ed1905fb4f24b9f8fdf8c233a06ce68266bbc42edf45d15c6aa19434e67834",
   "results": [
     {
       "fixture_id": "poster",

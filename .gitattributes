@@ -3,3 +3,4 @@ visual-design-review/**/*.md text eol=lf
 *.pdf binary
 tests/fixtures/repair-lift/*.svg text eol=lf
 tests/check_repair_artifacts.py text eol=lf
+visual-design-review/scripts/repair_lift_summary.py text eol=lf
