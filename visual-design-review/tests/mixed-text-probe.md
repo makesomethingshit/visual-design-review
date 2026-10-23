@@ -51,3 +51,20 @@ outside this probe. Exception matching only applies to recognized exact tokens.
 font/render evidence are recorded in [the local execution report](../../docs/validation/mixed-text-probe-2026-10-23.md).
 The fixture pair proves only the supported simple candidate paths. It is not
 actual font fallback, full renderer conformance, or full SI evidence.
+
+## Versioned result vocabulary
+
+The output `schema: mixed-text-probe-v0` identifies this PoC's deliberately narrower
+vocabulary; it is not the issue's proposed general PASS/FAIL validator contract.
+
+| v0 status | Meaning / general-contract boundary |
+| --- | --- |
+| `FINDING` | Supported text-pattern or line-boundary candidate; not a confirmed `FAIL` or a severity decision |
+| `NO_SIMPLE_ANOMALY` | No supported line-boundary candidate; general correctness remains `INCONCLUSIVE`, never a line-break `PASS` |
+| `NOT_APPLICABLE` | No enabled/applicable limited check; no conformance verdict |
+| `PASS` | Recognized exact tokens were explicitly exempted by the supplied project policy only |
+| `UNVERIFIED` | Required font/render evidence unavailable |
+| `BLOCKED` | Supplied input cannot support the requested limited check |
+
+Callers must not coerce candidate/absence statuses into FAIL/PASS. A future full
+validator must version its result contract and retain these evidence distinctions.
