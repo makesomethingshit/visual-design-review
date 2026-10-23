@@ -27,7 +27,7 @@ def check(payload: dict) -> dict:
     if si:
         # Restricted to unambiguous unit tokens; product identifiers require
         # caller-supplied exceptions and are never rewritten automatically.
-        exceptions = set(profile.get("except_exact_tokens", []))
+        exceptions = set(except_tokens)
         matches = list(re.finditer(r"(?<![\w])\d+(?:\.\d+)?(?:mm|cm|km|kg)(?![\w])", text))
         bad = [m.group() for m in matches if m.group() not in exceptions]
         # No recognized unit token means this narrow probe did not apply a rule.
