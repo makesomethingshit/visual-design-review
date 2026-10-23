@@ -17,17 +17,30 @@
 ## 기록 카드 (제안)
 
 ```yaml
-pair_id: fp-demo-001
-artifact_and_text_sha256: UNSET
-font_left: {family: UNSET, version: UNSET, license: TO_VERIFY}
-font_right: {family: UNSET, version: UNSET, license: TO_VERIFY}
-render: {engine: UNSET, size_pt: UNSET, width_mm: UNSET}
+pair_id: FP-01
+artifact_and_text_sha256: see docs/validation/font-pairing-2026-10-23/render-manifest.json
+font_left: {family: recorded from installed file, file_sha256: recorded, version: hash-identified}
+font_right: {family: recorded from installed file, file_sha256: recorded, version: hash-identified}
+render: {engine: Pillow ImageDraw.text, layout: BASIC, size_px: 48, canvas_px: [1600, 180]}
 controlled_variable: latin_family_only
 other_variables_fixed: [text, korean_family, body_size, line_width]
 raters: []  # blinded independent judgements; no fabricated expert data
 comparisons: []  # A / B / tie / context-dependent, reason, confidence, counter-case
-status: UNVERIFIED
+status: RENDERED_UNVERIFIED_HUMAN
 ```
+
+## Reproducible local render
+
+The checked-in fixture and [`font_pairing_render.py`](../scripts/font_pairing_render.py) render FP-01–FP-03 from legally usable fonts already installed on the Windows host. The font binaries stay outside Git; the generated manifest records the system path, family/style name, file size, SHA-256, pixel parameters, Pillow version at execution time, and `BASIC` layout mode. The file hash is the reproducible font identity; a numeric font version is not invented.
+
+```text
+python visual-design-review/scripts/font_pairing_render.py --validate-only
+python visual-design-review/scripts/font_pairing_render.py
+```
+
+`Pillow` reports `raqm=False` in this environment. The PNGs therefore demonstrate the specified basic run placement only; they are not HarfBuzz shaping or renderer-fallback evidence. See [`render-manifest.json`](../../docs/validation/font-pairing-2026-10-23/render-manifest.json) and [`blind-packet.json`](../../docs/validation/font-pairing-2026-10-23/blind-packet.json) for the local outputs and hashes.
+
+The blind packet exposes only A/B labels, text, parameters, and image hashes. Keep the font-bearing render manifest separate when giving the packet to a rater.
 
 ## 프로토콜
 
@@ -41,7 +54,7 @@ status: UNVERIFIED
 ## 완료 조건
 
 - 최소 서로 다른 3가지 typography context(본문, 제목/라벨, 숫자·기호 혼식)를 포함한 짝 비교 fixture와 전제 기록
-- 1차 원자료(폰트/렌더 환경·평가 로그·권한 또는 재현 절차) 보존
+- 1차 원자료(폰트/렌더 환경·평가 로그·권한 또는 재현 절차) 보존; this PR records local system-font identity without redistributing the files
 - 정량 오류와 미적 선호 구분, 반대 의견/동률 기록
 - Expert judgement 미확보 시 `UNVERIFIED` 유지
 
