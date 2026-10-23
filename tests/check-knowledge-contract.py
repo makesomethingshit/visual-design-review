@@ -153,6 +153,26 @@ def check_typography_widths() -> None:
           "Mixed-font runs must be scaled separately before summing")
 
 
+
+
+def check_rule_contract() -> None:
+    contract = read(PKG / "references/rule-contract.md")
+    for required in ("knowledge_kind", "rule_strength", "source_version",
+                     "document_status", "scope", "conditions", "exceptions",
+                     "verification_method", "PROJECT_POLICY", "UNVERIFIED"):
+        check(required in contract, f"Missing rule contract field {required}")
+    for path in ("SKILL.md", "references/knowledge-routing.md",
+                 "references/design-handoff.md", "references/typography-relations.md"):
+        check("rule-contract.md" in read(PKG / path),
+              f"Rule contract not linked from {path}")
+    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    for code in range(29, 34):
+        check(f"| R-{code} |" in scenarios,
+              f"Missing knowledge-boundary scenario R-{code}")
+    presets = read(PKG / "references/typography-presets.md")
+    check("PROJECT_POLICY" in presets and "opt-in" in presets,
+          "User-approved project policy must be scoped and opt-in")
+
 if __name__ == "__main__":
     check_preset_mapping()
     check_links()
@@ -160,5 +180,6 @@ if __name__ == "__main__":
     check_reference_math()
     check_print_routing()
     check_typography_widths()
+    check_rule_contract()
     print("PASS: policy mappings, local docs links, legacy triggers, reference-math examples, "
           "print routing guards, documented typography widths")
