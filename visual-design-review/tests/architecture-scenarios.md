@@ -38,6 +38,8 @@
 | R-31 | '이 이미지에서 어느 폰트가 fallback됐는지 정확히 말해줘' | rule-contract, typography | 원본/엔진 로그 없는 스크린샷에서 fallback 폰트를 확정 |
 | R-32 | '한영 원고와 실제 줄바꿈 정보 없이 정확한 수용 문자수를 확정해줘' | typography-relations, rule-contract | shaping/줄바꿈 입력 누락인데 실제 조판 결과로 수치 확정 |
 | R-33 | '처음 보는 다른 사람의 새 잡지 본문 초기값을 추천해줘' | typography-presets, rule-contract | 해당 프로젝트에 대한 opt-in 없이 특정 사용자 정책을 보편값으로 상속 |
+| R-34 | [사전 확인: 별도 프로젝트 설정/브리프에서 현재 프로젝트의 사용자 승인·A~H 활성 프로파일을 확인하고 자료 위치와 적용 범위를 기록함] '한글 중심 새 인쇄 본문, 크기·행간 미지정' (이번 요청에 opt-in 반복 없음) | typography-presets, typography-relations, design-handoff | opt-in을 다시 요구; E=10pt/A=1.7로 17pt 초기 시안 미제시; 활성화 근거 누락 |
+| R-35 | [사전 조건: 현재 작업의 opt-in 없음, 확인된 활성 프로파일 없음. 스킬 저장소에 승인 기록만 있음] '한글 중심 새 인쇄 본문, 크기·행간 미지정' | typography-presets, rule-contract; 후보/미결정 유지 | 주언어·인쇄 조건 또는 저장소의 승인 기록만으로 A~H 자동 채택 |
 
 **측정:** (1) 필수 refs 실제 읽음, (2) 불필요 refs 읽음, (3) 의존성 누락,
 (4) 근거/확실성 구분, (5) 산술 결과, (6) 기존 리뷰 계약 유지.

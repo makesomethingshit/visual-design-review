@@ -52,9 +52,10 @@ unresolved:
 여러 후보가 조건을 만족하지만 목적이 정해지지 않았으면 하나로 좁히지 않는다.
 
 **타이포그래피:** 사용자가 10pt 및 r=1.7을 명시하면 `T-LEADING`으로 17pt를 계산할 수 있다.
-'적절한 행간'만 요청한 경우에도 현재 작업의 **명시적 opt-in** 또는 활성 프로파일 확인과
+'적절한 행간'만 요청한 경우에도 현재 작업의 **명시적 opt-in** 또는 **독립적으로 확인된 현재 프로젝트의 활성 프로파일** 중 하나와
 주언어·새 가로 본문 조건이 모두 있어야 승인 A~D를 **초기 정책값**으로 제안할 수 있다.
-주언어 확인만으로 프로파일 선택을 대신하지 않는다. opt-in이 없으면 정책값을 자동 채택하지 않는다.
+주언어 확인만으로 프로파일 선택을 대신하지 않는다. 확인된 활성 프로파일에는 opt-in을 반복 요구하지 않는다.
+두 활성화 근거가 모두 없거나 불명확하면 정책값을 자동 채택하지 않는다.
 주언어 불명확·다른 쓰기 방향 등의 경우 r은 UNRESOLVED로 남긴다.
 인쇄 본문 최초 비교 시안에만 E~H를 적용 가능하며 출처는 USER_APPROVED_PROJECT_POLICY,
 결정 상태는 PROJECT_INITIAL_PRESET, L=F×r로 계산한 값은 DERIVED,
@@ -76,6 +77,14 @@ initial_settings:
 derived:
   baseline_distance: {value: 17, unit: pt, formula: T-LEADING, origin: DERIVED, decision_status: PROJECT_INITIAL_PRESET, verification: [FORMULA_CHECKED]}
 unverified: [font_metrics, shaped_line_breaks, tool_applied, final_readability]
+```
+
+이번 요청에 opt-in을 반복하지 않았지만 별도 프로젝트 설정/브리프를 실제로 확인한 경우에는
+위 예시의 policy만 다음처럼 바꾼다. evidence는 예시 식별자이며 실제 확인한 자료 위치와 적용 범위를 기록한다.
+승인 날짜나 스킬 저장소의 정책 문서만으로 이 경로를 사용하지 않는다.
+
+```yaml
+policy: {source: USER_APPROVED_PROJECT_POLICY, approved_on: 2026-10-21, activation_basis: independently_verified_active_project_profile, profile: A-H, project: current_project, evidence: "current_project_brief#typography"}
 ```
 
 사용자 제약에 따라 수정 가능한 **첫 비교 시안**이다. 서체·원고·매체를 확인하지 않고 최종 규격으로 강제하지 않는다.

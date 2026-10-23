@@ -176,22 +176,51 @@ def check_typography_widths() -> None:
 
 
 def check_policy_activation() -> None:
-    # Static consistency only: actual agent reads and opt-in behavior need #7.
+    # Static consistency only: actual agent reads and activation behavior need #7.
+    gate = ("현재 작업의 **명시적 opt-in** 또는 "
+            "**독립적으로 확인된 현재 프로젝트의 활성 프로파일**")
     for relative in ("SKILL.md", "references/knowledge-routing.md",
-                     "references/design-handoff.md"):
-        check("명시적 opt-in" in read(PKG / relative),
-              f"Missing current-task opt-in guard: {relative}")
+                     "references/design-handoff.md", "references/typography-presets.md"):
+        text = read(PKG / relative)
+        check(gate in text, f"Missing alternative activation routes: {relative}")
+        check("opt-in이 없으면 정책값을 자동 채택하지 않는다." not in text,
+              f"Repeated opt-in requirement contradicts active profile: {relative}")
+    presets = read(PKG / "references/typography-presets.md")
+    for required in ("별도 프로젝트 설정/브리프", "현재 프로젝트의 사용자 승인·A~H 선택·유효한 적용 범위",
+                     "자료 위치와 적용 범위", "opt-in을 반복 요구하지 않는다", "두 활성화 근거가 모두 없거나 불명확하면"):
+        check(required in presets, f"Missing independent activation evidence guard: {required}")
     handoff = read(PKG / "references/design-handoff.md")
-    check("opt_in: true" in handoff and "activation_basis:" in handoff,
-          "Preset handoff example must include activation evidence")
+    policies = re.findall(r"^policy: \{([^\n]+)\}$", handoff, flags=re.M)
+    check(any("opt_in: true" in p and
+              "activation_basis: explicit_user_request_for_current_project" in p
+              for p in policies), "Explicit opt-in handoff must include activation evidence")
+    check(any(all(field in p for field in (
+                  "activation_basis: independently_verified_active_project_profile",
+                  "profile: A-H", "project: current_project",
+                  'evidence: "current_project_brief#typography"')) for p in policies),
+          "Active-profile handoff must include project-scoped activation evidence")
     scenarios = read(PKG / "tests/architecture-scenarios.md")
-    rows = {line.split("|")[1].strip(): line for line in scenarios.splitlines()
-            if line.startswith("| R-")}
+    rows = {cells[0]: cells for line in scenarios.splitlines()
+            if line.startswith("| R-")
+            for cells in [[cell.strip() for cell in line.strip("|").split("|")]]}
     for code in ("R-6", "R-13", "R-14"):
-        check("A~H 프로젝트 프로파일을 명시적으로 적용" in rows.get(code, ""),
+        check("A~H 프로젝트 프로파일을 명시적으로 적용" in rows.get(code, ["", ""])[1],
               f"Positive preset scenario lacks opt-in: {code}")
-    check("opt-in 없이" in rows.get("R-33", ""),
+    check("opt-in 없이" in " ".join(rows.get("R-33", [])),
           "Cross-project negative scenario must preserve the opt-in guard")
+    active = rows.get("R-34", [])
+    check(len(active) == 4 and all(term in active[1] for term in (
+              "별도 프로젝트 설정/브리프", "현재 프로젝트의 사용자 승인·A~H 활성 프로파일",
+              "자료 위치와 적용 범위", "opt-in 반복 없음"))
+          and all(term in active[3] for term in (
+              "opt-in을 다시 요구", "17pt 초기 시안 미제시", "활성화 근거 누락")),
+          "Missing verified active-profile scenario without repeated opt-in: R-34")
+    inactive = rows.get("R-35", [])
+    check(len(inactive) == 4 and all(term in inactive[1] for term in (
+              "현재 작업의 opt-in 없음", "확인된 활성 프로파일 없음", "저장소에 승인 기록만"))
+          and "후보/미결정 유지" in inactive[2]
+          and "A~H 자동 채택" in inactive[3],
+          "Missing no-activation scenario: R-35")
 
 
 def check_rule_contract() -> None:

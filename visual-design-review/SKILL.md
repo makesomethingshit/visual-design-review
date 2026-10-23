@@ -42,7 +42,7 @@ metadata:
 | 구성·배치·여백 | [composition](references/composition.md) |
 | 타이포그래피의 **비평/레터링** | [typography](references/typography.md) |
 | 서체·행간·어간·행 길이의 **정량 설계/역분석** | [typography-relations](references/typography-relations.md), [formula-relations](references/formula-relations.md) |
-| **A~H 프로파일을 명시적으로 선택한 새 본문 조판의 초기 기준** | [typography-presets](references/typography-presets.md) |
+| **A~H opt-in 또는 활성 프로파일이 확인된 새 본문 조판의 초기 기준** | [typography-presets](references/typography-presets.md) |
 | 편집·정보 계층·시각화 | [editorial-information](references/editorial-information.md) |
 | 아이덴티티·색 재현·인쇄 제작 | [identity-production](references/identity-production.md) |
 | 방법론 근거·라이선스 | [sources](references/sources.md) |
@@ -56,7 +56,8 @@ metadata:
 - 사용자 브리프·문서에 기록된 사실·직접 측정·이미지에서 추정·모델로 추론한 값은 **구분**한다.
   실제 측정에 필요한 파일이나 해상도가 없으면 해당 값은 `미검증`으로 남긴다.
 - 수학적 항등식, 연구 기반 경험 모델, 지각 모델과 **사용자가 승인한 A~H 프로젝트 초기 정책**을 구별한다.
-  현재 작업에서 **명시적 opt-in**과 [typography-presets](references/typography-presets.md)의 조건을 확인한 때만 적용한다.
+  현재 작업의 **명시적 opt-in** 또는 **독립적으로 확인된 현재 프로젝트의 활성 프로파일** 중 하나와
+  [typography-presets](references/typography-presets.md)의 적용 조건을 확인한 때만 사용한다. 확인된 활성 프로파일에는 opt-in을 반복 요구하지 않는다.
   저장소에 승인 기록이 있거나 주언어가 명확하다는 사실만으로 활성화하지 않으며, 미적/실증적 보편 법칙으로 주장하지 않는다.
   사용자·제작 제약이 우선한다. 승인되지 않은 황금비·행간·보정값 등은 발명하지 않는다.
 - 여러 해가 조건을 충족하지만 선택 목표가 없으면 AI의 임의 미감으로 하나를 고르지 않는다.
