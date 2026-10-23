@@ -72,6 +72,15 @@ class FindingHistoryTests(unittest.TestCase):
             new = {"findings": [{"finding_id": "F1", "state": state}]}
             self.assertEqual(mod.compare(old, new)[0]["state"], state)
 
+    def test_explicit_resolution_after_inconclusive_is_preserved(self):
+        old = {"findings": [{"finding_id": "F1", "state": "INCONCLUSIVE"}]}
+        new = {"review_coverage": "FULL_COMPARABLE", "findings": [{
+            "finding_id": "F1",
+            "state": "RESOLVED",
+            "observation": "current review explicitly resolves the finding",
+        }]}
+        self.assertEqual(mod.compare(old, new)[0]["state"], "RESOLVED")
+
     def test_inconclusive_then_new_requires_continuity_evidence(self):
         old = {"findings": [{"finding_id": "F1", "state": "INCONCLUSIVE"}]}
         for current in ({"finding_id": "F1", "state": "NEW"},
