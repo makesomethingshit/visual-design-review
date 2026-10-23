@@ -1,3 +1,5 @@
+import contextlib
+import io
 import importlib.util
 import json
 import os
@@ -6,6 +8,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 FILE = ROOT / "visual-design-review" / "scripts" / "check_pdf_preflight.py"
@@ -121,13 +124,41 @@ class PdfPreflightTests(unittest.TestCase):
     def test_unavailable_optional_tool_is_explicitly_blocked(self):
         missing = str(Path(self.temp.name) / "missing-poppler-tool")
         self.assertEqual(mod._tool_record(None)["status"], "BLOCKED")
-        self.assertEqual(mod._check_fonts(self.good, missing, self.profile, 1)["status"], "BLOCKED")
+        self.assertEqual(mod._check_fonts(self.good, missing, PROFILE, 1)["status"], "BLOCKED")
         result = mod.preflight(self.good, self.profile, {"pdfinfo": missing})
         self.assertEqual(result["input"]["status"], "BLOCKED")
         self.assertEqual(result["tools"]["pdfinfo"]["status"], "BLOCKED")
         checks = {item["id"]: item for item in result["checks"]}
         self.assertEqual(checks["font-embedding"]["status"], "BLOCKED")
         self.assertEqual(result["preflight_status"], "BLOCKED")
+
+    def test_cli_font_opt_out_does_not_require_pdffonts(self):
+        pdfinfo = (b"Pages: 1\nTrimBox: 0.00 0.00 595.28 841.89\n"
+                   b"BleedBox: -8.50 -8.50 603.78 850.39\n")
+
+        def run_pdfinfo(tool, args, timeout=30):
+            self.assertEqual(tool, "pdfinfo")
+            return subprocess.CompletedProcess([], 0, pdfinfo, b"")
+
+        for required, expected_status, expected_exit in (
+            (False, "NOT_APPLICABLE", 0), (True, "BLOCKED", 2),
+        ):
+            with self.subTest(require_embedded_fonts=required):
+                profile = {**PROFILE, "require_embedded_fonts": required,
+                           "allowed_rendered_color": "any"}
+                self.profile.write_text(json.dumps(profile), encoding="utf-8")
+                with patch.object(mod, "_resolve_tool", side_effect=lambda name, override:
+                                  "pdfinfo" if name == "pdfinfo" else None), \
+                     patch.object(mod, "_run", side_effect=run_pdfinfo), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    code = mod.main(["--pdf", str(self.good), "--profile", str(self.profile),
+                                     "--output", str(self.report)])
+                report = json.loads(self.report.read_text(encoding="utf-8"))
+                checks = {item["id"]: item for item in report["checks"]}
+                self.assertEqual(code, expected_exit)
+                self.assertEqual(checks["font-embedding"]["status"], expected_status)
+                self.assertEqual(checks["trim-bleed"]["status"], "PASS")
+                self.assertEqual(report["preflight_status"], "PASS" if not required else "BLOCKED")
 
     def test_tools_inspect_private_snapshot_matching_report_hash(self):
         original_run = mod._run

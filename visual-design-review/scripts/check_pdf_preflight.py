@@ -205,6 +205,9 @@ def _parse_fonts(text: str) -> tuple[list[dict[str, Any]], str | None]:
 
 
 def _check_fonts(pdf: Path, tool: str | None, profile: dict[str, Any], page_count: int | None) -> dict[str, Any]:
+    if not profile["require_embedded_fonts"]:
+        return {"id": "font-embedding", "status": "NOT_APPLICABLE", "page": None,
+                "evidence": {"reason": "profile does not require embedding"}}
     if tool is None:
         return _blocked("font-embedding", "pdffonts executable unavailable", "pdffonts")
     if page_count is None:
@@ -228,10 +231,6 @@ def _check_fonts(pdf: Path, tool: str | None, profile: dict[str, Any], page_coun
         return {"id": "font-embedding", "status": "NOT_APPLICABLE", "page": None,
                 "evidence": {"source": "pdffonts", "pages": pages,
                              "reason": "PDF contains no text fonts"}}
-    if not profile["require_embedded_fonts"]:
-        return {"id": "font-embedding", "status": "NOT_APPLICABLE", "page": None,
-                "evidence": {"source": "pdffonts", "pages": pages,
-                             "reason": "profile does not require embedding"}}
     status = "PASS" if all(font["embedded"] for font in all_fonts) else "FAIL"
     return {"id": "font-embedding", "status": status, "page": None,
             "evidence": {"source": "pdffonts", "pages": pages}}
