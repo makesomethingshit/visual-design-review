@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 TRUSTED_BBOX = {"VERIFIED_SOURCE", "MEASURED_RASTER"}
+STATES = {"NEW", "PERSISTING", "RESOLVED", "REGRESSED", "INCONCLUSIVE"}
 
 
 def by_id(entries: list[dict]) -> dict[str, dict]:
@@ -17,6 +18,8 @@ def by_id(entries: list[dict]) -> dict[str, dict]:
             raise ValueError("Each finding needs a non-empty finding_id")
         if key in result:
             raise ValueError(f"Duplicate finding_id: {key}")
+        if row.get("state") is not None and row["state"] not in STATES:
+            raise ValueError(f"{key}: unsupported current state")
         if row.get("bbox") is not None and row.get("bbox_evidence") not in TRUSTED_BBOX:
             raise ValueError(f"{key}: exact bbox requires measured/source evidence")
         result[key] = row
@@ -29,14 +32,18 @@ def compare(before: dict, after: dict) -> list[dict]:
     complete = after.get("review_coverage") == "FULL_COMPARABLE"
     results = []
     for finding_id in sorted(set(old) | set(new)):
-        if finding_id in old and finding_id in new:
-            state = ("REGRESSED" if old[finding_id].get("previous_state") == "RESOLVED"
+        if finding_id in new and new[finding_id].get("state") in {"RESOLVED", "INCONCLUSIVE"}:
+            state = new[finding_id]["state"]
+        elif finding_id in old and finding_id in new:
+            # Compare with the immediately preceding snapshot, not its history.
+            state = ("REGRESSED" if old[finding_id].get("state") == "RESOLVED"
                      else "PERSISTING")
         elif finding_id in new:
             state = ("REGRESSED" if new[finding_id].get("previous_state") == "RESOLVED"
                      else "NEW")
         else:
-            state = "RESOLVED" if complete else "INCONCLUSIVE"
+            state = ("RESOLVED" if complete or old[finding_id].get("state") == "RESOLVED"
+                     else "INCONCLUSIVE")
         results.append({"finding_id": finding_id, "state": state,
                         "evidence": "stable_id_only",
                         "warning": "ID continuity is supplied, not visually verified"})

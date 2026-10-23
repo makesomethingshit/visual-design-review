@@ -16,6 +16,7 @@ findings:
     observed_impact: "depends on actual brief"
     uncertainty: "PROBABLE"
     previous_state: null
+    state: NEW           # current snapshot state; RESOLVED can retain a history tombstone
     verification_request: "inspect at actual output size"
 ```
 
@@ -24,6 +25,14 @@ A visual region label is **not** an object ID. A pixel bbox needs documented coo
 **History states:** `NEW / PERSISTING / RESOLVED / REGRESSED / INCONCLUSIVE`. Exact IDs in two snapshots are treated as *user-provided* continuity, not visual confirmation. The accompanying `finding_history.py` comparator is a narrow deterministic draft and cannot infer visually equivalent renamed objects.
 
 **Resolution guard:** absence of a finding after a partial review is **INCONCLUSIVE**, not RESOLVED. Even under `FULL_COMPARABLE`, the comparator records a status **candidate**; physical improvement still needs actual artifact review. A prior RESOLVED finding reappearing is REGRESSED only when stable identity and history are supplied.
+
+`state` records the current snapshot; `previous_state` is historical metadata.
+When the same ID is active in both snapshots, the result is PERSISTING even if an older
+`previous_state` says RESOLVED. A RESOLVED tombstone in the immediately previous snapshot
+followed by an active finding is REGRESSED. The legacy current-row `previous_state` fallback
+is used only when the ID is absent from the before snapshot; it is a caller-provided assertion.
+An explicitly resolved or inconclusive current row retains that declared candidate state.
+The chain RESOLVED → REGRESSED → PERSISTING is counted as one recurrence, not two.
 
 **Severity:** no numeric area score automatically upgrades Critical/Major. Existing finding contract (location, observation, impact, counter-interpretation, action, verification) remains authoritative.
 
