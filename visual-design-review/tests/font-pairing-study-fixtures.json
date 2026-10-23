@@ -1,0 +1,43 @@
+{
+  "status": "DRAFT_UNVERIFIED",
+  "schema_version": "0.1",
+  "pair_tasks": [
+    {
+      "id": "FP-01",
+      "context": "print_body",
+      "controlled_variable": "latin_family",
+      "korean_sample": "한글과 English가 섞인 본문입니다.",
+      "conditions": {
+        "same_korean_face": true,
+        "same_size": true,
+        "same_text": true,
+        "actual_fonts": "TO_BE_PROVIDED"
+      },
+      "blind_ratings": []
+    },
+    {
+      "id": "FP-02",
+      "context": "display_title",
+      "controlled_variable": "latin_weight",
+      "korean_sample": "문자의 History",
+      "conditions": {
+        "same_layout": true,
+        "same_text": true,
+        "actual_fonts": "TO_BE_PROVIDED"
+      },
+      "blind_ratings": []
+    },
+    {
+      "id": "FP-03",
+      "context": "mixed_numbers",
+      "controlled_variable": "latin_figures",
+      "korean_sample": "2026년 10월 23일, 35 mm",
+      "conditions": {
+        "same_layout": true,
+        "same_text": true,
+        "actual_fonts": "TO_BE_PROVIDED"
+      },
+      "blind_ratings": []
+    }
+  ]
+}
