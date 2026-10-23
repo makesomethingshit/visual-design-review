@@ -25,7 +25,7 @@ python tests/check_repair_artifacts.py --generate
 python tests/check_repair_artifacts.py --output path/to/new-report.json
 ```
 
-실행 환경: Windows, Python 3.12.14, Poppler pdfinfo 26.07.0. 실제 Python 버전·파일 SHA-256·검사 출력·집계 결과는 [JSON 실행 기록](repair-artifacts-2026-10-23.json)에 남겼다. 원본/수정본 8개 파일의 해시는 모두 다르며, 동일 checker/동일 과제 조건으로 전후를 검사했다. fixture 재생성은 ReportLab invariant 모드를 사용한다.
+실행 환경: Windows, Python 3.12.14, Poppler pdfinfo 26.07.0. 실제 Python 버전·파일 SHA-256·검사 출력·집계 결과는 [JSON 실행 기록](repair-artifacts-2026-10-23.json)에 남겼다. 원본/수정본 8개 파일의 해시는 모두 다르며, 동일 checker/동일 과제 조건으로 전후를 검사했다. fixture 재생성은 ReportLab 4.4.9 invariant 모드를 사용한다. PDF는 binary, 해시를 기록하는 SVG·검사 스크립트는 LF로 보존한다.
 
 검사 결과: 세 과제의 명시적 기술 조건 수정, 한 과제의 미해결 반례. 기존 reporter 단위 시험 12/12 통과. reporter의 `verified_counts=null` 및 `independent_verification=UNVERIFIED`는 그대로다. 독립 파일 검사를 실행했다는 사실이 reporter의 선언값을 인증하는 어댑터를 구현했다는 의미는 아니다.
 
