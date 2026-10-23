@@ -18,14 +18,19 @@ def check(payload: dict) -> dict:
         raise ValueError("text must be a string and profile must be an object")
     lines = payload.get("rendered_lines")
     checks = []
-    si = bool(profile.get("si_spacing", False))
+    si = profile.get("si_spacing", False)
+    if not isinstance(si, bool):
+        raise ValueError("si_spacing must be a boolean")
     if si:
         # Restricted to unambiguous unit tokens; product identifiers require
         # caller-supplied exceptions and are never rewritten automatically.
         exceptions = set(profile.get("except_exact_tokens", []))
         matches = list(re.finditer(r"(?<![\w])\d+(?:\.\d+)?(?:mm|cm|km|kg)(?![\w])", text))
         bad = [m.group() for m in matches if m.group() not in exceptions]
-        checks.append({"rule_id": "MIX-005", "status": "FINDING" if bad else "PASS",
+        # No recognized unit token means this narrow probe did not apply a rule.
+        # In particular, a token attached to a word is not a verified SI pass.
+        status = "NOT_APPLICABLE" if not matches else ("FINDING" if bad else "PASS")
+        checks.append({"rule_id": "MIX-005", "status": status,
                        "matches": bad, "severity": "UNDETERMINED",
                        "message": "Review number/SI-unit spacing under the explicit SI editorial profile"})
     else:

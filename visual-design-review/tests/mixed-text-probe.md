@@ -25,4 +25,12 @@ Outputs `PASS` only for narrowly implemented checks. `NO_SIMPLE_ANOMALY` is **no
 
 **Known limitations:** no cmap parser, no actual font fallback detection, no full KLReq tailoring, no line-breaking layout engine, no PDF/Adobe integration, no image OCR. A finding is not automatically Major/Critical.
 
-**Verification status:** scripted tests authored; actual runner evidence/CI outcomes not yet recorded. Needs independent review and positive/negative fixture expansion.
+SI opt-in must be a JSON boolean. A string such as `"false"` is invalid and must not
+activate inspection. If no supported standalone unspaced unit token is recognized,
+the narrow check returns `NOT_APPLICABLE`, not a verified SI `PASS`. This includes
+already-spaced text and ambiguous tokens attached to words; full SI validation remains
+outside this probe. Exception matching only applies to recognized exact tokens.
+
+**Verification status:** macOS/Python unit execution and the original failure are
+recorded in [the local execution report](../../docs/validation/mixed-text-probe-2026-10-23.md).
+This synthetic test evidence is not actual font, renderer, or full SI conformance evidence.

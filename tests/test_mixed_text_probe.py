@@ -34,6 +34,28 @@ class ProbeTests(unittest.TestCase):
         result = probe.check({"text": "가나다", "rendered_lines": ["가나"]})
         self.assertEqual(result["checks"][1]["status"], "BLOCKED")
 
+    def test_no_supported_unit_token_is_not_a_pass(self):
+        for text in ("본문만 있음", "폭 35 mm 끝", "모델35mmA"):
+            result = probe.check({"text": text, "profile": {"si_spacing": True}})
+            self.assertEqual(result["checks"][0]["status"], "NOT_APPLICABLE")
+
+    def test_non_boolean_opt_in_rejected(self):
+        for flag in ("false", "true", 1, None):
+            with self.assertRaises(ValueError):
+                probe.check({"text": "폭 35mm 끝", "profile": {"si_spacing": flag}})
+
+    def test_si_disabled_does_not_report_a_finding(self):
+        result = probe.check({"text": "폭 35mm 끝", "profile": {"si_spacing": False}})
+        self.assertEqual(result["checks"][0]["status"], "NOT_APPLICABLE")
+
+    def test_payload_is_not_rewritten(self):
+        import copy
+        payload = {"text": "폭 35mm 끝", "profile": {"si_spacing": True,
+                   "except_exact_tokens": ["35mm"]}}
+        original = copy.deepcopy(payload)
+        self.assertEqual(probe.check(payload)["checks"][0]["status"], "PASS")
+        self.assertEqual(payload, original)
+
 
 if __name__ == "__main__":
     unittest.main()
