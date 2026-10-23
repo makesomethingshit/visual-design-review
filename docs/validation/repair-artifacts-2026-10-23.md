@@ -21,6 +21,8 @@ python tests/check_repair_artifacts.py
 python -m unittest discover -s tests -p 'test_repair_lift_summary.py' -v
 # 선택적 fixture 재생성에만 기존 reportlab 필요; 검사를 위해 설치할 필요 없음
 python tests/check_repair_artifacts.py --generate
+# 명시한 경우에만 새 실행 리포트 저장; 기본 검사는 기존 기록 불변
+python tests/check_repair_artifacts.py --output path/to/new-report.json
 ```
 
 실행 환경: Windows, Python 3.12.14, Poppler pdfinfo 26.07.0. 실제 Python 버전·파일 SHA-256·검사 출력·집계 결과는 [JSON 실행 기록](repair-artifacts-2026-10-23.json)에 남겼다. 원본/수정본 8개 파일의 해시는 모두 다르며, 동일 checker/동일 과제 조건으로 전후를 검사했다. fixture 재생성은 ReportLab invariant 모드를 사용한다.

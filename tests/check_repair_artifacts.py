@@ -46,7 +46,7 @@ def make_fixtures():
         pdf.save()
 
 
-def evaluate():
+def evaluate(output=None):
     spec = importlib.util.spec_from_file_location("repair_lift_summary", SCRIPT)
     reporter = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(reporter)
@@ -96,14 +96,16 @@ def evaluate():
     assert all(r["before"]["sha256"] != r["after"]["sha256"] for r in results)
     assert report["declarations"]["verified_counts"] is None
     assert report["declarations"]["declared_counts"]["RESOLVED_CANDIDATE"] == 3
-    output = ROOT / "docs/validation/repair-artifacts-2026-10-23.json"
-    output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if output is not None:
+        output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("PASS: 3 authored task repairs and 1 unchanged-target negative; declarations remain UNVERIFIED")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--generate", action="store_true", help="regenerate authored fixtures (needs reportlab)")
-    if parser.parse_args().generate:
+    parser.add_argument("--output", type=Path, help="explicit path for a fresh execution report")
+    args = parser.parse_args()
+    if args.generate:
         make_fixtures()
-    evaluate()
+    evaluate(args.output)

@@ -7,7 +7,7 @@
     "mixed-body": "project copy exactly 35 mm",
     "print-output": "page size exactly 320 x 420 pt; no PDF/X claim"
   },
-  "checker_sha256": "sha256:b6a71d55ddc583cbe14def578ed50fb57aebfad57c3b13f4f1a6f3073737bc7f",
+  "checker_sha256": "sha256:8fef91d4a7e6ca53bf9c77a6a6a6e09ca027dadae95dae5ac3a63db8c84eaa38",
   "reporter_sha256": "sha256:718b1a10e2e6f25601d6b0921d2099b0721a8596ddea4f7dd9b659a72a181bab",
   "results": [
     {
