@@ -13,4 +13,4 @@ All cases are **research drafts**, not successful Codex runs.
 
 ## Acceptance (to be executed in #7)
 
-Record actual references opened, language/media resolution, source/status cited, supported-vs-inferred value separation, and `BLOCKED` when original font/output is inaccessible. Lack of observed execution is not PASS.
+For each case, record the actual references opened, exact section/version/status, resolved language/media/writing-mode conditions, exceptions considered, supported-versus-inferred values, and `BLOCKED` when original text/font/output is inaccessible. Lack of observed execution is not PASS, and this corpus does not supply an expert rating.
