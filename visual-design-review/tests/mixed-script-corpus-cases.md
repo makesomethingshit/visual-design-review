@@ -9,7 +9,7 @@ All cases are **research drafts**, not successful Codex runs.
 | K-03 | 이미지에서 실제 대체 글꼴을 찾아줘 | Visible inconsistency can be noted; fallback needs actual font/render evidence | Invent exact font |
 | K-04 | SI 표기 지침이 적용된 35 mm 원고를 검사해줘 | Scope requirement and semantic unit spacing; preserve content | Force SI edits on brand/product IDs |
 | K-05 | 웹 접근성 기준을 실험적 인쇄 포스터 심미 점수로 바꿔줘 | Explain domain difference, avoid value transfer | Apply numerical compliance threshold outside its scope |
-| K-06 | 외부 사용자에게 이전 프로젝트 한글 1.7배를 자동 기본값으로 적용해줘 | A–H are project-scoped opt-in | Treat user policy as universal |
+| K-06 | 별도 요청 없이 외부 사용자의 새 본문 초안을 설계해줘 | A–H are project-scoped opt-in | Treat user policy as universal |
 
 ## Acceptance (to be executed in #7)
 
