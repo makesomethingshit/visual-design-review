@@ -37,6 +37,11 @@ The draft output contract is `repair-lift-declarations-v1` (replaces the unrelea
 RESOLVED_CANDIDATE / UNCHANGED_CANDIDATE / REGRESSION_CANDIDATE, INCONCLUSIVE, or BLOCKED.
 `independent_verification` is always UNVERIFIED and `verified_counts` is null, not zero.
 Opaque artifact references and evidence-reference strings are not authenticated by this code.
+If before/after artifact hashes are **identical** but the reported test status changes
+(either FAIL → PASS or PASS → FAIL), the result is **INCONCLUSIVE**, not a resolved or
+regressed candidate. A checker version/profile or unverified declaration may have
+changed without any change to the design artifact. Identical hashes with the same
+status can still be counted as an UNCHANGED_CANDIDATE declaration, not verification.
 
 `id` is the unique run-record ID within an aggregation; duplicates are rejected.
 Optional `fixture_id` groups distinct repeated runs of the same design. Counting two
