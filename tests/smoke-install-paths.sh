@@ -36,6 +36,15 @@ export CODEX_HOME="$sandbox/safe-alias/new-home/deeper"
 /bin/bash "$installer" remove >/dev/null
 [[ ! -e "$CODEX_HOME/skills/visual-design-review" ]] || fail 'safe remove left active skill'
 
+# Long valid SKILL.md must not trip pipefail when a reader stops after frontmatter.
+printf '\n' >> "$source_copy/SKILL.md"
+awk 'BEGIN { for (i=0; i<10000; i++) print "Long valid body text for frontmatter pipe regression." }' >> "$source_copy/SKILL.md"
+export CODEX_HOME="$sandbox/long-document-home"
+/bin/bash "$installer" install --dry-run >/dev/null
+/bin/bash "$installer" install >/dev/null
+/bin/bash "$installer" check >/dev/null
+/bin/bash "$installer" remove >/dev/null
+
 # A dangling ancestor is not silently treated as a resolvable directory.
 ln -s "$sandbox/missing" "$sandbox/dangling"
 if CODEX_HOME="$sandbox/dangling/new-home" /bin/bash "$installer" install --dry-run >/dev/null 2>&1; then

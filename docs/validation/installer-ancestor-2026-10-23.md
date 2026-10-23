@@ -32,3 +32,12 @@ git diff --check
 공통 Linux 스모크에서 새 경로 시험을 호출하므로 Linux/macOS CI에도 연결된다.
 Windows installer/junction 동작과 링크 변경의 동시성(TOCTOU)은 이번 수정의 검증 범위가 아니다.
 전역 사용자 스킬·설정·디자인 원본은 변경하지 않았다.
+
+## macOS CI의 긴 본문 파이프 오류 추가 반영
+
+첫 PR CI의 macOS 작업에서 frontmatter를 읽는 생산자 `printf`가 Broken pipe로
+실패했다. `pipefail` 상태에서 앞부분만 읽는 `awk`/`grep`이 일찍 종료하는 경로를
+제거하고 here-string 및 Bash 문자열 연산을 사용했다. 긴 정상 본문을 추가한
+격리 시험은 수정 전 실패했고 수정 후 install/dry-run/check/remove가 통과했다.
+기존 frontmatter 경계·metadata 소속 음성 시험을 포함한 전체 macOS 스모크도 통과했다.
+이 항목은 파일 구조 유효성을 검증하며 모델의 내용 판단은 검증하지 않는다.
