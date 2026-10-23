@@ -44,6 +44,22 @@ class ProbeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 probe.check({"text": "폭 35mm 끝", "profile": {"si_spacing": flag}})
 
+    def test_except_exact_tokens_rejects_non_list_or_non_string_items(self):
+        for invalid in ("35mm", None, 35, {"value": "35mm"},
+                        ["35mm", None], ["35mm", 35], [True], [None]):
+            with self.subTest(invalid=invalid):
+                for si in (False, True):
+                    with self.assertRaisesRegex(ValueError, "except_exact_tokens"):
+                        probe.check({"text": "폭 35mm 끝", "profile": {
+                            "si_spacing": si, "except_exact_tokens": invalid}})
+
+    def test_except_exact_tokens_accepts_only_string_lists(self):
+        for valid in ([], ["35mm"], ["35mm", "20cm"]):
+            payload = {"text": "폭 35mm 끝", "profile": {
+                "si_spacing": True, "except_exact_tokens": valid}}
+            expected = "FINDING" if not valid else "PASS"
+            self.assertEqual(probe.check(payload)["checks"][0]["status"], expected)
+
     def test_si_disabled_does_not_report_a_finding(self):
         result = probe.check({"text": "폭 35mm 끝", "profile": {"si_spacing": False}})
         self.assertEqual(result["checks"][0]["status"], "NOT_APPLICABLE")
