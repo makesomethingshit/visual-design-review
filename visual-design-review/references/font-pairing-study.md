@@ -35,12 +35,12 @@ The checked-in fixture and [`font_pairing_render.py`](../scripts/font_pairing_re
 
 ```text
 python visual-design-review/scripts/font_pairing_render.py --validate-only
-python visual-design-review/scripts/font_pairing_render.py
+python visual-design-review/scripts/font_pairing_render.py --output path/to/new-run
 ```
 
 `Pillow` reports `raqm=False` in this environment. The PNGs therefore demonstrate the specified basic run placement only; they are not HarfBuzz shaping or renderer-fallback evidence. See [`render-manifest.json`](../../docs/validation/font-pairing-2026-10-23/render-manifest.json) and [`blind-packet.json`](../../docs/validation/font-pairing-2026-10-23/blind-packet.json) for the local outputs and hashes.
 
-The blind packet exposes only A/B labels, text, parameters, and image hashes. Keep the font-bearing render manifest separate when giving the packet to a rater.
+The blind packet exposes task IDs, A/B labels, image paths/hashes, and parameters; the fixed text is visible in each PNG and recorded in the source fixture, not duplicated as a JSON text field. Keep the font-bearing render manifest and source fixture separate when giving the packet to a rater.
 
 ## 프로토콜
 
