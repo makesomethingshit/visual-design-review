@@ -33,6 +33,7 @@ metadata:
 | 완성된 시각디자인 비평 (기존 기본 모드) | [review-protocol](references/review-protocol.md), [critique-rubric](references/critique-rubric.md), [review-output](references/review-output.md) | 아래 분야별 참고 |
 | 레퍼런스의 구조·관계·수식 역분석 | [reference-analysis](references/reference-analysis.md) | [formula-relations](references/formula-relations.md), 분야별 참고 |
 | 계산 가능한 디자인 제안·플러그인 전달 명세 | [formula-relations](references/formula-relations.md), [design-handoff](references/design-handoff.md) | [reference-analysis](references/reference-analysis.md), 분야별 참고 |
+| **사용자가 명시한** GitHub 제품 시각디자인 Issue/수정 Draft PR 작업 | [product-correct](references/product-correct.md) | 새 시각 비평이 필요하면 review-protocol·review-output 및 분야별 참고. 외부 GitHub 쓰기 도구·권한이 없으면 초안만 작성 |
 
 분야별 참고는 해당 성격이 **실제로 포함될 때만** 읽는다.
 
