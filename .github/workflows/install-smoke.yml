@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: bash tests/smoke-install-linux.sh
       - run: bash tests/check-knowledge-architecture.sh
+      - run: python3 -m unittest discover -s tests -p 'test_mixed_text_probe.py' -v
   macos:
     runs-on: macos-latest
     steps:

@@ -26,6 +26,8 @@ python3 visual-design-review/scripts/mixed_text_probe.py examples/mixed-script-i
   비활성화 상태, 예외 적용과 입력 불변.
 - 제공 예시 CLI: SI 후보 `35mm`는 `FINDING`, 실제 줄 결과와 폰트 폴백은 `UNVERIFIED` 유지.
 - `git diff --check` 통과.
+- Linux CI에 해당 unittest 명령을 연결했다. 기존 설치/정적 CI의 성공만으로는
+  이 테스트가 실행됐다고 볼 수 없었으며, 새 CI 결과는 해당 SHA에서 별도로 확인한다.
 
 이는 Python 코드와 합성 입력에 대한 실행 증거다. 전체 SI 표준, Unicode/KLReq 엔진,
 실제 폰트·렌더러·PDF·인쇄 품질, Codex 행동 평가는 검증하지 않았다.
