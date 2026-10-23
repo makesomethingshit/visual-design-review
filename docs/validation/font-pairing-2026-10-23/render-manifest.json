@@ -1,0 +1,331 @@
+{
+  "fixture": "D:\\Codex\\2026-10-15\\new-chat\\work\\vdr-ready-20261023\\pr17\\visual-design-review\\tests\\font-pairing-study-fixtures.json",
+  "fixture_sha256": "a8e23cfcfd7d401806fde0c40b31bc435eb0faed38a93dbbbc4cd5cb0407ae62",
+  "font_binaries_in_repository": false,
+  "records": [
+    {
+      "task_id": "FP-01",
+      "label": "A",
+      "image": "blind/FP-01/A.png",
+      "image_sha256": "3917fa20ee30a382a85e7cebcae92f9bb912ba683de0ac2e60d1558599017102",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "fonts": {
+        "korean": {
+          "path": "C:\\Windows\\Fonts\\malgun.ttf",
+          "name": [
+            "Malgun Gothic",
+            "Regular"
+          ],
+          "file_size": 13459196,
+          "file_sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version_identifier": "sha256:7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        },
+        "latin": {
+          "path": "C:\\Windows\\Fonts\\arial.ttf",
+          "name": [
+            "Arial",
+            "Regular"
+          ],
+          "file_size": 1045720,
+          "file_sha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+          "version_identifier": "sha256:b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        }
+      }
+    },
+    {
+      "task_id": "FP-01",
+      "label": "B",
+      "image": "blind/FP-01/B.png",
+      "image_sha256": "2b7f0fdcfeb03279631beb4f7f59573f70c37866cbdffd43787e492360a79948",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "fonts": {
+        "korean": {
+          "path": "C:\\Windows\\Fonts\\malgun.ttf",
+          "name": [
+            "Malgun Gothic",
+            "Regular"
+          ],
+          "file_size": 13459196,
+          "file_sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version_identifier": "sha256:7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        },
+        "latin": {
+          "path": "C:\\Windows\\Fonts\\times.ttf",
+          "name": [
+            "Times New Roman",
+            "Regular"
+          ],
+          "file_size": 1190736,
+          "file_sha256": "931c5de5c70401d9324d5014c123802b4fb753000360ceb2f56c589403cd58c5",
+          "version_identifier": "sha256:931c5de5c70401d9324d5014c123802b4fb753000360ceb2f56c589403cd58c5",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        }
+      }
+    },
+    {
+      "task_id": "FP-02",
+      "label": "A",
+      "image": "blind/FP-02/A.png",
+      "image_sha256": "4c75aa0f237f36c538426adcccf11f5160fbfc3b3654cbe7e397031115e72957",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "fonts": {
+        "korean": {
+          "path": "C:\\Windows\\Fonts\\malgun.ttf",
+          "name": [
+            "Malgun Gothic",
+            "Regular"
+          ],
+          "file_size": 13459196,
+          "file_sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version_identifier": "sha256:7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        },
+        "latin": {
+          "path": "C:\\Windows\\Fonts\\arial.ttf",
+          "name": [
+            "Arial",
+            "Regular"
+          ],
+          "file_size": 1045720,
+          "file_sha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+          "version_identifier": "sha256:b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        }
+      }
+    },
+    {
+      "task_id": "FP-02",
+      "label": "B",
+      "image": "blind/FP-02/B.png",
+      "image_sha256": "db6612b6d2731d1c8943876f37bb6374f2a2bd5a3873f5cb18286e89964673b8",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "fonts": {
+        "korean": {
+          "path": "C:\\Windows\\Fonts\\malgun.ttf",
+          "name": [
+            "Malgun Gothic",
+            "Regular"
+          ],
+          "file_size": 13459196,
+          "file_sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version_identifier": "sha256:7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        },
+        "latin": {
+          "path": "C:\\Windows\\Fonts\\arialbd.ttf",
+          "name": [
+            "Arial",
+            "Bold"
+          ],
+          "file_size": 989780,
+          "file_sha256": "e8f4e3baf6cc35fed6fcce3a540e8b39e8f6cda1d22a28f2ec8f526fef7a43f5",
+          "version_identifier": "sha256:e8f4e3baf6cc35fed6fcce3a540e8b39e8f6cda1d22a28f2ec8f526fef7a43f5",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        }
+      }
+    },
+    {
+      "task_id": "FP-03",
+      "label": "A",
+      "image": "blind/FP-03/A.png",
+      "image_sha256": "05935b75f6d0879200ac445b870658c06d1cf370a4ef5ca5ae9c028e6ceb8aa3",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "fonts": {
+        "korean": {
+          "path": "C:\\Windows\\Fonts\\malgun.ttf",
+          "name": [
+            "Malgun Gothic",
+            "Regular"
+          ],
+          "file_size": 13459196,
+          "file_sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version_identifier": "sha256:7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        },
+        "latin": {
+          "path": "C:\\Windows\\Fonts\\arial.ttf",
+          "name": [
+            "Arial",
+            "Regular"
+          ],
+          "file_size": 1045720,
+          "file_sha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+          "version_identifier": "sha256:b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        }
+      }
+    },
+    {
+      "task_id": "FP-03",
+      "label": "B",
+      "image": "blind/FP-03/B.png",
+      "image_sha256": "90b5f11a8af18d9343ef04a6911cf696112e19f2e88e5f291bb8f7da1b47c6d5",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "fonts": {
+        "korean": {
+          "path": "C:\\Windows\\Fonts\\malgun.ttf",
+          "name": [
+            "Malgun Gothic",
+            "Regular"
+          ],
+          "file_size": 13459196,
+          "file_sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "version_identifier": "sha256:7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        },
+        "latin": {
+          "path": "C:\\Windows\\Fonts\\times.ttf",
+          "name": [
+            "Times New Roman",
+            "Regular"
+          ],
+          "file_size": 1190736,
+          "file_sha256": "931c5de5c70401d9324d5014c123802b4fb753000360ceb2f56c589403cd58c5",
+          "version_identifier": "sha256:931c5de5c70401d9324d5014c123802b4fb753000360ceb2f56c589403cd58c5",
+          "numeric_version": null,
+          "size_px": 48,
+          "layout_engine": "BASIC"
+        }
+      }
+    }
+  ]
+}

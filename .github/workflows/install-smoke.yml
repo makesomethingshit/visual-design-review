@@ -7,7 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Prepare font rendering tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil fonts-nanum fonts-dejavu-core
       - run: bash tests/smoke-install-linux.sh
+      - run: python3 -m unittest discover -s tests -p 'test_font_pairing_render.py' -v
       - run: bash tests/check-knowledge-architecture.sh
   macos:
     runs-on: macos-latest
