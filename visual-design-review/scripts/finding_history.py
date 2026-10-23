@@ -32,7 +32,12 @@ def compare(before: dict, after: dict) -> list[dict]:
     complete = after.get("review_coverage") == "FULL_COMPARABLE"
     results = []
     for finding_id in sorted(set(old) | set(new)):
-        if finding_id in new and new[finding_id].get("state") in {"RESOLVED", "INCONCLUSIVE"}:
+        if finding_id in old and old[finding_id].get("state") == "INCONCLUSIVE":
+            # An unresolved prior observation is not evidence of a continuing
+            # finding. Neither a new active row nor its absence establishes
+            # continuity or resolution, even with FULL_COMPARABLE coverage.
+            state = "INCONCLUSIVE"
+        elif finding_id in new and new[finding_id].get("state") in {"RESOLVED", "INCONCLUSIVE"}:
             state = new[finding_id]["state"]
         elif finding_id in old and finding_id in new:
             # Compare with the immediately preceding snapshot, not its history.
