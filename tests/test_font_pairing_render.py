@@ -26,6 +26,11 @@ class FontPairingFixtureTest(unittest.TestCase):
     def test_rendered_pair_has_visible_distinct_pixels_and_one_variable(self):
         fixture = MODULE.load_fixture(MODULE.FIXTURE)
         task = fixture["pair_tasks"][0]
+        if not Path(task["fixed"]["korean_font"]).is_file():
+            # Linux CI uses distro fonts; the committed Windows render record stays fixed.
+            task["fixed"]["korean_font"] = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"
+            task["variants"][0]["latin_font"] = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+            task["variants"][1]["latin_font"] = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
         self.assertEqual(task["controlled_variable"], "latin_family")
         self.assertNotEqual(task["variants"][0]["latin_font"], task["variants"][1]["latin_font"])
         with tempfile.TemporaryDirectory() as directory:
