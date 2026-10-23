@@ -1,5 +1,6 @@
 """Standalone unittest for the limited mixed-text probe."""
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 
@@ -9,12 +10,51 @@ spec = importlib.util.spec_from_file_location("mixed_text_probe", FILE)
 probe = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(probe)
 
+PIL_AVAILABLE = importlib.util.find_spec("PIL") is not None
+WINDOWS_KOREAN_FONT = Path(r"C:\Windows\Fonts\malgun.ttf")
+
 
 class ProbeTests(unittest.TestCase):
     def test_unverified_without_actual_line_geometry(self):
         result = probe.check({"text": "한글 ABC"})
         self.assertEqual(result["checks"][1]["status"], "UNVERIFIED")
         self.assertEqual(result["checks"][2]["status"], "UNVERIFIED")
+
+    def test_rule_sources_are_explicit(self):
+        result = probe.check({"text": "한글 ABC"})
+        for item in result["checks"]:
+            for field in ("source", "source_version", "document_status",
+                          "scope", "verification_method"):
+                self.assertIn(field, item)
+
+    @unittest.skipUnless(PIL_AVAILABLE and WINDOWS_KOREAN_FONT.is_file(),
+                         "Pillow and the Windows Korean font are optional")
+    def test_optional_font_render_reproducer_records_engine_and_identity(self):
+        import hashlib
+        import io
+        import PIL
+        from PIL import Image, ImageDraw, ImageFont
+
+        font_path = WINDOWS_KOREAN_FONT
+        font = ImageFont.truetype(str(font_path), size=32)
+        image = Image.new("L", (400, 64), 0)
+        ImageDraw.Draw(image).text((4, 4), "한글 ABC", font=font, fill=255)
+        encoded = io.BytesIO()
+        image.save(encoded, format="PNG", optimize=False)
+        self.assertIsNotNone(image.getbbox())
+        self.assertEqual(len(hashlib.sha256(font_path.read_bytes()).hexdigest()), 64)
+        self.assertEqual(len(hashlib.sha256(encoded.getvalue()).hexdigest()), 64)
+        self.assertTrue(font.getname()[0])
+        self.assertTrue(str(getattr(font, "layout_engine", "BASIC")))
+        self.assertTrue(PIL.__version__)
+
+    def test_source_fixtures_cover_simple_good_and_bad_paths(self):
+        root = Path(__file__).resolve().parents[1] / "examples"
+        good = probe.check(json.loads((root / "mixed-script-good.json").read_text(encoding="utf-8")))
+        bad = probe.check(json.loads((root / "mixed-script-bad.json").read_text(encoding="utf-8")))
+        self.assertEqual(good["checks"][1]["status"], "NO_SIMPLE_ANOMALY")
+        self.assertEqual(bad["checks"][1]["status"], "FINDING")
+        self.assertEqual(bad["checks"][0]["status"], "FINDING")
 
     def test_si_is_opt_in_and_never_rewrites(self):
         payload = {"text": "폭은 35mm입니다", "profile": {"si_spacing": True}}
