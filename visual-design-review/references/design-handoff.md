@@ -13,6 +13,7 @@
 | Provenance | USER / USER_APPROVED_PROJECT_POLICY / MEASURED / DERIVED / EMPIRICAL / INFERRED / UNKNOWN |
 | Decision status | DETERMINED / PROJECT_INITIAL_PRESET / CANDIDATE / UNRESOLVED / CONFLICT — 출처·검증 상태와 별개. PROJECT_INITIAL_PRESET은 최종 확정값이 아닌 채택된 첫 시안값 |
 | Verification status | FORMULA_CHECKED / SOURCE_MEASURED / TOOL_APPLIED / OUTPUT_INSPECTED / UNVERIFIED |
+| Rule basis (when applicable) | [rule-contract](rule-contract.md)의 rule_id / knowledge_kind / rule_strength / source_version / document_status / scope / conditions / exceptions / conflict / verification_method. 출처 강도·수식 정확도·디자인 결정 상태를 별개로 둠 |
 | Unresolved | 충돌·미입력·여러 가능한 해와 적용 조건 |
 | Verification request | 외부 도구에서 가능할 경우 확인할 실제 속성, 허용 편차 |
 
@@ -43,6 +44,8 @@ unresolved:
 추정한 값은 DERIVED가 아니라 INFERRED/EMPIRICAL로 표기한다.
 레퍼런스 관측에서 사용하는 프레임, 개별 좌표, 측정·추론의 구분은
 [reference-analysis](reference-analysis.md)의 증거 등급에 따른다.
+
+적용 규칙이 있을 때 `rule_id`와 실제 조건/예외 확인 결과를 함께 전달한다. 확인되지 않은 폰트 fallback·금칙·규범 충돌을 임의의 `DETERMINED`로 승격하지 않는다. 모든 전달에 상세 규칙 목록을 강제하지 않으며 해당 과업에 필요한 내용만 기록한다.
 
 실제 도구가 객체를 생성했는지, 원본 폰트가 있는지, 38mm로 반영했는지는 **외부 실행 결과**가
 있어야 확인할 수 있다. 도구가 확인값을 돌려주지 않으면 스킬은 '실행 미검증'으로 남긴다.
