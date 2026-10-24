@@ -14,6 +14,8 @@
 | Decision status | DETERMINED / PROJECT_INITIAL_PRESET / CANDIDATE / UNRESOLVED / CONFLICT — 출처·검증 상태와 별개. PROJECT_INITIAL_PRESET은 최종 확정값이 아닌 채택된 첫 시안값 |
 | Verification status | FORMULA_CHECKED / SOURCE_MEASURED / TOOL_APPLIED / OUTPUT_INSPECTED / UNVERIFIED |
 | Rule basis (when applicable) | [rule-contract](rule-contract.md)의 rule_id / knowledge_kind / rule_strength / source_version / document_status / scope / conditions / exceptions / conflict / verification_method. 출처 강도·수식 정확도·디자인 결정 상태를 별개로 둠 |
+| Reconstruction model (when applicable) | 디자인 문제, 실제/대체 자산, 고정 조건·공통 규칙·가변값·예외·미설명 부분 |
+| Adjustments (when applicable) | 대상 ID·속성, 기본값→적용값·단위, 이유·근거 상태, 적용 범위, 전후 효과·잔차. 임의 보정 허용은 원저자 설정 확인을 뜻하지 않음 |
 | Unresolved | 충돌·미입력·여러 가능한 해와 적용 조건 |
 | Verification request | 외부 도구에서 가능할 경우 확인할 실제 속성, 허용 편차 |
 

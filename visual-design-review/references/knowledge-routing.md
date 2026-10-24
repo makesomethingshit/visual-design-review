@@ -15,7 +15,7 @@ A~H 정책은 현재 작업의 **명시적 opt-in** 또는 **독립적으로 확
 | 신호 | 로드 | 제외 또는 조건 |
 | --- | --- | --- |
 | **비평/리뷰** | review-protocol + critique-rubric + review-output | 정량 분석/설계 명세는 요청된 경우에만 |
-| **레퍼런스의 수학적 해체·재구성 가설** | reference-analysis | 수치 관계를 다룰 때 formula-relations |
+| **레퍼런스의 디자인 문제·생성 규칙·재구성 가설** | reference-analysis | 수치 관계를 다룰 때 formula-relations |
 | **수치 설계·외부 도구 전달** | formula-relations + design-handoff | 원본에서 관계를 추출할 때 reference-analysis |
 | 장문 본문·조판·문자 위계의 **비평** | typography | 실제 본문이 없으면 장문 조판 검사 제외 |
 | **수치 타이포그래피 관계/설계** | typography-relations + formula-relations | 필요시 font metrics→spacing/leading→measure→capacity를 의존성별 로드 |
