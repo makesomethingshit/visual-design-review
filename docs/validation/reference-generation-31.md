@@ -22,6 +22,46 @@
 현재 최종 지침의 독립 행동 평가, 인쇄·관객 검증은 남아 있다. 이 기록은 실패로부터 요구를 도출한
 탐색 증거이며 PR만으로 로컬 이미지나 전체 실행 로그를 재검증할 수 있다는 주장이 아니다.
 
+### 공통 변수 후보의 재현 가능한 내용 계약
+
+아래 레코드는 위 마지막 로컬 설계의 내용 선택과 새 값을 옮긴 것이다. 실제 명세 링크 검사를
+완료한 원작 복원 패키지가 아니며, 지침의 행동 시험이나 미적 성공 예제가 아니다.
+
+```json
+{
+  "id": "JOINT-1",
+  "status": "CANDIDATE",
+  "sources": {
+    "A": ["같은 말은", "같은 곳에", "머문다."],
+    "B": ["낯선 문장은", "다른 곳에", "도착한다."]
+  },
+  "selected_source_by_row": ["A", "B", "B"],
+  "current_by_row": ["같은 말은:", "다른 곳에", "도착한다."],
+  "discarded_by_row": ["낯선 문장은", "같은 곳에", "머문다."],
+  "tokens": {
+    "canvas_px": [842, 1192], "font_size_px": 144, "tracking_px": -7,
+    "left_px": 45, "baselines_px": [374, 615, 856],
+    "discarded_offset_px": [26, 50], "discarded_stroke_px": 1.4,
+    "palette": ["#173fd1", "#f7f4ec", "#e8ff52", "#6384f0"]
+  },
+  "token_provenance": "NEW_DESIGN_CHOICE_NOT_SOURCE_SETTING",
+  "verification": {
+    "local_render": "OUTPUT_INSPECTED",
+    "independent_handoff": "UNVERIFIED",
+    "audience_reading": "UNVERIFIED"
+  }
+}
+```
+
+각 행 i에서 current는 sources[selected[i]][i], discarded는 선택하지 않은 출처의 같은 행이다.
+콜론만 현재 첫 행 끝에 추가하고 앞 출처 색을 유지한다. 둘 다 같은 서체·크기·기준선을 사용하고
+discarded만 공통변위한다. 원리별로 별도의 좌표 목록을 만든 조합이 아니다.
+
+탐색 후보는 STUDY-1 가림 / STUDY-2 서술부 교체 / STUDY-3 누적이었다. 공통 입력은 같은 두
+원문·서체·88px이고, 차이는 가림/교체/중첩 관계였다. 독해와 편집 의미로 STUDY-2를 상대적으로
+선택했으나 사용자 품질 판단으로 채택 완료하지 않았다. JOINT-1은 크기·색·조합 방식까지 바꾼
+새 후보라 STUDY-2에서 단일 변수만 개선한 결과가 아니다.
+
 - 기준 커밋: 03b567ce69ab2e63bd8f5cfa61333afcbb7f0a57.
 - 지침 변경: e8a71468ecd73d914dc9a2b4192a1498dd342c62; Draft PR #32.
 - 같은 메인 세션에서 수정한 SKILL, routing, reference-analysis, formula-relations를 읽고 적용했다. 독립 BASE/HEAD 행동 비교가 아니며 GEN-1~12의 쌍대 평가는 미실행이다.
