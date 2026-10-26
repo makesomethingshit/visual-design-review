@@ -1,0 +1,7 @@
+{
+  "artifact_version": "poster-v3",
+  "artifact_source_id": "fixture-poster",
+  "artifact_path": "poster-v3-regressed.svg",
+  "review_coverage": "PARTIAL",
+  "findings": []
+}

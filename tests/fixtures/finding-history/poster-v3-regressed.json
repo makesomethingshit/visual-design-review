@@ -1,0 +1,40 @@
+{
+  "artifact_version": "poster-v3",
+  "artifact_source_id": "fixture-poster",
+  "artifact_path": "poster-v3-regressed.svg",
+  "artifact_sha256": "9e2709e5cf74899c68e236599b2fc10f5c3d277ee52b57b3f75e967fa4c37389",
+  "review_coverage": "FULL_COMPARABLE",
+  "findings": [
+    {
+      "finding_id": "F-ALIGN",
+      "page_id": "artboard-1",
+      "object_ids": ["title-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "title panel",
+      "bbox": [180, 96, 240, 80],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "title block remains too close to the top edge",
+      "uncertainty": "CONFIRMED",
+      "state": "PERSISTING",
+      "verification_request": "compare the title panel at the same viewBox"
+    },
+    {
+      "finding_id": "F-CAPTION",
+      "page_id": "artboard-1",
+      "object_ids": ["caption-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "caption panel after regression",
+      "bbox": [180, 250, 320, 40],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "caption panel has limited vertical room again",
+      "uncertainty": "CONFIRMED",
+      "previous_state": "RESOLVED",
+      "state": "REGRESSED",
+      "verification_request": "inspect at the intended reading size"
+    }
+  ]
+}
