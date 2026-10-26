@@ -1,0 +1,103 @@
+# 스킬 리팩터링 구현 경계 — Issue #2 / PR #6
+
+> **상태: Draft / Proposed.** [PR #5의 아키텍처 설계](https://github.com/makesomethingshit/visual-design-review/pull/5)를 바탕으로 한 #6의 구현·확장 경계를 다룬다. 2026-10-21 사용자가 A~H 전부를 프로젝트 내부 조건부 초기 정책으로 승인했다. 보편적 실증 법칙으로 주장하지 않으며 PR #5는 수정하지 않는다.
+>
+> 문서와 지식 라우팅의 최초 리팩터링이며 실제 계산기, 자동 레이어 분석,
+> 렌더링 검증 또는 Adobe·Penpot·Figma 플러그인 구현을 포함하지 않는다.
+
+## 목표와 책임 경계
+
+`visual-design-review`를 시각디자인의 정량적 관계를 **분석·설명·명세화**하는 스킬로 확장한다.
+AI에게 임의의 미적 답을 맡기지 않고, 관찰 가능한 증거·적용 가능한 수식·명시적 제약을 기반으로
+설계값을 추적할 수 있게 한다. 수식이 존재한다고 미적 우월성이 증명되는 것은 아니다.
+
+| 계층 | 우리 저장소 | 외부 에이전트/플러그인 |
+| --- | --- | --- |
+| Task routing | 요청·콘텐츠·매체에서 지식 선택 및 의존성 지침 | 스킬 로딩과 실제 도구 선택 |
+| Reference analysis | 관찰/추론 분리, 관계 모델과 재구성 검증 규약 | 파일 열기·측정·렌더링·레이어/메트릭 조회 |
+| Formula knowledge | 수식·단위·적용 조건·근거·유보 규칙 | 가능한 경우 실제 산술/폰트 엔진 등 호출 |
+| Design handoff | 파라미터·출처·미결정값·검증 항목 출력 | Illustrator/InDesign·Penpot·Figma 등에서 객체 생성·수정 |
+| Review | 제공된 증거에 기초한 비평과 조건부 검토 | 외부 측정값이 가능할 때 반환, 파일 제어 |
+
+**하지 않는 일:** 자체 도구 어댑터, API 래퍼, read-back 엔진, 범용 제약 솔버, 픽셀 분석기,
+외부 디자인 도구 사용법 복제. 외부 도구가 돌려주지 않은 수치는 검증했다고 선언하지 않는다.
+
+## 규범·출처와 계산 모델의 직교 축
+
+이 리팩터링은 Review/Reference Analysis/Quantitative Design의 **작업 경로**를 유지하면서, `rule-contract.md`의 `knowledge_kind`·`rule_strength`·출처 지위/버전·scope·예외·verification_method를 필요한 경우에만 추가한다. 이 계약은 `formula-relations`의 Exact/Approximation/Empirical/Perceptual과 별개의 축이다. 표준 초안을 자동 강제 규칙으로 승격하지 않고, 혼식 본문에서 원문·script run·폰트·shaping·줄바꿈 결과가 없으면 최종 조판 수치를 확인했다고 주장하지 않는다. **실제 glyph/line-break validator, 플랫폼 adapter, optical pairing 평가 등은 후속 이슈 #8~#13으로 분리**한다. PR #5는 변경하지 않는다.
+
+## 1. 지식 진입점과 라우팅
+
+`SKILL.md`는 최소 공통 원칙과 모드 선택으로 축약한다.
+`references/knowledge-routing.md`가 매체/내용/과업에 따른 선택 규칙과 의존성을 소유한다.
+분야별 기존 비평 references는 재사용하며 새 정량 관계·역분석 refs는 별도 유지한다.
+
+- **Review:** review-protocol → critique-rubric → review-output, 실제 관련 분야 refs.
+- **Analyze reference:** reference-analysis → 필요하면 formula-relations와 관련 분야 refs.
+- **Specify design:** formula-relations → design-handoff, 필요하면 원본 분석·분야 refs.
+- **Quantitative typography:** formula-relations → typography-relations (T-METRICS → T-SPACING/T-LEADING → T-MEASURE → T-CAPACITY; 작업별 필요 의존성만).
+- 요청이 일부 변경될 때 의존성을 다시 평가한다. '포스터'라는 이유만으로 본문 조판이나 인쇄
+  모듈을 자동 선택/제외하지 않는다.
+- 성능은 컨텍스트 절약뿐 아니라 **필수 모듈 누락·불필요 활성화·출처/근거 정확성**으로 평가한다.
+  현재 라우팅 표는 **지침**이며 모델이 항상 올바르게 선택함을 실측한 결과가 아니다.
+  기존 리뷰의 자동 호출 키워드를 진입점에 복원했지만, 실제 Codex 스킬 선택·파일 읽기를 검증한 기록은 아직 없다.
+
+## PR #5 타이포그래피 설계의 수용/보류
+
+- **채택:** UPM/advance·간격·어간·행 길이·혼식·행간·수용량·크기 위계의 관계와 선행 의존성.
+  [typography-relations](../visual-design-review/references/typography-relations.md)로 모듈화한다.
+- **사용자 승인 A~D:** 한글 1.7·영문 1.5·일/중문 2.0배는 주언어가 확인된 새 가로 본문의 조건부 시작 행간.
+- **사용자 승인 E~H:** 10pt·전각 30칸·tracking 0·왼끝맞춤은 새 인쇄 본문의 최초 비교 시안 설정.
+- **여전히 미검증:** 언어별 배율의 보편적/실증적 타당성, 개인 메모 N1/N2의 원문 대조,
+  혼식 언어 비중의 수치 임계값, 최종 조판의 실제 판독. 정책은 [typography-presets](../visual-design-review/references/typography-presets.md)에서 관리한다.
+- **기여 이력:** PR #5의 협업자 제안은 별도 리뷰 및 머지 판단을 유지한다. 두 PR 모두
+  ARCHITECTURE.md를 새로 생성하는 충돌을 방지하기 위해 #6의 확장 설명은 본 문서로 분리한다.
+
+## 2. 수학적 레퍼런스 역분석
+
+`references/reference-analysis.md`의 과정은
+입력의 신뢰도 확인 → 객체/영역 분해 → 정규화된 관측 → 관계 가설 → 재구성 가능한 모델
+→ 오차/대안 기록이다.
+
+[reference-analysis의 정량 계약](../visual-design-review/references/reference-analysis.md)은 Object/Relation/Hypothesis의 식별자와 frame/단위, 관계식, 경쟁 모델, 차원별 재구성 잔차를 정의한다.
+재구성 실행이나 픽셀 품질 측정을 자동으로 수행한 것은 아니다.
+
+동일 픽셀 결과를 만드는 원래 제작 구조가 다수 존재할 수 있다. 따라서 원작자의
+숨은 의도를 **발견했다고 주장하지 않고**, 관찰을 설명하는 후보 모델과 증거를 기록한다.
+사진·스크린샷에서 폰트명/물리 치수·레이어 구조를 사실로 단정하지 않는다.
+파라미터 적합도가 좋더라도 다른 판형/문자열에 일반화되는지는 별도 검증한다.
+
+## 3. 수식과 결정 계약
+
+수식은 **정의/항등식**, **조건부 경험 모델**, **지각·광학 가설**로 나눈다.
+각 관계에 ID·변수·단위·조건·출처·검증 방법·실패 조건을 둔다.
+해를 선택하기 위한 목표/가중치가 제공되지 않으면 계산 가능한 범위나 후보를 보고한다.
+실제 엔진의 연산 정확성·지각적 적합성을 코드 없이 보장하지 않는다.
+
+## 4. 최소 Design Handoff
+
+`references/design-handoff.md`가 도구별 JSON API가 아닌 **내용 계약**을 정의한다.
+입력 근거와 계산값/측정값/추론값, 단위, 좌표계, 허용 오차, 미확정 사항 및
+외부 플러그인에 요청할 검증 항목을 전달한다. 구현은 외부 도구의 책임이다.
+
+## 안전·호환성
+
+- 기존 `$visual-design-review` 진입점 및 Quick/Deep 비평 계약을 유지한다.
+- 새 references가 기존 리뷰에 무조건 로드되지 않도록 한다. 참조 문서 경로는
+  스킬 설치 패키지 내부의 상대 경로를 사용한다.
+- 원본 수정·외부 업로드는 명시된 요청과 실제 도구 지원이 있을 때만 한다.
+- `VALIDATION.md`와 기존 평가 자료는 이전 버전의 제한적 검증을 기록한 것이지
+  신규 레퍼런스 역분석 능력의 합격 증거는 아니다.
+
+## 다음 검증 (이 PR 밖의 실증)
+
+1. [architecture-scenarios](../visual-design-review/tests/architecture-scenarios.md) 과업별
+   실제 에이전트 로그로 모듈 로딩 누락/오활성화 점검.
+2. 자체 생성한 레퍼런스에서 좌표·서체/원본 메트릭의 정답과 추론값을 비교하고
+   재구성 오차를 기록(인위적 가중치 없는 항목별 지표).
+3. 같은 관계를 다른 판형/문자열에 적용했을 때 유효성·예외 검증.
+4. 이전 Review 평가 세트 전체 재실행, 정확 심각도 차이와 관찰 날조 여부 확인.
+
+이 문서는 **아키텍처 확장 및 리팩터링 제안**이지 릴리스 일정이나 기능 구현 완료 보고가 아니다.
+현재 SKILL frontmatter 버전 1.0.1은 기존 배포본과 같은 값이므로, 실제 출시 시 변경 이력과
+버전 정책을 별도 검토해야 한다. 본 Draft와 설치 스모크의 성공은 새 기능의 모델 품질을 증명하지 않는다.

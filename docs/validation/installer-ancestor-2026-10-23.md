@@ -41,3 +41,15 @@ Windows installer/junction 동작과 링크 변경의 동시성(TOCTOU)은 이�
 격리 시험은 수정 전 실패했고 수정 후 install/dry-run/check/remove가 통과했다.
 기존 frontmatter 경계·metadata 소속 음성 시험을 포함한 전체 macOS 스모크도 통과했다.
 이 항목은 파일 구조 유효성을 검증하며 모델의 내용 판단은 검증하지 않는다.
+
+## 2026-10-26 최신 main과 충돌 해결
+
+PR #6이 병합된 `03b567ce69ab2e63bd8f5cfa61333afcbb7f0a57`을 기존 PR #23 브랜치에 합쳤다.
+충돌한 frontmatter 읽기는 main의 `read`/here-string과 입력을 끝까지 읽는 awk 구현을 유지했다.
+이 PR의 미생성 경로 상위 디렉터리 해석과 긴 본문 수명주기 회귀 시험은 그대로 보존했다.
+
+동일한 macOS arm64 환경에서 기본 `/bin/bash`로 전체 native macOS 설치 스모크를 재실행해 통과했다.
+원본 내부 링크 거부, 정상 링크 허용, 끊어진 링크 거부, 긴 본문, native shasum,
+한글/공백 경로 및 강제 활성화 실패 후 복원까지 포함한다.
+Python 3.12.14의 지식 계약 검사와 기존 단위 시험 15개도 통과했다.
+실제 전역 설치를 변경하지 않았으며, Windows junction과 실제 모델 행동은 이 로컬 실행의 범위가 아니다.

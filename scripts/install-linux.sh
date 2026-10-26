@@ -28,11 +28,13 @@ target="$skills_dir/visual-design-review"
 backups_dir="$codex_home/skill-backups/visual-design-review"
 
 check_layout() {
-  local root="$1" path links skill_text frontmatter
+  local root="$1" path links skill_text frontmatter first_line
   [[ -f "$root/SKILL.md" ]] || { echo "Missing SKILL.md in $root" >&2; return 1; }
   skill_text="$(tr -d '\r' < "$root/SKILL.md")" || return 1
-  [[ "${skill_text%%$'\n'*}" == '---' ]] || return 1
-  frontmatter="$(awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; exit } inside { print } END { exit !found }' <<< "$skill_text")" || return 1
+  IFS= read -r first_line <<< "$skill_text" || return 1
+  [[ "$first_line" == '---' ]] || return 1
+  # Avoid early-reader SIGPIPE (BSD/macOS) with pipefail enabled.
+  frontmatter="$(awk 'NR == 1 && $0 == "---" { inside=1; next } inside && $0 == "---" { found=1; inside=0; next } inside { print } END { exit !found }' <<< "$skill_text")" || return 1
   [[ -n "$frontmatter" ]] || return 1
   grep -qx 'name: visual-design-review' <<< "$frontmatter" || return 1
   grep -Eq '^description:' <<< "$frontmatter" || return 1
