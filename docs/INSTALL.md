@@ -16,6 +16,7 @@
 - PowerShell 실행 정책은 바꾸지 않는다. 시스템 정책이 실행을 막으면 관리자 정책을 우회하지 않는다.
 - 저장소를 설치 대상 경로($CODEX_HOME/skills/visual-design-review)에 두지 않는다. 그 경로에 저장소가 있으면 설치기가 저장소 루트를 백업으로 옮기고 스킬 폴더로 교체한다.
 - CODEX_HOME은 source 디렉터리(visual-design-review/) 안에 둘 수 없다.
+- Windows에서는 CODEX_HOME 자체나 상위 디렉터리가 정션·심볼릭 링크 등 reparse point이면 모든 작업을 거부한다. 원본 내부로 우회 설치하거나 다른 트리를 이동하지 않도록, 링크를 거치지 않는 실제 경로를 지정한다.
 
 ## Windows PowerShell
 

@@ -74,6 +74,16 @@ class ProbeTests(unittest.TestCase):
         result = probe.check({"text": "가나다", "rendered_lines": ["가나"]})
         self.assertEqual(result["checks"][1]["status"], "BLOCKED")
 
+    def test_source_line_endings_preserve_boundary_findings(self):
+        for newline in ("\n", "\r\n", "\r"):
+            with self.subTest(newline=repr(newline)):
+                result = probe.check({
+                    "text": "가나" + newline + "다라)",
+                    "rendered_lines": ["가나", "다라", ")"],
+                    "profile": {"korean_horizontal_break_check": True},
+                })
+                self.assertEqual(result["checks"][1]["status"], "FINDING")
+
     def test_no_supported_unit_token_is_not_a_pass(self):
         for text in ("본문만 있음", "폭 35 mm 끝", "모델35mmA"):
             result = probe.check({"text": text, "profile": {"si_spacing": True}})

@@ -10,6 +10,7 @@
 - 스킬에 필요한 references 및 (존재하는 경우) scripts/assets
 - **visual-design-review/**만 사람이 편집하는 단일 원본이다. plugins 내부의 스킬은 생성된 배포 사본으로 직접 편집하지 않는다.
 - visual-design-review/tests의 평가 로그와 테스트 자료는 배포에 포함하지 않는다.
+- 글꼴 비교 렌더러의 실행 입력은 assets/font-pairing-study-fixtures.json으로 포함한다. Windows 시스템 폰트 경로를 기록한 예제이므로 다른 환경에서는 --fixture로 로컬 폰트 경로가 담긴 입력을 지정한다. 폰트 파일은 배포하지 않는다.
 
 ## 소스 등록 및 설치 (지원되는 클라이언트)
 
@@ -33,6 +34,8 @@ python3 -m unittest discover -s tests -p 'test_codex_plugin_distribution.py' -v
 ~~~
 
 Windows에서 python3가 없다면 py -3으로 대체한다.
+
+Windows 정션 검사는 Python 3.11·3.14에서 실행한다. 링크를 거쳐 패키지 밖 파일을 지우는 일이 없도록 reparse point를 읽기·쓰기 전에 거부한다.
 
 --write는 패키지의 스킬 하위 디렉터리를 원본 SKILL.md/references/scripts/assets와 정확히 같게 재구성한다. manifest와 marketplace는 보존한다. --check는 SHA에 상응하는 바이트 동일성, 누락/여분 파일, 플러그인 경로, 필요한 reference가 존재하는지 검사한다. **CI는 --write를 실행하지 않아야** 원본만 변경하고 사본을 갱신하지 않은 작업을 차단할 수 있다.
 

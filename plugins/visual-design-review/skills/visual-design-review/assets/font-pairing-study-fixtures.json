@@ -1,0 +1,71 @@
+{
+  "status": "RENDERED_UNVERIFIED_HUMAN",
+  "schema_version": "1.0",
+  "purpose": "Controlled local PNG examples; system font files are referenced by path and are not redistributed.",
+  "render_contract": {
+    "platform": "Windows",
+    "renderer": "Pillow ImageDraw.text",
+    "pillow_layout_engine": "BASIC",
+    "raqm_or_harfbuzz": false,
+    "font_version_identifier": "font file SHA-256; no numeric version inferred",
+    "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+    "canvas": [1600, 180],
+    "font_size_px": 48,
+    "background": "#ffffff",
+    "foreground": "#111111",
+    "output": "PNG"
+  },
+  "pair_tasks": [
+    {
+      "id": "FP-01",
+      "context": "print_body",
+      "controlled_variable": "latin_family",
+      "text_lines": [[
+        {"role": "korean", "text": "한글과 "},
+        {"role": "latin", "text": "English"},
+        {"role": "korean", "text": "가 섞인 본문입니다."}
+      ]],
+      "fixed": {"korean_font": "C:\\Windows\\Fonts\\malgun.ttf", "font_size_px": 48, "line_spacing_px": 64, "padding_px": [48, 48]},
+      "variants": [
+        {"label": "A", "latin_font": "C:\\Windows\\Fonts\\arial.ttf"},
+        {"label": "B", "latin_font": "C:\\Windows\\Fonts\\times.ttf"}
+      ],
+      "blind_ratings": []
+    },
+    {
+      "id": "FP-02",
+      "context": "display_title",
+      "controlled_variable": "latin_weight",
+      "text_lines": [[
+        {"role": "korean", "text": "문자의 "},
+        {"role": "latin", "text": "History"}
+      ]],
+      "fixed": {"korean_font": "C:\\Windows\\Fonts\\malgun.ttf", "font_size_px": 48, "line_spacing_px": 64, "padding_px": [48, 48]},
+      "variants": [
+        {"label": "A", "latin_font": "C:\\Windows\\Fonts\\arial.ttf"},
+        {"label": "B", "latin_font": "C:\\Windows\\Fonts\\arialbd.ttf"}
+      ],
+      "blind_ratings": []
+    },
+    {
+      "id": "FP-03",
+      "context": "mixed_numbers",
+      "controlled_variable": "latin_family",
+      "text_lines": [[
+        {"role": "latin", "text": "2026"},
+        {"role": "korean", "text": "년 "},
+        {"role": "latin", "text": "10"},
+        {"role": "korean", "text": "월 "},
+        {"role": "latin", "text": "23"},
+        {"role": "korean", "text": "일, "},
+        {"role": "latin", "text": "35 mm"}
+      ]],
+      "fixed": {"korean_font": "C:\\Windows\\Fonts\\malgun.ttf", "font_size_px": 48, "line_spacing_px": 64, "padding_px": [48, 48]},
+      "variants": [
+        {"label": "A", "latin_font": "C:\\Windows\\Fonts\\arial.ttf"},
+        {"label": "B", "latin_font": "C:\\Windows\\Fonts\\times.ttf"}
+      ],
+      "blind_ratings": []
+    }
+  ]
+}

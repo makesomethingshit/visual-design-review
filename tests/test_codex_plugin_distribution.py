@@ -1,6 +1,7 @@
 """Isolated positive/negative cases for the source-of-truth plugin mirror."""
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -49,12 +50,12 @@ class PluginDistributionTests(unittest.TestCase):
                 capture_output=True, text=True
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-            self.assertTrue(link.is_junction())
+            self.assertEqual(os.path.realpath(link), os.path.realpath(target))
         else:
             link.symlink_to(target, target_is_directory=True)
 
     def remove_directory_link(self, link):
-        if os.name == "nt" and link.is_junction():
+        if os.name == "nt":
             link.rmdir()
         elif link.is_symlink():
             link.unlink()
@@ -62,6 +63,15 @@ class PluginDistributionTests(unittest.TestCase):
     def test_sync_then_check(self):
         self.assertEqual(self.run_script("--write").returncode, 0)
         self.assertEqual(self.run_script("--check").returncode, 0)
+
+    def test_packaged_reference_links_resolve_without_repository(self):
+        package = ROOT / "plugins/visual-design-review/skills/visual-design-review"
+        for document in package.rglob("*.md"):
+            for link in re.findall(r"\]\(([^)\s]+)\)", document.read_text(encoding="utf-8")):
+                if ":" in link or link.startswith("#"):
+                    continue
+                with self.subTest(document=str(document), link=link):
+                    self.assertTrue((document.parent / link.split("#")[0]).is_file())
 
     def test_source_bytecode_cache_is_not_distributed(self):
         cache = self.root / "visual-design-review/scripts/__pycache__/runtime.cpython-314.pyc"

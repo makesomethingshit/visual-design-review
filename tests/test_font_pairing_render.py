@@ -1,5 +1,7 @@
 import importlib.util
 import sys
+import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -16,6 +18,17 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FontPairingFixtureTest(unittest.TestCase):
+    def test_installed_package_validates_default_fixture_without_repository(self):
+        package = ROOT / "plugins/visual-design-review/skills/visual-design-review"
+        with tempfile.TemporaryDirectory() as directory:
+            installed = Path(directory) / "installed-skill"
+            shutil.copytree(package, installed)
+            result = subprocess.run(
+                [sys.executable, str(installed / "scripts/font_pairing_render.py"),
+                 "--validate-only"], cwd=directory, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("3 controlled font-pair tasks", result.stdout)
+
     def test_fixture_is_controlled_and_unrated(self):
         fixture = MODULE.load_fixture(MODULE.FIXTURE)
         self.assertEqual([task["id"] for task in fixture["pair_tasks"]],

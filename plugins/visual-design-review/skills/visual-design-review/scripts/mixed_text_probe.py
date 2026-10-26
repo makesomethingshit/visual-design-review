@@ -95,7 +95,7 @@ def check(payload: dict) -> dict:
     elif not isinstance(lines, list) or not all(isinstance(x, str) for x in lines):
         checks.append(_check("MIX-001", "BLOCKED",
                              reason="rendered_lines must be an array of strings"))
-    elif "".join(lines) != text.replace("\n", ""):
+    elif "".join(lines) != text.replace("\r", "").replace("\n", ""):
         checks.append(_check("MIX-001", "BLOCKED",
                              reason="Provided lines do not match the source text"))
     elif profile.get("korean_horizontal_break_check") is not True:

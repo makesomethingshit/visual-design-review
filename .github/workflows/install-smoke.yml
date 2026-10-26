@@ -24,9 +24,15 @@ jobs:
       - run: /bin/bash tests/smoke-install-macos.sh
   windows:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.14']
     steps:
       - run: git config --global core.autocrlf true
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
       - shell: powershell
         run: ./tests/smoke-install-windows.ps1
       - name: Check plugin distribution on Windows checkout

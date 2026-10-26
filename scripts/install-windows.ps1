@@ -78,6 +78,22 @@ function New-BackupName {
     $stamp = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
     return Join-Path $backupsRoot "$stamp.$PID.$([guid]::NewGuid().ToString('N').Substring(0, 6))"
 }
+function Assert-NoReparsePointAncestor([string]$Path) {
+    $fullPath = [IO.Path]::GetFullPath($Path).TrimEnd([char[]]@('\', '/'))
+    $root = [IO.Path]::GetPathRoot($fullPath)
+    $current = $fullPath
+    while ($current -and $current -ne $root.TrimEnd([char[]]@('\', '/'))) {
+        $item = Get-Item -LiteralPath $current -Force -ErrorAction SilentlyContinue
+        if ($item -and ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw "Refusing CODEX_HOME with reparse-point ancestor: $current"
+        }
+        $parent = Split-Path -Parent $current
+        if ($parent -eq $current) { break }
+        $current = $parent
+    }
+}
+
+Assert-NoReparsePointAncestor $codexHome
 
 # Managed roots must not redirect moves into another tree.
 foreach ($managedRoot in @($skillsRoot, (Join-Path $codexHome 'skill-backups'), $backupsRoot)) {
