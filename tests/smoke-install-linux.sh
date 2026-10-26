@@ -127,4 +127,5 @@ done
 ln -s "$sandbox/not-installed" "$target"
 if bash "$installer" install >/dev/null 2>&1; then fail 'symlink install target accepted'; fi
 [[ -L "$target" ]] || fail 'symlink was changed'
+bash "$root/tests/smoke-install-paths.sh"
 echo 'PASS: dry-run, custom home, install, hash check, idempotence, backup, remove, symlink refusal, frontmatter, source-less remove, nested source'

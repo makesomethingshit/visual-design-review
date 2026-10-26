@@ -1,0 +1,149 @@
+{
+  "schema": "repair-fixture-execution-v1",
+  "python": "3.12.14",
+  "comparison": "authored before/after; not baseline-vs-skill or causal repair lift",
+  "profile": {
+    "poster": "required date 2026-10-23",
+    "mixed-body": "project copy exactly 35 mm",
+    "print-output": "page size exactly 320 x 420 pt; no PDF/X claim"
+  },
+  "checker_sha256": "sha256:4e4909709e6a0ad16fab40d31733315c88cc92502d4087bbb70c50ddd56a7522",
+  "reporter_sha256": "sha256:c8ed1905fb4f24b9f8fdf8c233a06ce68266bbc42edf45d15c6aa19434e67834",
+  "results": [
+    {
+      "fixture_id": "poster",
+      "before": {
+        "artifact": "tests/fixtures/repair-lift/poster-before.svg",
+        "sha256": "sha256:72df1f63744d635a8d1fc1ef3381fd9619167c353b195cb624b57eb4d0f0834a",
+        "actual": "2026-10-32",
+        "expected": "2026-10-23",
+        "status": "FAIL",
+        "checker": "Python ElementTree exact source text"
+      },
+      "after": {
+        "artifact": "tests/fixtures/repair-lift/poster-after.svg",
+        "sha256": "sha256:8bb60d71cb6401b019a648abea6e29c6eec8d3a7a50f1d7f59269afd66f73621",
+        "actual": "2026-10-23",
+        "expected": "2026-10-23",
+        "status": "PASS",
+        "checker": "Python ElementTree exact source text"
+      }
+    },
+    {
+      "fixture_id": "mixed-body",
+      "before": {
+        "artifact": "tests/fixtures/repair-lift/mixed-body-before.svg",
+        "sha256": "sha256:7411af1febddc760e275d96f2235bd880a584dfb69f719b30dfb79c9e064beff",
+        "actual": "용지 Paper: 35mm",
+        "expected": "용지 Paper: 35 mm",
+        "status": "FAIL",
+        "checker": "Python ElementTree exact source text"
+      },
+      "after": {
+        "artifact": "tests/fixtures/repair-lift/mixed-body-after.svg",
+        "sha256": "sha256:c1ab1540fe704ff4a9857819d9dc045966ed068ecee3d2a68fc7fd33c670a9ae",
+        "actual": "용지 Paper: 35 mm",
+        "expected": "용지 Paper: 35 mm",
+        "status": "PASS",
+        "checker": "Python ElementTree exact source text"
+      }
+    },
+    {
+      "fixture_id": "negative-repair",
+      "before": {
+        "artifact": "tests/fixtures/repair-lift/negative-repair-before.svg",
+        "sha256": "sha256:59afc6a6ee3489cc1d4257dc98afc951f6f27b52be6212b29607c37fab258738",
+        "actual": "용지 Paper: 35mm",
+        "expected": "용지 Paper: 35 mm",
+        "status": "FAIL",
+        "checker": "Python ElementTree exact source text"
+      },
+      "after": {
+        "artifact": "tests/fixtures/repair-lift/negative-repair-after.svg",
+        "sha256": "sha256:7411af1febddc760e275d96f2235bd880a584dfb69f719b30dfb79c9e064beff",
+        "actual": "용지 Paper: 35mm",
+        "expected": "용지 Paper: 35 mm",
+        "status": "FAIL",
+        "checker": "Python ElementTree exact source text"
+      }
+    },
+    {
+      "fixture_id": "print-output",
+      "before": {
+        "artifact": "tests/fixtures/repair-lift/print-output-before.pdf",
+        "sha256": "sha256:c567577c04fb58ab1de55b0d372f06505803ba0168bfa009b3fd2f0003ad5405",
+        "actual": [
+          300.0,
+          420.0
+        ],
+        "expected": [
+          320.0,
+          420.0
+        ],
+        "status": "FAIL",
+        "checker": "pdfinfo version 26.07.0"
+      },
+      "after": {
+        "artifact": "tests/fixtures/repair-lift/print-output-after.pdf",
+        "sha256": "sha256:6e2972e23e93f9999927b6ebfef030e9305a991d8abed3663cb2a58921b1f6f8",
+        "actual": [
+          320.0,
+          420.0
+        ],
+        "expected": [
+          320.0,
+          420.0
+        ],
+        "status": "PASS",
+        "checker": "pdfinfo version 26.07.0"
+      }
+    }
+  ],
+  "declarations": {
+    "schema": "repair-lift-declarations-v1",
+    "declared_counts": {
+      "RESOLVED_CANDIDATE": 3,
+      "UNCHANGED_CANDIDATE": 1,
+      "REGRESSION_CANDIDATE": 0,
+      "INCONCLUSIVE": 0,
+      "BLOCKED": 0
+    },
+    "verified_counts": null,
+    "independent_verification": "UNVERIFIED",
+    "sample_results": [
+      {
+        "id": "poster-local-1",
+        "fixture_id": "poster",
+        "domain": "deterministic",
+        "declared_outcome": "RESOLVED_CANDIDATE",
+        "independent_verification": "UNVERIFIED"
+      },
+      {
+        "id": "mixed-body-local-1",
+        "fixture_id": "mixed-body",
+        "domain": "deterministic",
+        "declared_outcome": "RESOLVED_CANDIDATE",
+        "independent_verification": "UNVERIFIED"
+      },
+      {
+        "id": "negative-repair-local-1",
+        "fixture_id": "negative-repair",
+        "domain": "deterministic",
+        "declared_outcome": "UNCHANGED_CANDIDATE",
+        "independent_verification": "UNVERIFIED"
+      },
+      {
+        "id": "print-output-local-1",
+        "fixture_id": "print-output",
+        "domain": "deterministic",
+        "declared_outcome": "RESOLVED_CANDIDATE",
+        "independent_verification": "UNVERIFIED"
+      }
+    ],
+    "aesthetic_score": null,
+    "warning": "Caller-reported candidates only; hashes/references are not authenticated; not verified repair counts, expert preference, or a global quality score"
+  },
+  "expert_review": "BLOCKED: independent human reviewers have not rated these tasks",
+  "visual_quality": "UNVERIFIED",
+  "physical_print": "UNVERIFIED"
+}

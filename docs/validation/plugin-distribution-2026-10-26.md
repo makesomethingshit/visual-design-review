@@ -30,6 +30,12 @@
 
 PR30 follow-up: Windows 11 C: NTFS에서 `mklink /J`로 canonical root/references/nested 및 package 내부 junction을 재현했고, Python 3.14에서 외부 canary 보존과 `--check`/`--write` 거부를 확인했다. focused suite는 **9개 테스트 통과**했으며 `sync-codex-plugin.py --check`도 통과했다.
 
+## source-30 Windows line-ending regression
+
+현재 PR 파일만 둔 격리 fixture에서 `git init` → `core.autocrlf=true` 설정 → `git add` → 작업 트리 삭제 → `git checkout-index --all --force`를 실행했다. 기존 속성에서는 canonical Markdown 17개는 LF였지만 생성 패키지 Markdown 17개는 CRLF로 체크아웃되어, 17개 파일의 바이트 비교가 실패했다. 원격 clone·다운로드는 사용하지 않았다.
+
+`.gitattributes`에 canonical 및 generated runtime의 Markdown/Python 경로를 모두 `text eol=lf`로 명시했고, 테스트는 실제 임시 Git checkout에서 source/package의 `.md`와 `.py` 파일 모두 CRLF가 없는지 확인한다. 기존 Windows junction 회귀 9개와 새 EOL 회귀를 포함한 focused suite는 **10개 테스트**이며, Windows workflow도 실제 checkout에서 `python scripts/sync-codex-plugin.py --check`를 실행한다.
+
 ## 남은 검증
 
 - GitHub 원격 marketplace 추가·갱신, 데스크톱 UI 표시와 설치 흐름.
@@ -45,3 +51,11 @@ marketplace add → available 목록 확인 → plugin add → installed/enabled
 재조회 → plugin remove → marketplace remove를 실행해 모두 성공했다.
 사용자 전역 설정·인증을 복사하지 않았다. GitHub 원격 source fetch, 데스크톱 UI,
 자연어 자동 선택·비대상 요청·전역 스킬 공존은 이 실행에서 검증하지 않았다.
+
+## 최종 기능 통합
+
+선행 기능 PR을 합친 원본의 런타임28개 파일을 다시 생성했다. 전체 테스트가
+만드는 scripts/__pycache__는 배포 입력에서 제외하며, 캐시를 만든 뒤에도
+배포본에 포함되지 않고 --check가 통과하는 회귀를 추가했다. 생성물 제외 외
+원본/배포본 바이트 동일성 검사는 유지한다. 최종 통합 단위88/88, 계약·
+수정 아티팩트·Windows 설치 스모크와 배포28파일 동기화가 로컬에서 통과했다.

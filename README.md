@@ -50,6 +50,18 @@ $visual-design-review 이 포스터를 빡세게 리뷰해줘.
 파일을 수정하거나 외부에 업로드하지 마.
 ```
 
+## GitHub 제품 개선: Product Correct (초안)
+
+디자인 Finding을 **증거가 있는 제품 개선 Issue → 실제 수정이 가능한 경우 Draft PR**로 잇는 선택적 작업 경로를 설계 중입니다. [Product Correct 계약](visual-design-review/references/product-correct.md)을 따르며, 일반 비평만 요청하면 GitHub에 아무것도 쓰지 않습니다.
+
+```text
+$visual-design-review 이 제품 저장소(owner/repo)의 반복된 시각디자인 결함을
+실제 기존 이슈/PR 리뷰와 디자인 근거로 조사하고, 관련 GitHub Issue를 등록해줘.
+수정 가능한 최소 범위라면 Draft PR까지 작성하되 머지하지 마.
+```
+
+원본·브리프·재현 및 대상 저장소 접근 권한이 필요합니다. 스킬 자체가 GitHub 연결이나 제품 편집 도구를 제공하지는 않습니다. 확인하지 못한 결함/수정/CI 성공을 확정하지 않고, [수동 행동 시나리오](visual-design-review/tests/product-correct-cases.md)로 실제 동작을 별도 평가합니다. 이 기능은 [에이전트 자체 교정 #7](https://github.com/makesomethingshit/visual-design-review/issues/7)과 책임이 다릅니다.
+
 ## 구성과 근거
 
 - 단일 [SKILL.md](visual-design-review/SKILL.md)

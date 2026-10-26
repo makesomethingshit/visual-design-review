@@ -48,6 +48,8 @@ def inventory(root):
             if not directory.is_dir():
                 raise ValueError("source component is not a directory: " + part)
             for path in sorted(directory.rglob("*")):
+                if "__pycache__" in path.relative_to(source).parts:
+                    continue
                 reject_linked_path(root, path, "canonical")
                 if path.is_file():
                     paths.append(path.relative_to(source))

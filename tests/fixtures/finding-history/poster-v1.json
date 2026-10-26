@@ -1,0 +1,39 @@
+{
+  "artifact_version": "poster-v1",
+  "artifact_source_id": "fixture-poster",
+  "artifact_path": "poster-v1.svg",
+  "artifact_sha256": "15a41bc3dc1ff37a586aba9b2daf958a6e918a854b5cf294b0f5bb7c5664a03d",
+  "review_coverage": "FULL_COMPARABLE",
+  "findings": [
+    {
+      "finding_id": "F-ALIGN",
+      "page_id": "artboard-1",
+      "object_ids": ["title-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "title panel",
+      "bbox": [48, 48, 240, 80],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "title block begins too close to the top edge",
+      "uncertainty": "CONFIRMED",
+      "state": "NEW",
+      "verification_request": "compare the title panel at the same viewBox"
+    },
+    {
+      "finding_id": "F-CAPTION",
+      "page_id": "artboard-1",
+      "object_ids": ["caption-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "caption panel",
+      "bbox": [48, 240, 320, 40],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "caption panel has limited vertical room",
+      "uncertainty": "CONFIRMED",
+      "state": "NEW",
+      "verification_request": "inspect at the intended reading size"
+    }
+  ]
+}

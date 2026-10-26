@@ -1,0 +1,39 @@
+{
+  "artifact_version": "poster-v2-renamed",
+  "artifact_source_id": "fixture-poster",
+  "artifact_path": "poster-v2-renamed.svg",
+  "artifact_sha256": "247acd58ce999648c4055eb2b9be180a771d8f231ea32025b158639ff0ac24ac",
+  "review_coverage": "FULL_COMPARABLE",
+  "findings": [
+    {
+      "finding_id": "F-ALIGN-RENAMED",
+      "page_id": "artboard-1",
+      "object_ids": ["title-panel-renamed"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "renamed title panel",
+      "bbox": [180, 96, 240, 80],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "renamed source object is not matched by the ID-only comparator",
+      "uncertainty": "CONFIRMED",
+      "state": "NEW",
+      "verification_request": "review the renamed object manually"
+    },
+    {
+      "finding_id": "F-CAPTION",
+      "page_id": "artboard-1",
+      "object_ids": ["caption-panel"],
+      "object_id_evidence": "VERIFIED_SOURCE",
+      "region_note": "caption panel after rename",
+      "bbox": [180, 250, 320, 60],
+      "bbox_evidence": "VERIFIED_SOURCE",
+      "coordinate_system": "viewBox 0 0 600 400",
+      "observation_evidence": "source artifact object bounds",
+      "observed_impact": "caption panel has enough vertical room in this version",
+      "uncertainty": "CONFIRMED",
+      "state": "RESOLVED",
+      "verification_request": "recheck at the intended reading size"
+    }
+  ]
+}

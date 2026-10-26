@@ -31,8 +31,9 @@ metadata:
 | 요청 | 필수 reference | 조건부 추가 |
 | --- | --- | --- |
 | 완성된 시각디자인 비평 (기존 기본 모드) | [review-protocol](references/review-protocol.md), [critique-rubric](references/critique-rubric.md), [review-output](references/review-output.md) | 아래 분야별 참고 |
-| 레퍼런스의 구조·관계·수식 역분석 | [reference-analysis](references/reference-analysis.md) | [formula-relations](references/formula-relations.md), 분야별 참고 |
+| 디자이너 관점의 레퍼런스·구조·생성 규칙 역분석 | [reference-analysis](references/reference-analysis.md) | [formula-relations](references/formula-relations.md), 분야별 참고 |
 | 계산 가능한 디자인 제안·플러그인 전달 명세 | [formula-relations](references/formula-relations.md), [design-handoff](references/design-handoff.md) | [reference-analysis](references/reference-analysis.md), 분야별 참고 |
+| **사용자가 명시한** GitHub 제품 시각디자인 Issue/수정 Draft PR 작업 | [product-correct](references/product-correct.md) | 새 시각 비평이 필요하면 review-protocol·review-output 및 분야별 참고. 외부 GitHub 쓰기 도구·권한이 없으면 초안만 작성 |
 
 분야별 참고는 해당 성격이 **실제로 포함될 때만** 읽는다.
 
@@ -63,7 +64,11 @@ metadata:
 - 여러 해가 조건을 충족하지만 선택 목표가 없으면 AI의 임의 미감으로 하나를 고르지 않는다.
   근거 있는 후보·미정 변수·검증 방법을 보고한다.
 - 디자인 레퍼런스를 해체할 때 **보이는 결과**와 **원저자의 의도/원래 제작 과정**을 동일시하지
-  않는다. 재구성 가능성·오차를 확인하지 않았다면 '검증됨'이라고 주장하지 않는다.
+  않는다. 임의 보정은 허용 범위에서 수행하되 대상·전후 값·이유·근거를 공개한다. 상세 절차는 reference-analysis를 따른다.
+  재구성 가능성·오차를 확인하지 않았다면 '검증됨'이라고 주장하지 않는다.
+- 재현·재사용 명세는 **복원 명세 / 재사용 원리 명세**로 나누고 실제 사례 ID로 연결한다.
+  조합 요청에서는 새 목적과 원고를 기준으로 공통 입력·객체·변수를 함께 결정하고, 필요한 조형 탐색을
+  거쳐 새 제작값을 확정한다. 원리를 모두 넣거나 명세를 준수했다는 이유로 디자인 성공을 선언하지 않는다.
 
 ## 기존 Review 호환 계약
 
