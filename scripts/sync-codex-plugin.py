@@ -12,6 +12,16 @@ PLUGIN = "visual-design-review"
 MARKETPLACE = "makesomethingshit-design"
 
 
+def reject_linked_package_path(root, target):
+    """Do not read or replace a package reached through a linked parent."""
+    current = root
+    for part in target.relative_to(root).parts:
+        current = current / part
+        is_junction = getattr(current, "is_junction", lambda: False)
+        if current.is_symlink() or is_junction():
+            raise ValueError("linked package path component: " + str(current.relative_to(root)))
+
+
 def inventory(root):
     source = root / PLUGIN
     if source.is_symlink() or not (source / "SKILL.md").is_file():
@@ -93,6 +103,7 @@ def main():
     source = root / PLUGIN
     target = root / "plugins" / PLUGIN / "skills" / PLUGIN
     try:
+        reject_linked_package_path(root, target)
         paths = inventory(root)
         if args.write:
             if target.is_symlink():

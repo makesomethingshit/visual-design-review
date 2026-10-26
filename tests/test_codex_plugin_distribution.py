@@ -57,6 +57,40 @@ class PluginDistributionTests(unittest.TestCase):
         path.write_text(json.dumps(data), encoding="utf-8")
         self.assertNotEqual(self.run_script("--check").returncode, 0)
 
+    def test_linked_package_ancestor_rejected_without_external_changes(self):
+        self.assertEqual(self.run_script("--write").returncode, 0)
+        package_parent = self.root / "plugins"
+        outside = self.root / "outside-plugins"
+        package_parent.rename(outside)
+        sentinel = outside / "visual-design-review/skills/visual-design-review/keep.txt"
+        sentinel.write_text("external user file", encoding="utf-8")
+        before = {p.relative_to(outside): p.read_bytes()
+                  for p in outside.rglob("*") if p.is_file()}
+        try:
+            package_parent.symlink_to(outside, target_is_directory=True)
+        except OSError as exc:
+            self.skipTest("directory symlinks unavailable: " + str(exc))
+        for mode in ("--check", "--write"):
+            with self.subTest(mode=mode):
+                result = self.run_script(mode)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("linked package path component: plugins", result.stderr)
+                self.assertEqual(before, {p.relative_to(outside): p.read_bytes()
+                                         for p in outside.rglob("*") if p.is_file()})
+
+    def test_dangling_package_ancestor_rejected(self):
+        parent = self.root / "plugins/visual-design-review/skills"
+        try:
+            parent.symlink_to(self.root / "missing-outside", target_is_directory=True)
+        except OSError as exc:
+            self.skipTest("directory symlinks unavailable: " + str(exc))
+        for mode in ("--check", "--write"):
+            with self.subTest(mode=mode):
+                result = self.run_script(mode)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("linked package path component", result.stderr)
+                self.assertFalse((self.root / "missing-outside").exists())
+
     def test_unexpected_package_file_fails(self):
         self.assertEqual(self.run_script("--write").returncode, 0)
         extra = self.root / "plugins/visual-design-review/skills/visual-design-review/extra.md"
