@@ -1,0 +1,162 @@
+{
+  "status": "HUMAN_REVIEW_PENDING",
+  "ratings": [],
+  "items": [
+    {
+      "task_id": "FP-01",
+      "label": "A",
+      "image": "blind/FP-01/A.png",
+      "image_sha256": "3917fa20ee30a382a85e7cebcae92f9bb912ba683de0ac2e60d1558599017102",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26300-SP0"
+      }
+    },
+    {
+      "task_id": "FP-01",
+      "label": "B",
+      "image": "blind/FP-01/B.png",
+      "image_sha256": "2b7f0fdcfeb03279631beb4f7f59573f70c37866cbdffd43787e492360a79948",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26300-SP0"
+      }
+    },
+    {
+      "task_id": "FP-02",
+      "label": "A",
+      "image": "blind/FP-02/A.png",
+      "image_sha256": "4c75aa0f237f36c538426adcccf11f5160fbfc3b3654cbe7e397031115e72957",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26300-SP0"
+      }
+    },
+    {
+      "task_id": "FP-02",
+      "label": "B",
+      "image": "blind/FP-02/B.png",
+      "image_sha256": "db6612b6d2731d1c8943876f37bb6374f2a2bd5a3873f5cb18286e89964673b8",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26300-SP0"
+      }
+    },
+    {
+      "task_id": "FP-03",
+      "label": "A",
+      "image": "blind/FP-03/A.png",
+      "image_sha256": "05935b75f6d0879200ac445b870658c06d1cf370a4ef5ca5ae9c028e6ceb8aa3",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26300-SP0"
+      }
+    },
+    {
+      "task_id": "FP-03",
+      "label": "B",
+      "image": "blind/FP-03/B.png",
+      "image_sha256": "90b5f11a8af18d9343ef04a6911cf696112e19f2e88e5f291bb8f7da1b47c6d5",
+      "parameters": {
+        "canvas": [
+          1600,
+          180
+        ],
+        "padding_px": [
+          48,
+          48
+        ],
+        "font_size_px": 48,
+        "line_spacing_px": 64,
+        "background": "#ffffff",
+        "foreground": "#111111",
+        "renderer": "Pillow ImageDraw.text",
+        "pillow_version": "12.3.0",
+        "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
+        "layout_engine": "BASIC",
+        "raqm": false,
+        "platform": "Windows-11-10.0.26300-SP0"
+      }
+    }
+  ]
+}
