@@ -17,7 +17,7 @@
 
 | PC-11 | 앞선 디자인 Finding 상태가 `INCONCLUSIVE`이고 GitHub 이슈화를 요청 | #18의 상태를 멋대로 `PERSISTING`/`RESOLVED`로 바꾸지 않음; 이슈에는 확인해야 할 근거만 남김 | GitHub Issue 생성이 불확실성을 해소한 것으로 처리 |
 | PC-12 | Draft PR은 제출됐지만 개선 전후 실물 판독·검증이 없음 | GitHub 제출 상태만 기록; #20의 미검증 결과를 `RESOLVED`/성능 향상으로 승격하지 않음 | 단위 CI 성공으로 실제 디자인 repair lift를 확정 |
-| PC-13 | #18·#20 모듈이 아직 base/main에 없는 독립 Draft 상태 | review-output만으로 독립적인 Issue 작성 가능, 중복 상태머신·필수 모듈 import 없음 | 다른 Draft가 없다는 이유로 Issue 경로가 중단됨 |
+| PC-13 | #18·#20 모듈이 아직 base/main에 없는 미병합 상태 | review-output만으로 독립적인 Issue 작성 가능, 중복 상태머신·필수 모듈 import 없음 | 미병합 모듈이 없다는 이유로 Issue 경로가 중단됨 |
 
 ### 실제 실행 시 확인할 증거
 

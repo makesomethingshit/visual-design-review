@@ -19,12 +19,12 @@
 | 책임 | 단일 소유자 | Product Correct의 역할 |
 | --- | --- | --- |
 | 시각적 관찰·근거·심각도·반대 해석 | 기존 [review-output](review-output.md) / [review-protocol](review-protocol.md) | 확인된 Finding을 Issue 입력으로 연결; 자체 비평 기준 발명 금지 |
-| Finding ID·이전/현재 상태·불확실성 | [#11 / PR #18](https://github.com/makesomethingshit/visual-design-review/pull/18), **Draft** | 사용 가능할 때 참조·링크만 전달; 새로운 전이 규칙·별도 히스토리 저장소 추가 금지 |
+| Finding ID·이전/현재 상태·불확실성 | [#11 / PR #18](https://github.com/makesomethingshit/visual-design-review/pull/18), **미병합** | 사용 가능할 때 참조·링크만 전달; 새로운 전이 규칙·별도 히스토리 저장소 추가 금지 |
 | GitHub 대상·중복 Issue/PR 조회·권한·Issue 작성·최소 패치 Draft 제출 | **현재 Product Correct (#27)** | 이 단계의 **유일한 책임**; 등록 결과는 실제 GitHub 응답으로 확인 |
-| 수정 효과/퇴행/검증 상태 집계 | [#13 / PR #20](https://github.com/makesomethingshit/visual-design-review/pull/20), **Draft** | Before/After와 CI 증거를 링크하되 품질 향상 수치나 RESOLVED를 자체 판정하지 않음 |
+| 수정 효과/퇴행/검증 상태 집계 | [#13 / PR #20](https://github.com/makesomethingshit/visual-design-review/pull/20), **미병합** | Before/After와 CI 증거를 링크하되 품질 향상 수치나 RESOLVED를 자체 판정하지 않음 |
 | 스킬 라우팅/반복 실패의 에이전트 행동 평가 | [#7](https://github.com/makesomethingshit/visual-design-review/issues/7) | 검증용 시나리오를 제공, 평가 엔진을 중복 구현하지 않음 |
 
-**독립 Draft 의존성:** #18과 #20이 아직 main에 없으므로 PR #28은 이들 Python 모듈을 import하거나 존재를 필수로 강제하지 않는다. 현재의 review-output 형식으로도 Issue 초안을 만들 수 있다. 통합이 필요할 때는 별도 호환성 PR에서 증거 ID·이력·산출물 버전을 연결한다.
+**독립 PR 의존성:** #18과 #20이 아직 main에 없으므로 PR #28은 이들 Python 모듈을 import하거나 존재를 필수로 강제하지 않는다. 현재의 review-output 형식으로도 Issue 초안을 만들 수 있다. 통합이 필요할 때는 별도 호환성 PR에서 증거 ID·이력·산출물 버전을 연결한다.
 
 ## 관찰 수집 → 문제의 종류 결정
 
