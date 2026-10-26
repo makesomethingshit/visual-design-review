@@ -1,0 +1,9 @@
+{
+  "text": "폭 35 mm 끝",
+  "rendered_lines": ["폭 35 mm 끝"],
+  "profile": {
+    "si_spacing": true,
+    "except_exact_tokens": [],
+    "korean_horizontal_break_check": true
+  }
+}
