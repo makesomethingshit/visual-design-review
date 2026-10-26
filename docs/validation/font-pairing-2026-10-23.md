@@ -34,3 +34,22 @@ The PNGs demonstrate that the same text and pixel parameters can be rendered wit
 - Independent human A/B/tie/context-dependent ratings, swapped display order, reasons, disagreement, and counter-interpretation: pending.
 - Expert status and any recommendation for `typography.md` or `typography-relations.md`: pending.
 - Cross-platform shaping, browser/print renderer comparison, and licensed-font redistribution review: pending.
+
+## macOS local regression follow-up — 2026-10-26
+
+On macOS arm64 with Python 3.12.14 and Pillow, the original rendered-pair test
+failed because an absent Windows font unconditionally selected Linux-only
+`/usr/share/fonts` paths. The temporary test render now selects installed macOS
+Apple SD Gothic Neo, Arial and Times New Roman files on Darwin. Linux CI keeps
+its provisioned Nanum/DejaVu paths. Missing fonts still fail visibly rather than
+being reported as a completed render.
+
+`python -m unittest discover -s tests -p 'test_font_pairing_render.py' -v` now
+passes 2/2, including actual A/B PNG generation, visible bounds, distinct pixel
+hashes and a fixed Korean font hash across the pair. The existing fixture-schema
+test also passes. The temporary images are deleted after the test.
+
+This verifies the local BASIC renderer test with these installed Mac fonts only.
+The committed Windows fixtures, PNGs, font hashes and blind packets are unchanged;
+no font binary is copied into the repository. Expert blind comparison, shaping
+conformance and physical print quality remain unverified.

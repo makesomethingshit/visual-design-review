@@ -1,4 +1,5 @@
 import importlib.util
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -27,10 +28,24 @@ class FontPairingFixtureTest(unittest.TestCase):
         fixture = MODULE.load_fixture(MODULE.FIXTURE)
         task = fixture["pair_tasks"][0]
         if not Path(task["fixed"]["korean_font"]).is_file():
-            # Linux CI uses distro fonts; the committed Windows render record stays fixed.
-            task["fixed"]["korean_font"] = "/usr/share/fonts/truetype/nanum/NanumGothic.ttf"
-            task["variants"][0]["latin_font"] = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-            task["variants"][1]["latin_font"] = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
+            # Use installed platform fonts only for this temporary test render.
+            # The committed Windows fixture and render record stay fixed.
+            if sys.platform == "darwin":
+                fonts = (
+                    "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+                    "/System/Library/Fonts/Supplemental/Arial.ttf",
+                    "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+                )
+            else:
+                # Linux CI provisions these distro fonts before running this test.
+                fonts = (
+                    "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+                    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                    "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+                )
+            task["fixed"]["korean_font"] = fonts[0]
+            task["variants"][0]["latin_font"] = fonts[1]
+            task["variants"][1]["latin_font"] = fonts[2]
         self.assertEqual(task["controlled_variable"], "latin_family")
         self.assertNotEqual(task["variants"][0]["latin_font"], task["variants"][1]["latin_font"])
         with tempfile.TemporaryDirectory() as directory:
