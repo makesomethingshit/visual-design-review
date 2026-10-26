@@ -1,6 +1,6 @@
 {
-  "fixture": "D:\\Codex\\2026-10-15\\new-chat\\work\\vdr-ready-20261023\\pr17\\visual-design-review\\tests\\font-pairing-study-fixtures.json",
-  "fixture_sha256": "a8e23cfcfd7d401806fde0c40b31bc435eb0faed38a93dbbbc4cd5cb0407ae62",
+  "fixture": "D:\\Codex\\2026-10-26\\new-chat\\work\\pr-review\\source-17\\visual-design-review\\tests\\font-pairing-study-fixtures.json",
+  "fixture_sha256": "938ac98cc492ec420809e2d896c3d148423f78d0d9c5bcf6e2024cbbde61cc2a",
   "font_binaries_in_repository": false,
   "records": [
     {
@@ -26,7 +26,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       },
       "fonts": {
         "korean": {
@@ -80,7 +80,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       },
       "fonts": {
         "korean": {
@@ -134,7 +134,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       },
       "fonts": {
         "korean": {
@@ -188,7 +188,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       },
       "fonts": {
         "korean": {
@@ -242,7 +242,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       },
       "fonts": {
         "korean": {
@@ -296,7 +296,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       },
       "fonts": {
         "korean": {

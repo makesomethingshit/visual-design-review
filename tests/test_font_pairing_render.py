@@ -20,6 +20,10 @@ class FontPairingFixtureTest(unittest.TestCase):
         fixture = MODULE.load_fixture(MODULE.FIXTURE)
         self.assertEqual([task["id"] for task in fixture["pair_tasks"]],
                          ["FP-01", "FP-02", "FP-03"])
+        self.assertEqual(
+            {task["id"]: task["controlled_variable"] for task in fixture["pair_tasks"]},
+            {"FP-01": "latin_family", "FP-02": "latin_weight", "FP-03": "latin_family"},
+        )
         self.assertEqual(fixture["render_contract"]["pillow_layout_engine"], "BASIC")
         self.assertFalse(fixture["render_contract"]["raqm_or_harfbuzz"])
         self.assertTrue(all(not task["blind_ratings"] for task in fixture["pair_tasks"]))

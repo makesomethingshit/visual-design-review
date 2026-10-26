@@ -50,7 +50,7 @@
     {
       "id": "FP-03",
       "context": "mixed_numbers",
-      "controlled_variable": "latin_figures",
+      "controlled_variable": "latin_family",
       "text_lines": [[
         {"role": "latin", "text": "2026"},
         {"role": "korean", "text": "년 "},

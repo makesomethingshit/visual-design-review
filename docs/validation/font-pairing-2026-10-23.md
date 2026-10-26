@@ -13,7 +13,11 @@ C:\Users\USER\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\py
 git diff --check origin/main...HEAD
 ```
 
-Actual result after the final rerun: fixture validation passed for 3 tasks; the renderer produced 6 PNGs; the focused unittest passed 2/2; and `git diff --check origin/main...HEAD` exited 0. The output manifest contains the actual fixture path/hash and `anchor: left-baseline; baseline derived from the fixed Korean face ascent`.
+The fixture records FP-01 and FP-03 as `latin_family` comparisons and FP-02 as a `latin_weight` comparison. FP-03 uses Arial versus Times New Roman, so its earlier `latin_figures` label was metadata drift, not a multi-variable experiment failure.
+
+Verification for this scoped update: fixture validation passed for 3 tasks; a temporary render produced 6 PNGs; the focused unittest passed 2/2. Checked-in PNGs and the prior render manifest/blind packet were not regenerated.
+
+The output manifest contains the actual fixture path/hash and `anchor: left-baseline; baseline derived from the fixed Korean face ascent`.
 
 The local runtime used Pillow 12.3.0 with `raqm=False`. The script uses `ImageDraw.text` with `ImageFont.Layout.BASIC` and a shared left-baseline anchor; it bounds-checks every segment before saving. It renders Korean runs with `C:\Windows\Fonts\malgun.ttf` and Latin variants with installed `arial.ttf`, `arialbd.ttf`, and `times.ttf`. It does not copy or add those files to the repository.
 
@@ -44,12 +48,23 @@ Apple SD Gothic Neo, Arial and Times New Roman files on Darwin. Linux CI keeps
 its provisioned Nanum/DejaVu paths. Missing fonts still fail visibly rather than
 being reported as a completed render.
 
-`python -m unittest discover -s tests -p 'test_font_pairing_render.py' -v` now
-passes 2/2, including actual A/B PNG generation, visible bounds, distinct pixel
-hashes and a fixed Korean font hash across the pair. The existing fixture-schema
-test also passes. The temporary images are deleted after the test.
+`python -m unittest discover -s tests -p 'test_font_pairing_render.py' -v` passes
+2/2, including
+actual A/B PNG generation, visible bounds, distinct pixel hashes and a fixed
+Korean font hash across the pair. The temporary images are deleted after the
+test.
 
 This verifies the local BASIC renderer test with these installed Mac fonts only.
 The committed Windows fixtures, PNGs, font hashes and blind packets are unchanged;
 no font binary is copied into the repository. Expert blind comparison, shaping
 conformance and physical print quality remain unverified.
+
+## Windows metadata consistency — 2026-10-26
+
+FP-03 compares Arial with Times New Roman in the mixed-numbers context; the
+controlled variable is now recorded as `latin_family`, not `latin_figures`.
+The fixture contract test checks FP-01/FP-03 family and FP-02 weight. After
+this metadata change, all six PNGs and both manifests were regenerated with
+the installed Windows fonts so the fixture SHA and output records describe
+the current input bytes. This is a new BASIC-render run, not new human ratings
+or shaping/print verification. No font binaries are included.

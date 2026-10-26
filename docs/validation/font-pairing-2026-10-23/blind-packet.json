@@ -25,7 +25,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       }
     },
     {
@@ -51,7 +51,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       }
     },
     {
@@ -77,7 +77,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       }
     },
     {
@@ -103,7 +103,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       }
     },
     {
@@ -129,7 +129,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       }
     },
     {
@@ -155,7 +155,7 @@
         "anchor": "left-baseline; baseline derived from the fixed Korean face ascent",
         "layout_engine": "BASIC",
         "raqm": false,
-        "platform": "Windows-11-10.0.26200-SP0"
+        "platform": "Windows-11-10.0.26300-SP0"
       }
     }
   ]
