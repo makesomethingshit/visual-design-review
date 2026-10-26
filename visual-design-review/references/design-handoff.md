@@ -6,6 +6,14 @@
 
 ## 반드시 구분할 항목
 
+레퍼런스를 옮기는 경우 [reference-analysis](reference-analysis.md)의 **복원 명세 / 재사용 원리 명세**를
+사례 ID로 연결한다. 새 작업의 제작값에는 채택·배제한 원리, 공통 입력/객체/변수, 사례 참조,
+원고에서 도출한 값과 임의 설계값, 충돌 해결·보정·잃는 효과를 남긴다. 참조 ID는 실제 존재와
+적용 범위를 확인한다. 이전 작품의 값과 새 값을 한 원본 설정처럼 합치지 않는다.
+새 구성이 미결이면 작은 조형 탐색과 선택을 거쳐 제작값을 고정한다. 명세만 받은 구현자에게
+전달할 때는 허용 입력·실제 자산·미결·검증 항목을 포함하고, 첫 결과와 피드백/재보정을 구분한다.
+문자 잘림·원고·실제 폰트·대조물 검사는 기술 증거이며 미적 품질 보증은 아니다.
+
 | 필드 | 의미 |
 | --- | --- |
 | Brief & constraints | 실제 콘텐츠, 매체, 판형·고정값, 사용자 목적 |
@@ -14,6 +22,8 @@
 | Decision status | DETERMINED / PROJECT_INITIAL_PRESET / CANDIDATE / UNRESOLVED / CONFLICT — 출처·검증 상태와 별개. PROJECT_INITIAL_PRESET은 최종 확정값이 아닌 채택된 첫 시안값 |
 | Verification status | FORMULA_CHECKED / SOURCE_MEASURED / TOOL_APPLIED / OUTPUT_INSPECTED / UNVERIFIED |
 | Rule basis (when applicable) | [rule-contract](rule-contract.md)의 rule_id / knowledge_kind / rule_strength / source_version / document_status / scope / conditions / exceptions / conflict / verification_method. 출처 강도·수식 정확도·디자인 결정 상태를 별개로 둠 |
+| Reconstruction model (when applicable) | 디자인 문제, 실제/대체 자산, 고정 조건·공통 규칙·가변값·예외·미설명 부분 |
+| Adjustments (when applicable) | 대상 ID·속성, 기본값→적용값·단위, 이유·근거 상태, 적용 범위, 전후 효과·잔차. 임의 보정 허용은 원저자 설정 확인을 뜻하지 않음 |
 | Unresolved | 충돌·미입력·여러 가능한 해와 적용 조건 |
 | Verification request | 외부 도구에서 가능할 경우 확인할 실제 속성, 허용 편차 |
 
@@ -52,7 +62,10 @@ unresolved:
 여러 후보가 조건을 만족하지만 목적이 정해지지 않았으면 하나로 좁히지 않는다.
 
 **타이포그래피:** 사용자가 10pt 및 r=1.7을 명시하면 `T-LEADING`으로 17pt를 계산할 수 있다.
-'적절한 행간'만 요청하더라도 주언어와 새 가로 본문 조건이 확인되면 승인 A~D를 **초기 정책값**으로 제안할 수 있다.
+'적절한 행간'만 요청한 경우에도 현재 작업의 **명시적 opt-in** 또는 **독립적으로 확인된 현재 프로젝트의 활성 프로파일** 중 하나와
+주언어·새 가로 본문 조건이 모두 있어야 승인 A~D를 **초기 정책값**으로 제안할 수 있다.
+주언어 확인만으로 프로파일 선택을 대신하지 않는다. 확인된 활성 프로파일에는 opt-in을 반복 요구하지 않는다.
+두 활성화 근거가 모두 없거나 불명확하면 정책값을 자동 채택하지 않는다.
 주언어 불명확·다른 쓰기 방향 등의 경우 r은 UNRESOLVED로 남긴다.
 인쇄 본문 최초 비교 시안에만 E~H를 적용 가능하며 출처는 USER_APPROVED_PROJECT_POLICY,
 결정 상태는 PROJECT_INITIAL_PRESET, L=F×r로 계산한 값은 DERIVED,
@@ -64,7 +77,7 @@ unresolved:
 ```yaml
 scenario: print_body_first_comparison
 primary_language: ko
-policy: {source: USER_APPROVED_PROJECT_POLICY, approved_on: 2026-10-21}
+policy: {source: USER_APPROVED_PROJECT_POLICY, approved_on: 2026-10-21, opt_in: true, activation_basis: explicit_user_request_for_current_project}
 initial_settings:
   font_size: {value: 10, unit: pt, id: E, status: PROJECT_INITIAL_PRESET}
   line_measure: {value: 30, unit: fullwidth_equivalent, id: F, status: PROJECT_INITIAL_PRESET}
@@ -74,6 +87,14 @@ initial_settings:
 derived:
   baseline_distance: {value: 17, unit: pt, formula: T-LEADING, origin: DERIVED, decision_status: PROJECT_INITIAL_PRESET, verification: [FORMULA_CHECKED]}
 unverified: [font_metrics, shaped_line_breaks, tool_applied, final_readability]
+```
+
+이번 요청에 opt-in을 반복하지 않았지만 별도 프로젝트 설정/브리프를 실제로 확인한 경우에는
+위 예시의 policy만 다음처럼 바꾼다. evidence는 예시 식별자이며 실제 확인한 자료 위치와 적용 범위를 기록한다.
+승인 날짜나 스킬 저장소의 정책 문서만으로 이 경로를 사용하지 않는다.
+
+```yaml
+policy: {source: USER_APPROVED_PROJECT_POLICY, approved_on: 2026-10-21, activation_basis: independently_verified_active_project_profile, profile: A-H, project: current_project, evidence: "current_project_brief#typography"}
 ```
 
 사용자 제약에 따라 수정 가능한 **첫 비교 시안**이다. 서체·원고·매체를 확인하지 않고 최종 규격으로 강제하지 않는다.

@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from decimal import Decimal
 from pathlib import Path
+from statistics import median
 
 ROOT = Path(__file__).resolve().parents[1]
 PKG = ROOT / "visual-design-review"
@@ -98,16 +99,35 @@ def check_reference_math() -> None:
                       "evidence_status", "UNVERIFIED", "e_x=", "median(",
                       "경쟁 모델", "임의 가중치", "재구성"):
         check(must_have in doc, f"Missing inverse-analysis contract {must_have}")
-    width = Decimal(1200)
-    xs = [Decimal(120), Decimal(420), Decimal(720)]
-    check([x / width for x in xs] ==
-          [Decimal(".10"), Decimal(".35"), Decimal(".60")],
-          "Synthetic normalized x observations mismatch")
-    gaps = [b - a for a, b in zip(xs, xs[1:])]
-    check(gaps == [Decimal(300), Decimal(300)], "Synthetic pitch mismatch")
-    check([abs(Decimal(120) + Decimal(300)*i - x) / width
-           for i, x in enumerate(xs)] == [0, 0, 0],
-          "Synthetic geometric residual mismatch")
+    rows = {}
+    for line in doc.splitlines():
+        if not line.startswith("| RA-"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        check(len(cells) == 9, f"Malformed reference example: {line}")
+        code, width, observations, normalized, deltas, pitch, origin, model_pitch, residuals = cells
+        check(code not in rows, f"Duplicate reference example: {code}")
+        width = Decimal(width)
+        check(width.is_finite() and width > 0, f"Invalid reference frame width: {code}")
+        xs = [Decimal(value) for value in observations.split(",")]
+        check(len(xs) >= 3 and all(x.is_finite() for x in xs),
+              f"Invalid reference observations: {code}")
+        documented_normalized = [Decimal(value) for value in normalized.split(",")]
+        documented_deltas = [Decimal(value) for value in deltas.split(",")]
+        documented_residuals = [Decimal(value) for value in residuals.split(",")]
+        check([x / width for x in xs] == documented_normalized,
+              f"Documented normalized x mismatch: {code}")
+        gaps = [b - a for a, b in zip(xs, xs[1:])]
+        check(gaps == documented_deltas, f"Documented adjacent deltas mismatch: {code}")
+        check(median(gaps) == Decimal(pitch), f"Documented pitch mismatch: {code}")
+        origin, model_pitch = Decimal(origin), Decimal(model_pitch)
+        check(origin.is_finite() and model_pitch.is_finite(),
+              f"Invalid reference model: {code}")
+        check([abs(origin + model_pitch * i - x) / width
+               for i, x in enumerate(xs)] == documented_residuals,
+              f"Documented geometric residual mismatch: {code}")
+        rows[code] = cells
+    check(set(rows) == {"RA-1"}, f"Missing or extra reference example: {set(rows)}")
 
 
 def check_print_routing() -> None:
@@ -155,6 +175,54 @@ def check_typography_widths() -> None:
 
 
 
+def check_policy_activation() -> None:
+    # Static consistency only: actual agent reads and activation behavior need #7.
+    gate = ("현재 작업의 **명시적 opt-in** 또는 "
+            "**독립적으로 확인된 현재 프로젝트의 활성 프로파일**")
+    for relative in ("SKILL.md", "references/knowledge-routing.md",
+                     "references/design-handoff.md", "references/typography-presets.md"):
+        text = read(PKG / relative)
+        check(gate in text, f"Missing alternative activation routes: {relative}")
+        check("opt-in이 없으면 정책값을 자동 채택하지 않는다." not in text,
+              f"Repeated opt-in requirement contradicts active profile: {relative}")
+    presets = read(PKG / "references/typography-presets.md")
+    for required in ("별도 프로젝트 설정/브리프", "현재 프로젝트의 사용자 승인·A~H 선택·유효한 적용 범위",
+                     "자료 위치와 적용 범위", "opt-in을 반복 요구하지 않는다", "두 활성화 근거가 모두 없거나 불명확하면"):
+        check(required in presets, f"Missing independent activation evidence guard: {required}")
+    handoff = read(PKG / "references/design-handoff.md")
+    policies = re.findall(r"^policy: \{([^\n]+)\}$", handoff, flags=re.M)
+    check(any("opt_in: true" in p and
+              "activation_basis: explicit_user_request_for_current_project" in p
+              for p in policies), "Explicit opt-in handoff must include activation evidence")
+    check(any(all(field in p for field in (
+                  "activation_basis: independently_verified_active_project_profile",
+                  "profile: A-H", "project: current_project",
+                  'evidence: "current_project_brief#typography"')) for p in policies),
+          "Active-profile handoff must include project-scoped activation evidence")
+    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    rows = {cells[0]: cells for line in scenarios.splitlines()
+            if line.startswith("| R-")
+            for cells in [[cell.strip() for cell in line.strip("|").split("|")]]}
+    for code in ("R-6", "R-13", "R-14"):
+        check("A~H 프로젝트 프로파일을 명시적으로 적용" in rows.get(code, ["", ""])[1],
+              f"Positive preset scenario lacks opt-in: {code}")
+    check("opt-in 없이" in " ".join(rows.get("R-33", [])),
+          "Cross-project negative scenario must preserve the opt-in guard")
+    active = rows.get("R-34", [])
+    check(len(active) == 4 and all(term in active[1] for term in (
+              "별도 프로젝트 설정/브리프", "현재 프로젝트의 사용자 승인·A~H 활성 프로파일",
+              "자료 위치와 적용 범위", "opt-in 반복 없음"))
+          and all(term in active[3] for term in (
+              "opt-in을 다시 요구", "17pt 초기 시안 미제시", "활성화 근거 누락")),
+          "Missing verified active-profile scenario without repeated opt-in: R-34")
+    inactive = rows.get("R-35", [])
+    check(len(inactive) == 4 and all(term in inactive[1] for term in (
+              "현재 작업의 opt-in 없음", "확인된 활성 프로파일 없음", "저장소에 승인 기록만"))
+          and "후보/미결정 유지" in inactive[2]
+          and "A~H 자동 채택" in inactive[3],
+          "Missing no-activation scenario: R-35")
+
+
 def check_rule_contract() -> None:
     contract = read(PKG / "references/rule-contract.md")
     for required in ("knowledge_kind", "rule_strength", "source_version",
@@ -181,5 +249,6 @@ if __name__ == "__main__":
     check_print_routing()
     check_typography_widths()
     check_rule_contract()
+    check_policy_activation()
     print("PASS: policy mappings, local docs links, legacy triggers, reference-math examples, "
           "print routing guards, documented typography widths")

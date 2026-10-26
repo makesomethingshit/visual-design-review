@@ -35,3 +35,16 @@ python3 visual-design-review/scripts/mixed_text_probe.py examples/mixed-script-i
 caller-supplied `rendered_lines`는 실제 shaping 결과를 증명하지 않으며 UAX #14 버전도
 고정하지 않았다. 전체 SI 표준, Unicode/KLReq 엔진, 실제 fallback·PDF·인쇄 품질,
 Codex 행동 평가(#7)는 검증하지 않았다.
+
+## 2026-10-26 후속 P2 회귀 검증
+
+기준 main은 사용자 제공 `faa92ee1`이다. 이 작업 스냅샷에는 `.git` 메타데이터가
+없으므로 새 fix commit SHA는 기록하지 않는다. 환경은 Windows의 Python 3.14이며,
+기존 2026-10-23 결과와 명령을 덮어쓰지 않고 현재 변경만 별도로 확인했다.
+
+- `python -m unittest discover -s tests -p 'test_mixed_text_probe.py' -v`: **14/14 통과**.
+- `python tests/check-knowledge-contract.py`: **통과**.
+- architecture 정적 assertion: **통과**.
+- P2 회귀: `모델35.5mm`, `1,035mm`, `exception035mm`, `1e+35mm`, `1e-35mm`,
+  `1.2.35mm`는 `NOT_APPLICABLE`; 독립 `35.5mm`는 `FINDING`, 정확히 예외 처리한
+  `35.5mm`는 `PASS`.

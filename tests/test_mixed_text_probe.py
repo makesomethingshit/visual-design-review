@@ -79,6 +79,25 @@ class ProbeTests(unittest.TestCase):
             result = probe.check({"text": text, "profile": {"si_spacing": True}})
             self.assertEqual(result["checks"][0]["status"], "NOT_APPLICABLE")
 
+    def test_si_numeric_boundaries_do_not_restart_inside_unsupported_numbers(self):
+        cases = (("모델35.5mm", []), ("1,035mm", []),
+                 ("exception035mm", ["035mm"]), ("1e+35mm", []),
+                 ("1e-35mm", []), ("1.2.35mm", []))
+        for text, exceptions in cases:
+            with self.subTest(text=text):
+                result = probe.check({"text": text, "profile": {
+                    "si_spacing": True, "except_exact_tokens": exceptions}})
+                self.assertEqual(result["checks"][0]["status"], "NOT_APPLICABLE")
+                self.assertEqual(result["checks"][0]["matches"], [])
+
+        result = probe.check({"text": "35.5mm", "profile": {"si_spacing": True}})
+        self.assertEqual(result["checks"][0]["status"], "FINDING")
+        self.assertEqual(result["checks"][0]["matches"], ["35.5mm"])
+
+        result = probe.check({"text": "35.5mm", "profile": {
+            "si_spacing": True, "except_exact_tokens": ["35.5mm"]}})
+        self.assertEqual(result["checks"][0]["status"], "PASS")
+
     def test_non_boolean_opt_in_rejected(self):
         for flag in ("false", "true", 1, None):
             with self.assertRaises(ValueError):

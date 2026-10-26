@@ -77,7 +77,7 @@ def check(payload: dict) -> dict:
         # Restricted to unambiguous unit tokens; product identifiers require
         # caller-supplied exceptions and are never rewritten automatically.
         exceptions = set(except_tokens)
-        matches = list(re.finditer(r"(?<![\w])\d+(?:\.\d+)?(?:mm|cm|km|kg)(?![\w])", text))
+        matches = list(re.finditer(r"(?<![\w.,+\-])\d+(?:\.\d+)?(?:mm|cm|km|kg)(?![\w])", text))
         bad = [m.group() for m in matches if m.group() not in exceptions]
         # No recognized unit token means this narrow probe did not apply a rule.
         # In particular, a token attached to a word is not a verified SI pass.
