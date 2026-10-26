@@ -15,7 +15,7 @@ A~H 정책은 현재 작업의 **명시적 opt-in** 또는 **독립적으로 확
 | 신호 | 로드 | 제외 또는 조건 |
 | --- | --- | --- |
 | **비평/리뷰** | review-protocol + critique-rubric + review-output | 정량 분석/설계 명세는 요청된 경우에만 |
-| **레퍼런스의 수학적 해체·재구성 가설** | reference-analysis | 수치 관계를 다룰 때 formula-relations |
+| **레퍼런스의 디자인 문제·생성 규칙·재구성 가설** | reference-analysis | 수치 관계를 다룰 때 formula-relations |
 | **수치 설계·외부 도구 전달** | formula-relations + design-handoff | 원본에서 관계를 추출할 때 reference-analysis |
 | **명시적 GitHub 제품 시각디자인 개선 요청** | product-correct | 기존 finding 사용 가능; 새 비평이 필요하면 review-protocol + review-output. GitHub 이슈·Draft PR 작성은 외부 도구/권한이 있을 때만; 일반 비평에서 자동 쓰기 금지 |
 | 장문 본문·조판·문자 위계의 **비평** | typography | 실제 본문이 없으면 장문 조판 검사 제외 |
