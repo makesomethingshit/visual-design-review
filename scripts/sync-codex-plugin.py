@@ -12,32 +12,47 @@ PLUGIN = "visual-design-review"
 MARKETPLACE = "makesomethingshit-design"
 
 
-def reject_linked_package_path(root, target):
-    """Do not read or replace a package reached through a linked parent."""
+def is_linked(path):
+    is_junction = getattr(path, "is_junction", lambda: False)
+    return path.is_symlink() or is_junction()
+
+
+def reject_linked_path(root, target, label):
+    """Do not read or replace a path reached through a linked component."""
     current = root
     for part in target.relative_to(root).parts:
         current = current / part
-        is_junction = getattr(current, "is_junction", lambda: False)
-        if current.is_symlink() or is_junction():
-            raise ValueError("linked package path component: " + str(current.relative_to(root)))
+        if is_linked(current):
+            raise ValueError("linked " + label + " path component: "
+                             + str(current.relative_to(root)))
+
+
+def reject_linked_tree(root, target, label):
+    reject_linked_path(root, target, label)
+    if target.is_dir():
+        for path in target.rglob("*"):
+            reject_linked_path(root, path, label)
 
 
 def inventory(root):
     source = root / PLUGIN
-    if source.is_symlink() or not (source / "SKILL.md").is_file():
+    reject_linked_path(root, source, "canonical")
+    reject_linked_path(root, source / "SKILL.md", "canonical")
+    if not (source / "SKILL.md").is_file():
         raise ValueError("canonical SKILL.md missing or symlinked")
     paths = [Path("SKILL.md")]
     for part in PARTS:
         directory = source / part
-        if directory.is_symlink():
-            raise ValueError("symlinked source directory: " + part)
+        reject_linked_path(root, directory, "canonical")
         if directory.exists():
             if not directory.is_dir():
                 raise ValueError("source component is not a directory: " + part)
-            paths.extend(sorted(p.relative_to(source) for p in directory.rglob("*") if p.is_file()))
+            for path in sorted(directory.rglob("*")):
+                reject_linked_path(root, path, "canonical")
+                if path.is_file():
+                    paths.append(path.relative_to(source))
     for rel in paths:
-        if (source / rel).is_symlink():
-            raise ValueError("symlinked source file: " + str(rel))
+        reject_linked_path(root, source / rel, "canonical")
     return paths
 
 
@@ -66,9 +81,16 @@ def validate(root, target, paths):
     except (OSError, ValueError, TypeError) as exc:
         errors.append("invalid marketplace: " + str(exc))
 
-    if target.is_symlink():
-        errors.append("package skill root is a symlink")
-    actual = {p.relative_to(target) for p in target.rglob("*") if p.is_file()} if target.is_dir() else set()
+    try:
+        reject_linked_tree(root, target, "package")
+        actual = set()
+        if target.is_dir():
+            for path in target.rglob("*"):
+                if path.is_file():
+                    actual.add(path.relative_to(target))
+    except (OSError, ValueError) as exc:
+        errors.append(str(exc))
+        return errors
     expected = set(paths)
     for rel in sorted(expected - actual):
         errors.append("missing packaged file: " + str(rel))
@@ -103,11 +125,9 @@ def main():
     source = root / PLUGIN
     target = root / "plugins" / PLUGIN / "skills" / PLUGIN
     try:
-        reject_linked_package_path(root, target)
+        reject_linked_tree(root, target, "package")
         paths = inventory(root)
         if args.write:
-            if target.is_symlink():
-                raise ValueError("will not replace symlinked package")
             if target.exists():
                 shutil.rmtree(target)
             for rel in paths:

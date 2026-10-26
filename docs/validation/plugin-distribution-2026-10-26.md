@@ -28,9 +28,20 @@
 
 수정본은 저장소 루트부터 대상 스킬 폴더까지의 연결 경로를 검사하고, `--check`와 `--write` 모두 연결 경로에서 중단한다. 기존 외부 파일을 바이트 단위로 보존하는 시험과 끊어진 상위 링크 시험을 추가했다. 수정 후 **7개 테스트 통과**, 17개 파일 동기화 검사 통과. macOS의 symlink를 실행 검증했으며 Windows junction 실행 검증은 하지 않았다.
 
+PR30 follow-up: Windows 11 C: NTFS에서 `mklink /J`로 canonical root/references/nested 및 package 내부 junction을 재현했고, Python 3.14에서 외부 canary 보존과 `--check`/`--write` 거부를 확인했다. focused suite는 **9개 테스트 통과**했으며 `sync-codex-plugin.py --check`도 통과했다.
+
 ## 남은 검증
 
 - GitHub 원격 marketplace 추가·갱신, 데스크톱 UI 표시와 설치 흐름.
 - 별도 세션에서 자연어로 스킬이 선택되고 실제 references를 읽는 행동 및 비대상 요청의 오발동 여부.
-- 기존 전역 스킬과 동시에 활성화할 때의 중복 검색, 버전 갱신 캐시, Windows junction.
+- 기존 전역 스킬과 동시에 활성화할 때의 중복 검색과 버전 갱신 캐시.
 - `enabled=true`는 설치 설정 상태이며, 모델이 실제로 스킬을 사용했다는 증거가 아니다. 위 행동 검증은 Issue #7과 #29에서 계속 추적한다.
+
+
+## Windows 격리 CLI 설치 수명주기 — 2026-10-26
+
+Codex CLI 0.164.0-alpha.11.1의 별도 빈 CODEX_HOME에서 로컬 PR 스냅샷
+marketplace add → available 목록 확인 → plugin add → installed/enabled=true
+재조회 → plugin remove → marketplace remove를 실행해 모두 성공했다.
+사용자 전역 설정·인증을 복사하지 않았다. GitHub 원격 source fetch, 데스크톱 UI,
+자연어 자동 선택·비대상 요청·전역 스킬 공존은 이 실행에서 검증하지 않았다.

@@ -41,7 +41,8 @@ Windows에서 python3가 없다면 py -3으로 대체한다.
 ## 검증 범위
 
 - 정적: JSON manifest/marketplace, 이름·상대경로, 스킬 설명의 frontmatter, reference 링크 해소, 패키지 바이트 동일성 및 drift 실패 반례.
-- 미검증: 실제 Codex 시장소스 등록 성공·플러그인 UI 노출·클라이언트 설치·활성화·캐시 갱신·자연어 자동 선택·기존 전역 스킬과의 공존.
+- macOS 로컬 marketplace source에서 등록·설치·활성화 상태 조회·제거를 격리 `CODEX_HOME`으로 검증했다. 자세한 명령과 결과는 `docs/validation/plugin-distribution-2026-10-26.md`에 기록한다.
+- 미검증: 원격 GitHub marketplace source, 플러그인 UI 노출, 자연어 자동 선택, 기존 전역 스킬과의 공존, 캐시 갱신.
 - 필요한 스킬만 선택하고 references를 조건부로 읽는 현재 지침은 **그대로 보존**한다. 실제 선택 품질의 시험은 Issue #7의 범위이다.
 
 참고: [공식 플러그인 문서](https://developers.openai.com/plugins/build/plugins), [공식 Skills activation](https://developers.openai.com/plugins/concepts/skills).
