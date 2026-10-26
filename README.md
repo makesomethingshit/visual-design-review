@@ -2,6 +2,17 @@
 
 포스터·편집디자인·타이포그래피·브랜드·인포그래픽을 위한 한국어 중심의 시각디자인 비평 스킬입니다. UI/UX 감사나 디자인 생성보다 기존 작품의 관찰, 해석, 근거 있는 판정과 수정 방향을 우선합니다.
 
+## Codex 플러그인으로 설치
+
+GitHub marketplace 소스로 이 저장소를 추가하고 플러그인 목록에서 **Visual Design Review**를 설치·활성화할 수 있습니다.
+
+~~~bash
+codex plugin marketplace add makesomethingshit/visual-design-review
+codex plugin marketplace list
+~~~
+
+이는 **마켓플레이스 등록** 명령이며 실제 클라이언트 설치·자동 선택 검증을 뜻하지 않습니다. [플러그인 배포·동기화 가이드](docs/CODEX-PLUGIN.md)를 참고하세요. 기존 전역 스킬 설치 방식도 그대로 유지합니다.
+
 ## Codex에서 사용
 
 Windows 네이티브와 macOS/WSL/Linux의 설치·업데이트·검증·백업·제거 절차는 [전역 설치 가이드](docs/INSTALL.md)를 따릅니다. 설치 전에 dry-run으로 변경 범위를 확인하고, 설치 후 원본과 설치본의 파일 목록·SHA-256을 검증할 수 있습니다. CODEX_HOME이 없다면 현재 실행 환경의 사용자 홈에 있는 `.codex/skills/`를 사용합니다. 프로젝트 지침을 수정하거나 새 의존성을 설치하지 않습니다.

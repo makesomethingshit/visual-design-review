@@ -29,6 +29,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - shell: powershell
         run: ./tests/smoke-install-windows.ps1
+      - name: Check plugin distribution on Windows checkout
+        if: ${{ hashFiles('scripts/sync-codex-plugin.py') != '' }}
+        shell: powershell
+        run: python scripts/sync-codex-plugin.py --check
       - name: Test plugin distribution and junction protection
         if: ${{ hashFiles('tests/test_codex_plugin_distribution.py') != '' }}
         shell: powershell
