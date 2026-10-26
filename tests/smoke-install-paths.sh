@@ -25,6 +25,19 @@ for action in install check; do
   done
 done
 
+# Missing-parent/.. must not hide a destination inside the source tree.
+for action in install check; do
+  for dry in --dry-run ''; do
+    if output="$(CODEX_HOME="$sandbox/repo/missing-parent/../visual-design-review/new-home" /bin/bash "$installer" "$action" $dry 2>&1)"; then
+      fail "unresolved parent traversal accepted: $action $dry"
+    else status=$?; fi
+    [[ "$status" -eq 2 && "$output" == *'Cannot resolve CODEX_HOME'* ]] ||
+      fail "wrong unresolved parent rejection: $output"
+    [[ ! -e "$sandbox/repo/missing-parent" && ! -e "$source_copy/new-home" ]] ||
+      fail 'unresolved parent traversal created directories'
+  done
+done
+
 # A safe alias with missing descendants remains a valid install destination.
 mkdir "$sandbox/outside"
 ln -s "$sandbox/outside" "$sandbox/safe-alias"

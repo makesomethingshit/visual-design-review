@@ -91,6 +91,9 @@ resolve_future_directory() {
   while [[ ! -d "$probe" ]]; do
     [[ ! -e "$probe" && ! -L "$probe" ]] || return 1
     component="${probe##*/}"
+    # Do not preserve unresolved dot segments: mkdir could enter the source
+    # through a missing directory before .. changes the final destination.
+    case "$component" in .|..) return 1 ;; esac
     parent="${probe%/*}"
     [[ -n "$parent" ]] || parent=/
     [[ "$parent" != "$probe" ]] || return 1
