@@ -31,14 +31,16 @@ status: RENDERED_UNVERIFIED_HUMAN
 
 ## Reproducible local render
 
-The checked-in fixture and [`font_pairing_render.py`](../scripts/font_pairing_render.py) render FP-01–FP-03 from legally usable fonts already installed on the Windows host. The font binaries stay outside Git; the generated manifest records the system path, family/style name, file size, SHA-256, pixel parameters, Pillow version at execution time, and `BASIC` layout mode. The file hash is the reproducible font identity; a numeric font version is not invented.
+The bundled `assets/font-pairing-study-fixtures.json` fixture and [`font_pairing_render.py`](../scripts/font_pairing_render.py) render FP-01–FP-03 from legally usable fonts already installed on the Windows host. The font binaries stay outside Git; the generated manifest records the system path, family/style name, file size, SHA-256, pixel parameters, Pillow version at execution time, and `BASIC` layout mode. The file hash is the reproducible font identity; a numeric font version is not invented.
 
 ```text
 python visual-design-review/scripts/font_pairing_render.py --validate-only
-python visual-design-review/scripts/font_pairing_render.py --output path/to/new-run
+python visual-design-review/scripts/font_pairing_render.py --output-dir path/to/new-run
 ```
 
-`Pillow` reports `raqm=False` in this environment. The PNGs therefore demonstrate the specified basic run placement only; they are not HarfBuzz shaping or renderer-fallback evidence. See [`render-manifest.json`](../../docs/validation/font-pairing-2026-10-23/render-manifest.json) and [`blind-packet.json`](../../docs/validation/font-pairing-2026-10-23/blind-packet.json) for the local outputs and hashes.
+The bundled fixture uses Windows system-font paths. On another host, pass `--fixture path/to/local-fixture.json` with legally usable local font paths; `--validate-only` checks the input structure without loading fonts.
+
+`Pillow` reports `raqm=False` in this environment. The PNGs therefore demonstrate the specified basic run placement only; they are not HarfBuzz shaping or renderer-fallback evidence. See [`render-manifest.json`](https://github.com/makesomethingshit/visual-design-review/blob/7f7d4d55c63d9691f50d9de2d5d594f5af181800/docs/validation/font-pairing-2026-10-23/render-manifest.json) and [`blind-packet.json`](https://github.com/makesomethingshit/visual-design-review/blob/7f7d4d55c63d9691f50d9de2d5d594f5af181800/docs/validation/font-pairing-2026-10-23/blind-packet.json) for the local outputs and hashes.
 
 The blind packet exposes task IDs, A/B labels, image paths/hashes, and parameters; the fixed text is visible in each PNG and recorded in the source fixture, not duplicated as a JSON text field. Keep the font-bearing render manifest and source fixture separate when giving the packet to a rater.
 

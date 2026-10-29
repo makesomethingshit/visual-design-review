@@ -22,6 +22,13 @@ python visual-design-review/scripts/mixed_text_probe.py examples/mixed-script-in
 ```
 `rendered_lines` can be provided only when lines actually originate from a renderer or explicit source layout; do not invent them from visual guessing.
 
+Source matching checks character content only: CRLF, CR and LF in `text` are
+ignored. It does not verify source line or paragraph boundaries. For example,
+`text: "가나\n\n다라"` matches both `["가나", "다라"]` and `["가나다라"]`;
+`NO_SIMPLE_ANOMALY` can be returned for either and proves no paragraph preservation.
+Callers requiring preserved paragraphs must compare explicit paragraph boundaries
+with renderer/layout evidence separately before treating the layout as verified.
+
 Font/render evidence is kept in the optional test-side reproducer so the runtime
 API does not pretend to own shaping. It uses an already installed Pillow runtime
 when available and records source, font, and render hashes. Pillow rendering is
@@ -32,7 +39,7 @@ evidence that a file rendered; it does not establish glyph coverage or fallback.
 | Check | Supported evidence | Rule source and strength |
 | --- | --- | --- |
 | `MIX-005` | UTF-8 source text and an explicit `si_spacing` profile | Caller project policy; `PROJECT_POLICY`, not SI conformance |
-| `MIX-001` | Caller-supplied `rendered_lines` that concatenate to the source | Unicode UAX #14 plus W3C KLReq 2026-03-21 Group Note Draft; `CONDITIONAL`; UAX version and shaping remain `UNVERIFIED` |
+| `MIX-001` | Caller-supplied `rendered_lines` whose concatenation matches the source after removing CR/LF | Unicode UAX #14 plus W3C KLReq 2026-03-21 Group Note Draft; `CONDITIONAL`; UAX version and shaping remain `UNVERIFIED` |
 | `MIX-003` | No font/renderer input in the runtime; optional test-side reproducer only | OpenType/HarfBuzz technical sources; `CONDITIONAL`; coverage/fallback remains `UNVERIFIED` |
 
 Flat images are `BLOCKED` for this probe because it has no OCR or layout evidence.

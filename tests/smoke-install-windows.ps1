@@ -126,6 +126,43 @@ try {
     Assert-True (-not (Test-Path -LiteralPath $nestedHome)) 'nested CODEX_HOME was created'
     $env:CODEX_HOME = $validHome
 
+    # An ancestor junction can make a lexical CODEX_HOME path resolve inside the source.
+    $junctionRepo = Join-Path $work 'junction-repo'
+    New-Item -ItemType Directory -Path (Join-Path $junctionRepo 'scripts') -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $repo 'scripts/install-windows.ps1') -Destination (Join-Path $junctionRepo 'scripts/install-windows.ps1')
+    Copy-Item -LiteralPath (Join-Path $repo 'visual-design-review') -Destination $junctionRepo -Recurse
+    $junctionSource = Join-Path $junctionRepo 'visual-design-review'
+    $junctionAlias = Join-Path $work 'source-alias'
+    New-Item -ItemType Junction -Path $junctionAlias -Target $junctionSource | Out-Null
+    $junctionHome = Join-Path $junctionAlias 'new-home'
+    $junctionBefore = @{}
+    $junctionPrefix = $junctionSource.TrimEnd([char[]]@('\', '/')) + [IO.Path]::DirectorySeparatorChar
+    Get-ChildItem -LiteralPath $junctionSource -File -Recurse -Force | ForEach-Object {
+        $junctionBefore[$_.FullName.Substring($junctionPrefix.Length)] = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
+    }
+    $env:CODEX_HOME = $junctionHome
+    $junctionFailed = $false
+    $junctionMessage = ''
+    try {
+        & (Join-Path $junctionRepo 'scripts/install-windows.ps1') -Action install | Out-Null
+    } catch {
+        $junctionFailed = $true
+        $junctionMessage = $_.Exception.Message
+    }
+    Assert-True $junctionFailed 'CODEX_HOME beneath a source junction accepted'
+    Assert-True ($junctionMessage -match 'reparse-point ancestor') "wrong source junction failure: $junctionMessage"
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $junctionSource 'new-home'))) 'source changed through ancestor junction'
+    $junctionAfter = @{}
+    Get-ChildItem -LiteralPath $junctionSource -File -Recurse -Force | ForEach-Object {
+        $junctionAfter[$_.FullName.Substring($junctionPrefix.Length)] = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
+    }
+    Assert-True ($junctionBefore.Count -eq $junctionAfter.Count) 'source file set changed through ancestor junction'
+    foreach ($junctionFile in $junctionBefore.Keys) {
+        Assert-True ($junctionAfter.ContainsKey($junctionFile) -and $junctionAfter[$junctionFile] -ceq $junctionBefore[$junctionFile]) "source file changed through ancestor junction: $junctionFile"
+    }
+    [IO.Directory]::Delete($junctionAlias)
+    $env:CODEX_HOME = $validHome
+
     # Parent junctions must not redirect install/remove into the source or backups elsewhere.
     $linkHome = Join-Path $work 'link-home'
     New-Item -ItemType Directory -Path $linkHome -Force | Out-Null

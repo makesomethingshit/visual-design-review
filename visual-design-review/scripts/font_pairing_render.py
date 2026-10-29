@@ -13,8 +13,8 @@ import PIL
 from PIL import Image, ImageDraw, ImageFont, features
 
 
-ROOT = Path(__file__).resolve().parents[2]
-FIXTURE = ROOT / "visual-design-review" / "tests" / "font-pairing-study-fixtures.json"
+ROOT = Path(__file__).resolve().parents[1]
+FIXTURE = ROOT / "assets" / "font-pairing-study-fixtures.json"
 
 
 def sha256(path: Path) -> str:

@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import shutil
+import stat
 import sys
 
 PARTS = ("references", "scripts", "assets")
@@ -13,8 +14,12 @@ MARKETPLACE = "makesomethingshit-design"
 
 
 def is_linked(path):
-    is_junction = getattr(path, "is_junction", lambda: False)
-    return path.is_symlink() or is_junction()
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        return False
+    return stat.S_ISLNK(info.st_mode) or bool(
+        getattr(info, "st_file_attributes", 0) & stat.FILE_ATTRIBUTE_REPARSE_POINT)
 
 
 def reject_linked_path(root, target, label):
@@ -131,6 +136,7 @@ def main():
         paths = inventory(root)
         if args.write:
             if target.exists():
+                # shortcut: concurrent path changes are unprotected; use directory handles if needed.
                 shutil.rmtree(target)
             for rel in paths:
                 dest = target / rel
