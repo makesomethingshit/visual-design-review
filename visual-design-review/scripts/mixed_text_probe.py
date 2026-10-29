@@ -21,7 +21,7 @@ RULE_METADATA = {
         ],
         "source_version": "KLReq 2026-03-21; UAX #14 version not pinned by this PoC",
         "document_status": "Unicode Standard Annex + Group Note Draft",
-        "scope": "Caller-supplied line strings for Korean horizontal text",
+        "scope": "Caller-supplied Korean horizontal lines; character matching ignores CR/LF; paragraph boundaries unverified",
         "verification_method": "source_line_boundary_candidate_check",
         "evidence_status": "UNVERIFIED: lines are not shaping evidence",
     },
@@ -97,7 +97,7 @@ def check(payload: dict) -> dict:
                              reason="rendered_lines must be an array of strings"))
     elif "".join(lines) != text.replace("\r", "").replace("\n", ""):
         checks.append(_check("MIX-001", "BLOCKED",
-                             reason="Provided lines do not match the source text"))
+                             reason="Provided line characters do not match the source text after removing CR/LF"))
     elif profile.get("korean_horizontal_break_check") is not True:
         checks.append(_check("MIX-001", "NOT_APPLICABLE",
                              reason="No explicit Korean horizontal line-break profile"))

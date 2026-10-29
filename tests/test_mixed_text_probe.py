@@ -84,6 +84,18 @@ class ProbeTests(unittest.TestCase):
                 })
                 self.assertEqual(result["checks"][1]["status"], "FINDING")
 
+    def test_source_matching_does_not_verify_paragraph_boundaries(self):
+        for newline in ("\n", "\r\n", "\r"):
+            for lines in (["가나", "다라"], ["가나다라"]):
+                with self.subTest(newline=repr(newline), lines=lines):
+                    result = probe.check({
+                        "text": "가나" + newline + newline + "다라",
+                        "rendered_lines": lines,
+                        "profile": {"korean_horizontal_break_check": True},
+                    })["checks"][1]
+                    self.assertEqual(result["status"], "NO_SIMPLE_ANOMALY")
+                    self.assertIn("paragraph boundaries unverified", result["scope"])
+
     def test_no_supported_unit_token_is_not_a_pass(self):
         for text in ("본문만 있음", "폭 35 mm 끝", "모델35mmA"):
             result = probe.check({"text": text, "profile": {"si_spacing": True}})

@@ -136,6 +136,7 @@ def main():
         paths = inventory(root)
         if args.write:
             if target.exists():
+                # shortcut: concurrent path changes are unprotected; use directory handles if needed.
                 shutil.rmtree(target)
             for rel in paths:
                 dest = target / rel
