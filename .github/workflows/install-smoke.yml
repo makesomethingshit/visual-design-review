@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: /bin/bash tests/smoke-install-macos.sh
-  windows:
+  windows-tests:
     runs-on: windows-latest
     strategy:
       matrix:
@@ -43,3 +43,12 @@ jobs:
         if: ${{ hashFiles('tests/test_codex_plugin_distribution.py') != '' }}
         shell: powershell
         run: python -m unittest discover -s tests -p 'test_codex_plugin_distribution.py' -v
+  windows:
+    needs: windows-tests
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require both Windows Python versions
+        env:
+          WINDOWS_RESULT: ${{ needs.windows-tests.result }}
+        run: test "$WINDOWS_RESULT" = success
