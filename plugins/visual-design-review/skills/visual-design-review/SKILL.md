@@ -5,9 +5,10 @@ description: >
   and formula-based design handoff for posters, editorial design, typography,
   identities and infographics. Use for visual design reviews, composition analysis,
   typography critique, print preflight, design reference reverse engineering,
+  and adaptive intake for new visual design tasks with an unclear brief,
   디자인 리뷰, 시각디자인 비평, 포스터 피드백, 편집디자인 검토,
   타이포그래피 리뷰, 레퍼런스 역분석, 조형 관계 분석, 타이포그래피 수식,
-  편집 그리드 설계. Excludes general code review, CSS inspection and web UI
+  편집 그리드 설계, 새로운 시각디자인 과제의 브리프 정리와 설계. Excludes general code review, CSS inspection and web UI
   accessibility audits; in mixed tasks apply only to visual/graphic design work.
 metadata:
   version: "1.0.1"
@@ -47,6 +48,35 @@ metadata:
 | 편집·정보 계층·시각화 | [editorial-information](references/editorial-information.md) |
 | 아이덴티티·색 재현·인쇄 제작 | [identity-production](references/identity-production.md) |
 | 방법론 근거·라이선스 | [sources](references/sources.md) |
+
+## 새 디자인 과제의 시작 인터뷰
+
+새 시각디자인 과제나 방향 설계 요청에서 결과의 구조·품질을 크게 좌우하는
+조건이 불명확하면 조형을 확정하기 전에 과제에 맞는 짧은 인터뷰를 한다.
+이미 충분한 브리프, 명확한 범위의 작은 수정, 기존 작품 비평은 전체 인터뷰
+대상이 아니다. 필요한 확인만 하고 요청된 작업을 수행한다.
+
+1. 대화와 제공 자료에서 목적·대상·매체·콘텐츠·제약과 이미 정한 내용을
+   먼저 모은다. 확인된 것을 반복 질문하지 않는다.
+2. 다음 단계의 방향이나 구조를 크게 바꾸고 지금 사용자 판단이 필요한 미결정을
+   먼저 고른다. 기본적으로 한 차례에 질문 하나만 한다. 하나의 질문 안에 서로
+   독립된 여러 항목을 나열하지 않는다. 그 질문이 왜 지금 필요한지 설명하고
+   선택에 따른 차이를 간결히 제시한다. 나중에 확인해도 되는 정보는 보류하고,
+   답변을 받은 후 다음 질문을 고른다. 사용자가 한꺼번에 더 묻기를 원하거나
+   긴급·필수 제약이 여럿일 때는 필요한 관련 질문을 함께 묻는다.
+   조사나 자료로 확인할 사실은 직접 확인하고, 목표·취향·중요한 제약 등은
+   사용자에게 묻는다.
+3. 답변과 새 조건에 따라 다음 질문과 이전 가정을 조정한다. 사용자가 모르는
+   값을 임의 확정하지 않는다. 시안·레퍼런스·조사 후 판단할 사항은 후보와
+   확인 방법을 남기고 미결정으로 둔다.
+4. 제작 전 확인된 조건, 후보·탐색용 가정, 미결정 및 다음 단계를 간결히
+   정리한다. 중요한 사용자 판단이 필요한 작업은 답을 기다리되, 답과 무관한
+   허용된 조사·저위험 작업은 계속한다. 사용자의 새 결정이 기존 결론에 영향을
+   주면 관계를 다시 확인한다.
+
+구조적 결정은 매체·콘텐츠·목적에 따라 달라진다. 과제에 실제로 관련된
+항목만 확인하거나 보류하고, 모든 작업에 같은 질문 목록을 강제하지 않는다.
+이 요약을 새 필수 상태 체계나 모든 결정에 대한 승인 절차로 만들지 않는다.
 
 ## 지식의 규범·범위 계약
 
