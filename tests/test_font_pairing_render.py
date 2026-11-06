@@ -1,4 +1,6 @@
 import importlib.util
+import copy
+import json
 import sys
 import shutil
 import subprocess
@@ -18,6 +20,83 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FontPairingFixtureTest(unittest.TestCase):
+    def test_fixture_rejects_output_path_components_and_duplicate_names(self):
+        for field, invalid in (("id", "../outside"), ("id", "/outside"),
+                               ("id", "C:\\outside"), ("id", ".."),
+                               ("label", "../../outside"), ("label", "C:\\outside")):
+            with self.subTest(field=field, invalid=invalid), tempfile.TemporaryDirectory() as directory:
+                fixture = MODULE.load_fixture(MODULE.FIXTURE)
+                if field == "id":
+                    fixture["pair_tasks"][0][field] = invalid
+                else:
+                    fixture["pair_tasks"][0]["variants"][0][field] = invalid
+                path = Path(directory) / "fixture.json"
+                path.write_text(json.dumps(fixture), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "path component"):
+                    MODULE.load_fixture(path)
+
+        for duplicate in ("task", "variant"):
+            with self.subTest(duplicate=duplicate), tempfile.TemporaryDirectory() as directory:
+                fixture = MODULE.load_fixture(MODULE.FIXTURE)
+                if duplicate == "task":
+                    fixture["pair_tasks"].append(copy.deepcopy(fixture["pair_tasks"][0]))
+                else:
+                    fixture["pair_tasks"][0]["variants"][1]["label"] = "A"
+                path = Path(directory) / "fixture.json"
+                path.write_text(json.dumps(fixture), encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "duplicate"):
+                    MODULE.load_fixture(path)
+
+    def test_cli_does_not_write_outside_output_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            fixture = MODULE.load_fixture(MODULE.FIXTURE)
+            task = fixture["pair_tasks"][0]
+            task["id"] = str(root / "outside")
+            task["fixed"]["korean_font"] = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+            task["variants"][0]["latin_font"] = "/System/Library/Fonts/Supplemental/Arial.ttf"
+            task["variants"][1]["latin_font"] = "/System/Library/Fonts/Supplemental/Times New Roman.ttf"
+            # Use any installed platform fonts solely to exercise the original CLI
+            # on Windows/Linux too; rejection must happen before font loading.
+            if sys.platform != "darwin":
+                if sys.platform == "win32":
+                    fonts = (r"C:\Windows\Fonts\malgun.ttf", r"C:\Windows\Fonts\arial.ttf",
+                             r"C:\Windows\Fonts\times.ttf")
+                else:
+                    fonts = ("/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+                             "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                             "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf")
+                task["fixed"]["korean_font"] = fonts[0]
+                for variant, font in zip(task["variants"], fonts[1:]):
+                    variant["latin_font"] = font
+            fixture["pair_tasks"] = [task]
+            path = root / "fixture.json"
+            path.write_text(json.dumps(fixture), encoding="utf-8")
+            result = subprocess.run([sys.executable, str(SCRIPT), "--fixture", str(path),
+                                     "--output-dir", str(root / "output")],
+                                    capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("path component", result.stderr)
+            self.assertFalse((root / "outside").exists())
+
+    def test_existing_output_link_cannot_redirect_images(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output, outside = root / "output", root / "outside"
+            output.mkdir()
+            outside.mkdir()
+            sentinel = outside / "keep.txt"
+            sentinel.write_text("preserve", encoding="utf-8")
+            try:
+                (output / "blind").symlink_to(outside, target_is_directory=True)
+            except OSError as exc:
+                self.skipTest("directory symlinks unavailable: " + str(exc))
+            fixture = MODULE.load_fixture(MODULE.FIXTURE)
+            with self.assertRaisesRegex(ValueError, "outside output"):
+                MODULE.render_task(fixture["pair_tasks"][0], fixture, output)
+            self.assertEqual([p.name for p in outside.iterdir()], ["keep.txt"])
+            self.assertEqual(sentinel.read_text(encoding="utf-8"), "preserve")
+
     def test_installed_package_validates_default_fixture_without_repository(self):
         package = ROOT / "plugins/visual-design-review/skills/visual-design-review"
         with tempfile.TemporaryDirectory() as directory:

@@ -40,6 +40,12 @@ python visual-design-review/scripts/font_pairing_render.py --output-dir path/to/
 
 The bundled fixture uses Windows system-font paths. On another host, pass `--fixture path/to/local-fixture.json` with legally usable local font paths; `--validate-only` checks the input structure without loading fonts.
 
+Task IDs and variant labels are single, non-empty filename components, such as `FP-01` and `A`/`B`.
+Absolute paths, `.`/`..`, directory separators and drive prefixes are rejected before rendering;
+task IDs and labels must also be distinct ignoring case. Existing links below the selected
+output directory cannot redirect PNGs outside it. Do not change output paths concurrently
+with rendering: these checks do not provide protection against concurrent filesystem changes.
+
 `Pillow` reports `raqm=False` in this environment. The PNGs therefore demonstrate the specified basic run placement only; they are not HarfBuzz shaping or renderer-fallback evidence. See [`render-manifest.json`](https://github.com/makesomethingshit/visual-design-review/blob/7f7d4d55c63d9691f50d9de2d5d594f5af181800/docs/validation/font-pairing-2026-10-23/render-manifest.json) and [`blind-packet.json`](https://github.com/makesomethingshit/visual-design-review/blob/7f7d4d55c63d9691f50d9de2d5d594f5af181800/docs/validation/font-pairing-2026-10-23/blind-packet.json) for the local outputs and hashes.
 
 The blind packet exposes task IDs, A/B labels, image paths/hashes, and parameters; the fixed text is visible in each PNG and recorded in the source fixture, not duplicated as a JSON text field. Keep the font-bearing render manifest and source fixture separate when giving the packet to a rater.

@@ -25,6 +25,25 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _path_component(value: Any, label: str) -> str:
+    if (not isinstance(value, str) or not value.strip() or value in {".", ".."}
+            or any(character in value for character in "/\\:\0")):
+        raise ValueError(f"{label} must be a single non-empty path component")
+    return value
+
+
+def _task_names(task: dict[str, Any]) -> tuple[str, list[str]]:
+    task_id = _path_component(task.get("id"), "task id")
+    variants = task.get("variants", [])
+    if len(variants) != 2:
+        raise ValueError(f"{task_id}: exactly two variants are required")
+    labels = [_path_component(variant.get("label"), "variant label")
+              for variant in variants]
+    if len({label.casefold() for label in labels}) != len(labels):
+        raise ValueError(f"{task_id}: duplicate variant labels")
+    return task_id, labels
+
+
 def load_fixture(path: Path) -> dict[str, Any]:
     fixture = json.loads(path.read_text(encoding="utf-8"))
     if fixture.get("schema_version") != "1.0":
@@ -32,9 +51,12 @@ def load_fixture(path: Path) -> dict[str, Any]:
     tasks = fixture.get("pair_tasks")
     if not isinstance(tasks, list) or not tasks:
         raise ValueError("pair_tasks must be a non-empty list")
+    task_ids: set[str] = set()
     for task in tasks:
-        if len(task.get("variants", [])) != 2:
-            raise ValueError(f"{task.get('id')}: exactly two variants are required")
+        task_id, _ = _task_names(task)
+        if task_id.casefold() in task_ids:
+            raise ValueError(f"duplicate task id: {task_id}")
+        task_ids.add(task_id.casefold())
         if task.get("blind_ratings") != []:
             raise ValueError(f"{task.get('id')}: ratings must remain empty before human review")
         if not task.get("fixed", {}).get("korean_font"):
@@ -71,13 +93,21 @@ def font_record(path: Path, size: int) -> tuple[ImageFont.FreeTypeFont, dict[str
 
 
 def render_task(task: dict[str, Any], fixture: dict[str, Any], output: Path) -> list[dict[str, Any]]:
+    task_id, labels = _task_names(task)
+    image_paths = [output / "blind" / task_id / f"{label}.png" for label in labels]
+    output_root = output.resolve()
+    # Check both images before creating directories or loading fonts. Existing
+    # links below the explicitly selected output root must not redirect writes.
+    for path in image_paths:
+        if not path.resolve().is_relative_to(output_root):
+            raise ValueError("image destination is outside output directory")
     contract = fixture["render_contract"]
     width, height = contract["canvas"]
     fixed = task["fixed"]
     size = fixed["font_size_px"]
     padding_x, padding_y = fixed["padding_px"]
     results: list[dict[str, Any]] = []
-    for variant in task["variants"]:
+    for variant, image_path in zip(task["variants"], image_paths):
         korean_path = require_font(fixed["korean_font"])
         latin_path = require_font(variant["latin_font"])
         korean, korean_meta = font_record(korean_path, size)
@@ -98,7 +128,6 @@ def render_task(task: dict[str, Any], fixture: dict[str, Any], output: Path) -> 
                 draw.text((x, y), text, fill=contract["foreground"], font=font, anchor="ls")
                 x += draw.textlength(text, font=font)
             y += fixed["line_spacing_px"]
-        image_path = output / "blind" / task["id"] / f"{variant['label']}.png"
         image_path.parent.mkdir(parents=True, exist_ok=True)
         image.save(image_path, format="PNG", optimize=False)
         results.append({
