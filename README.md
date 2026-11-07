@@ -50,9 +50,17 @@ $visual-design-review 이 포스터를 빡세게 리뷰해줘.
 파일을 수정하거나 외부에 업로드하지 마.
 ```
 
-## GitHub 제품 개선: Product Correct (초안)
+## 새 디자인 과제의 시작 인터뷰
 
-디자인 Finding을 **증거가 있는 제품 개선 Issue → 실제 수정이 가능한 경우 Draft PR**로 잇는 선택적 작업 경로를 설계 중입니다. [Product Correct 계약](visual-design-review/references/product-correct.md)을 따르며, 일반 비평만 요청하면 GitHub에 아무것도 쓰지 않습니다.
+목적·매체·콘텐츠 등 중요한 조건이 불명확한 새 과제에서는 이미 제공된 정보를 활용해
+지금 필요한 질문부터 묻습니다. 충분한 브리프·작은 수정·기존 작품 비평에는 전체 인터뷰를
+강제하지 않습니다. 사용자가 전체 시안을 먼저 원하면 가정과 미결정을 표시하고 진행합니다.
+[인터뷰 행동 시나리오](visual-design-review/tests/intake-interview-cases.md)는 평가 입력이며,
+실제 플러그인 호출·후속 대화·독립 BASE/HEAD 비교의 완료 기록은 아닙니다.
+
+## GitHub 제품 개선: Product Correct
+
+디자인 Finding을 **증거가 있는 제품 개선 Issue → 실제 수정이 가능한 경우 Draft PR**로 잇는 선택적 작업 지침이 병합됐습니다. [Product Correct 계약](visual-design-review/references/product-correct.md)을 따르며, 일반 비평만 요청하면 GitHub에 아무것도 쓰지 않습니다. 실제 제품 저장소의 E2E 행동 검증은 별도로 남아 있습니다.
 
 ```text
 $visual-design-review 이 제품 저장소(owner/repo)의 반복된 시각디자인 결함을
@@ -74,11 +82,11 @@ $visual-design-review 이 제품 저장소(owner/repo)의 반복된 시각디자
 
 v1.0.1은 내용 계약·관찰 범위·심각도 판단을 보강했습니다. [F1–F3 후속 검증](visual-design-review/tests/evaluation/FOLLOWUP.md)에서 C/J/F/G를 각 2회 재실행하고 실제 Codex 라우팅 12회(명시·자연어 호출 및 CSS·UI·코드 리뷰 비활성)를 완료했습니다. 중간 실패와 정확한 심각도 반복 차이 등 남은 한계도 공개하며, 모든 품질 항목 합격이나 이전 버전 대비 일반적 우월성을 보증하지 않습니다.
 
-## 개발 중: 정량적 레퍼런스 역분석과 디자인 지식 구조 (#2)
+## 병합된 정량적 레퍼런스 역분석과 디자인 지식 구조 (#2)
 
 이 문서의 v1.0.1 기능 설명과 검증 범위는 기존 Review 기준입니다. 아키텍처 리팩터링
-초안에서는 모드별 references 선택, 이미지/편집 원본의 조형 관계에 대한 증거 기반 역분석,
-수식의 출처·적용 조건 관리 및 외부 디자인 플러그인 전달 계약을 추가로 제안합니다.
+구현에서는 모드별 references 선택, 이미지/편집 원본의 조형 관계에 대한 증거 기반 역분석,
+수식의 출처·적용 조건 관리 및 외부 디자인 플러그인 전달 계약을 추가했습니다.
 자동 이미지 분해·솔버·Adobe/Penpot/Figma 어댑터를 구현했다고 주장하지 않습니다.
 초기 본문 조판에는 사용자가 승인한 [A~H 프로젝트 조건부 시작값](visual-design-review/references/typography-presets.md)을 사용할 수 있지만,
 이는 모든 서체·매체에 성립하는 가독성 법칙이나 최종 디자인 최적값이 아닙니다.
