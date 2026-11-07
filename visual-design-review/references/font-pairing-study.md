@@ -41,7 +41,8 @@ python visual-design-review/scripts/font_pairing_render.py --output-dir path/to/
 The bundled fixture uses Windows system-font paths. On another host, pass `--fixture path/to/local-fixture.json` with legally usable local font paths; `--validate-only` checks the input structure without loading fonts.
 
 Task IDs and variant labels are single, non-empty filename components, such as `FP-01` and `A`/`B`.
-Absolute paths, `.`/`..`, directory separators and drive prefixes are rejected before rendering;
+Absolute paths, names ending in a dot or space, directory separators and drive prefixes
+are rejected before rendering to avoid Windows filename aliases;
 task IDs and labels must also be distinct ignoring case. Existing links below the selected
 output directory cannot redirect PNGs outside it. Do not change output paths concurrently
 with rendering: these checks do not provide protection against concurrent filesystem changes.

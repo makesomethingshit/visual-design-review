@@ -23,7 +23,9 @@ class FontPairingFixtureTest(unittest.TestCase):
     def test_fixture_rejects_output_path_components_and_duplicate_names(self):
         for field, invalid in (("id", "../outside"), ("id", "/outside"),
                                ("id", "C:\\outside"), ("id", ".."),
-                               ("label", "../../outside"), ("label", "C:\\outside")):
+                               ("label", "../../outside"), ("label", "C:\\outside"),
+                               ("id", "FP-01."), ("id", "FP-01 "),
+                               ("label", "A."), ("label", "A ")):
             with self.subTest(field=field, invalid=invalid), tempfile.TemporaryDirectory() as directory:
                 fixture = MODULE.load_fixture(MODULE.FIXTURE)
                 if field == "id":
@@ -78,6 +80,21 @@ class FontPairingFixtureTest(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("path component", result.stderr)
             self.assertFalse((root / "outside").exists())
+
+    def test_cli_rejects_windows_task_aliases_before_writing(self):
+        for suffix in (".", " "):
+            with self.subTest(suffix=suffix), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                fixture = MODULE.load_fixture(MODULE.FIXTURE)
+                fixture["pair_tasks"][1]["id"] = fixture["pair_tasks"][0]["id"] + suffix
+                path, output = root / "fixture.json", root / "output"
+                path.write_text(json.dumps(fixture), encoding="utf-8")
+                result = subprocess.run(
+                    [sys.executable, str(SCRIPT), "--fixture", str(path),
+                     "--output-dir", str(output)], capture_output=True, text=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("path component", result.stderr)
+                self.assertFalse(output.exists())
 
     def test_existing_output_link_cannot_redirect_images(self):
         with tempfile.TemporaryDirectory() as directory:

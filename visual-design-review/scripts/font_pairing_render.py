@@ -26,7 +26,7 @@ def sha256(path: Path) -> str:
 
 
 def _path_component(value: Any, label: str) -> str:
-    if (not isinstance(value, str) or not value.strip() or value in {".", ".."}
+    if (not isinstance(value, str) or not value.strip() or value.endswith((".", " "))
             or any(character in value for character in "/\\:\0")):
         raise ValueError(f"{label} must be a single non-empty path component")
     return value
