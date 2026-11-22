@@ -1,3 +1,13 @@
+# 시각디자인 기획 아키텍처
+
+현재 진입점과 과제 처리 순서는 [레벨 1 실행 흐름](visual-design-review/references/workflow/level-1.md)에 있다. 사람과 총괄·하위의 역할은 [아키텍처 다이어그램](docs/architecture.html)을 참고한다.
+
+개별 방법 카드의 실제 경로는 [방법론 인덱스](visual-design-review/references/methods/01.methods-index.md)에 있다. 다이어그램의 파일명은 예시이며 배포본에서는 분류 폴더 안의 카드를 지정한다.
+
+새 의뢰에는 새 실행 경로를 할당한다. 다이어그램의 같은 슬롯 기록 삭제는 사용자가 정리 대상을 확인한 경우에 적용한다.
+
+아래는 이전 리뷰 스킬의 설계 기록이다.
+
 # 수식·제약조건 기반 시각디자인 스킬 아키텍처
 
 상태: 설계 문서 승인·병합 완료 (2026-10-23, [PR #5](https://github.com/makesomethingshit/visual-design-review/pull/5)).

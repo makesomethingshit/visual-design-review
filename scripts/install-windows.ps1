@@ -43,7 +43,7 @@ function Assert-Layout([string]$Root) {
         -not ($metadata.Success -and $metadata.Groups[1].Value -cmatch '(?m)^  version: "[^"]+"$')) {
         throw "Invalid skill frontmatter: $skill"
     }
-    foreach ($required in @('references/review-protocol.md', 'references/critique-rubric.md')) {
+    foreach ($required in @('references/workflow/level-1.md', 'references/methods/01.methods-index.md')) {
         if (-not (Test-Path -LiteralPath (Join-Path $Root $required) -PathType Leaf)) { throw "Missing $required" }
     }
     $text = $lines -join [Environment]::NewLine

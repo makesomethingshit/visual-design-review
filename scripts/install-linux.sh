@@ -47,7 +47,7 @@ check_layout() {
   [[ ! -L "$root" ]] || { echo "Refusing symlink: $root" >&2; return 1; }
   links="$(find "$root" -type l -print -quit)" || return 1
   [[ -z "$links" ]] || { echo "Refusing symlinks inside $root" >&2; return 1; }
-  [[ -f "$root/references/review-protocol.md" && -f "$root/references/critique-rubric.md" ]] || return 1
+  [[ -f "$root/references/workflow/level-1.md" && -f "$root/references/methods/01.methods-index.md" ]] || return 1
   while IFS= read -r path; do
     [[ -f "$root/$path" ]] || { echo "Broken reference: $path" >&2; return 1; }
   done < <(printf '%s\n' "$skill_text" | grep -oE '\]\(references/[^)#]+\.md\)' | sed -E 's/^\]\((.*)\)$/\1/' || true)

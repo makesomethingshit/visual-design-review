@@ -29,7 +29,7 @@ class PolicyActivationTests(unittest.TestCase):
         contract.check_policy_activation()
 
     def test_either_activation_route_missing_rejected(self):
-        for filename in ("SKILL.md", "knowledge-routing.md", "design-handoff.md",
+        for filename in ("legacy-review-entrypoint.md", "knowledge-routing.md", "design-handoff.md",
                          "typography-presets.md"):
             for route in ("명시적 opt-in", "독립적으로 확인된 현재 프로젝트의 활성 프로파일"):
                 with self.subTest(filename=filename, route=route):

@@ -19,7 +19,7 @@ codex plugin marketplace add makesomethingshit/visual-design-review
 codex plugin marketplace list
 ~~~
 
-이 명령은 **마켓플레이스 소스 등록**이다. 지원되는 ChatGPT 데스크톱/Codex의 Plugins 화면에서 Makesomethingshit Design → Visual Design Review를 설치·활성화한다. 소스 등록만으로 설치·자동 스킬 선택까지 성공했다고 주장할 수 없다.
+이 명령은 **마켓플레이스 소스 등록**이다. 지원되는 ChatGPT 데스크톱/Codex의 Plugins 화면에서 Makesomethingshit Design → Visual Design Planning를 설치·활성화한다. 소스 등록만으로 설치·자동 스킬 선택까지 성공했다고 주장할 수 없다.
 
 새 Codex 세션에서 시각디자인 포스터 리뷰를 자연어로 요청하여 실제 스킬 선택 및 필요한 reference의 열람을 확인한다. CSS 코드 리뷰·일반 소프트웨어 결함 분석처럼 대상 밖인 요청에서는 스킬이 잘못 선택되지 않아야 한다. 사용한 파일명만 대답에 등장하는 것을 실제 열람 증거로 해석하지 않는다.
 
@@ -46,6 +46,6 @@ Windows 정션 검사는 Python 3.11·3.14에서 실행한다. 검사 시점에 
 - 정적: JSON manifest/marketplace, 이름·상대경로, 스킬 설명의 frontmatter, reference 링크 해소, 패키지 바이트 동일성 및 drift 실패 반례.
 - macOS 로컬 marketplace source에서 등록·설치·활성화 상태 조회·제거를 격리 `CODEX_HOME`으로 검증했다. 자세한 명령과 결과는 `docs/validation/plugin-distribution-2026-10-26.md`에 기록한다.
 - 미검증: 원격 GitHub marketplace source, 플러그인 UI 노출, 자연어 자동 선택, 기존 전역 스킬과의 공존, 캐시 갱신.
-- 필요한 스킬만 선택하고 references를 조건부로 읽는 현재 지침은 **그대로 보존**한다. 실제 선택 품질의 시험은 Issue #7의 범위이다.
+- 레벨 1 자동 선택과 실제 모델 실행의 검증은 패키지 파일 검사와 별도로 수행한다.
 
 참고: [공식 플러그인 문서](https://developers.openai.com/plugins/build/plugins), [공식 Skills activation](https://developers.openai.com/plugins/concepts/skills).

@@ -6,7 +6,7 @@ package="$root/visual-design-review"
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 for ref in knowledge-routing review-protocol critique-rubric review-output reference-analysis formula-relations typography-relations typography-presets design-handoff; do
   [[ -f "$package/references/$ref.md" ]] || fail "missing reference $ref"
-  grep -Fq "references/$ref.md" "$package/SKILL.md" || fail "unreachable reference $ref"
+  grep -Fq "../references/$ref.md" "$package/tests/legacy-review-entrypoint.md" || fail "unreachable reference $ref"
 done
 for name in T-METRICS T-SPACING T-MEASURE T-LEADING T-CAPACITY T-HIERARCHY; do
   grep -Fq "$name" "$package/references/typography-relations.md" || fail "missing typography model $name"
@@ -26,7 +26,7 @@ grep -Fq 'PR #5' "$root/docs/skill-architecture-extension.md" || fail 'source at
 grep -Fq 'reference-analysis' "$root/docs/skill-architecture-extension.md" || fail 'reference reverse engineering omitted'
 # Product-correct is an explicit-write opt-in; static reachability only, not GitHub agent E2E.
 [[ -f "$package/references/product-correct.md" ]] || fail 'product-correct reference missing'
-grep -Fq 'references/product-correct.md' "$package/SKILL.md" || fail 'product-correct not routed from SKILL'
+grep -Fq '../references/product-correct.md' "$package/tests/legacy-review-entrypoint.md" || fail 'product-correct not routed from SKILL'
 grep -Fq 'product-correct' "$package/references/knowledge-routing.md" || fail 'product-correct route missing'
 [[ -f "$package/tests/product-correct-cases.md" ]] || fail 'product-correct manual cases missing'
 grep -Fq '| PC-01 |' "$package/tests/product-correct-cases.md" || fail 'product-correct no-write negative case missing'

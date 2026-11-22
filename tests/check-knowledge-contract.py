@@ -59,8 +59,9 @@ def check_links() -> None:
         ROOT / "README.md",
         ROOT / "docs/skill-architecture-extension.md",
         PKG / "SKILL.md",
-        *sorted((PKG / "references").glob("*.md")),
+        *sorted((PKG / "references").rglob("*.md")),
         PKG / "tests/architecture-scenarios.md",
+        PKG / "tests/legacy-review-entrypoint.md",
     ]
     pattern = re.compile(r"\[[^\]]+\]\(([^)\s]+)(?:\s+[^)]+)?\)")
     for doc in docs:
@@ -78,7 +79,7 @@ def check_links() -> None:
 
 
 def check_review_invocation() -> None:
-    skill = read(PKG / "SKILL.md")
+    skill = read(PKG / "tests/legacy-review-entrypoint.md")
     header = skill.split("---", 2)[1]
     for trigger in ("print preflight", "typography critique",
                     "composition analysis", "포스터 피드백", "편집디자인 검토"):
@@ -179,7 +180,7 @@ def check_policy_activation() -> None:
     # Static consistency only: actual agent reads and activation behavior need #7.
     gate = ("현재 작업의 **명시적 opt-in** 또는 "
             "**독립적으로 확인된 현재 프로젝트의 활성 프로파일**")
-    for relative in ("SKILL.md", "references/knowledge-routing.md",
+    for relative in ("tests/legacy-review-entrypoint.md", "references/knowledge-routing.md",
                      "references/design-handoff.md", "references/typography-presets.md"):
         text = read(PKG / relative)
         check(gate in text, f"Missing alternative activation routes: {relative}")
@@ -229,7 +230,7 @@ def check_rule_contract() -> None:
                      "document_status", "scope", "conditions", "exceptions",
                      "verification_method", "PROJECT_POLICY", "UNVERIFIED"):
         check(required in contract, f"Missing rule contract field {required}")
-    for path in ("SKILL.md", "references/knowledge-routing.md",
+    for path in ("tests/legacy-review-entrypoint.md", "references/knowledge-routing.md",
                  "references/design-handoff.md", "references/typography-relations.md"):
         check("rule-contract.md" in read(PKG / path),
               f"Rule contract not linked from {path}")
@@ -241,9 +242,29 @@ def check_rule_contract() -> None:
     check("PROJECT_POLICY" in presets and "opt-in" in presets,
           "User-approved project policy must be scoped and opt-in")
 
+def check_planning_library() -> None:
+    methods = PKG / "references/methods"
+    index = methods / "01.methods-index.md"
+    linked = re.findall(r"\]\((\d{2}-[^)/]+/[^)/]+\.md)\)", read(index))
+    cards = {path.relative_to(methods).as_posix() for path in methods.glob("*/*.md")}
+    check(len(linked) == len(set(linked)) and set(linked) == cards,
+          "Planning index must link to each method card exactly once")
+    diagram = read(ROOT / "docs/architecture.html")
+    sections = re.findall(
+        r"<h3>([^<>]+) · (\d+)개</h3>\s*</div>\s*<ul>(.*?)</ul>", diagram, flags=re.S
+    )
+    check(len(sections) == 6, "Expected the six Level 1 method categories")
+    for number, (category, count, list_items) in enumerate(sections, 1):
+        expected = {name.strip() for name in re.sub(r"</?li>", "", list_items).split(",") if name.strip()}
+        files = sorted(methods.glob(f"{number:02d}-*/*.md"))
+        names = [read(path).splitlines()[0].removeprefix("# ").strip() for path in files]
+        check(len(names) == int(count) and set(names) == expected,
+              f"Planning methods differ from the diagram in {category}")
+
 if __name__ == "__main__":
     check_preset_mapping()
     check_links()
+    check_planning_library()
     check_review_invocation()
     check_reference_math()
     check_print_routing()
