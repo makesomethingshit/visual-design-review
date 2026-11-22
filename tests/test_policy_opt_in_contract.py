@@ -16,7 +16,7 @@ class PolicyActivationTests(unittest.TestCase):
 
         def mutated(path):
             text = original(path)
-            if path.name == filename:
+            if path.relative_to(contract.ROOT).as_posix() == filename:
                 self.assertIn(old, text)
                 return text.replace(old, new)
             return text
@@ -29,8 +29,9 @@ class PolicyActivationTests(unittest.TestCase):
         contract.check_policy_activation()
 
     def test_either_activation_route_missing_rejected(self):
-        for filename in ("legacy-review-entrypoint.md", "knowledge-routing.md", "design-handoff.md",
-                         "typography-presets.md"):
+        for filename in ("visual-design-review/SKILL.md", "visual-design-review/references/knowledge-routing.md",
+                         "visual-design-review/references/design-handoff.md",
+                         "visual-design-review/references/typography-presets.md"):
             for route in ("명시적 opt-in", "독립적으로 확인된 현재 프로젝트의 활성 프로파일"):
                 with self.subTest(filename=filename, route=route):
                     self.assert_mutation_rejected(filename, route, "조건 확인",
@@ -38,14 +39,14 @@ class PolicyActivationTests(unittest.TestCase):
 
     def test_handoff_still_requiring_repeated_opt_in_rejected(self):
         self.assert_mutation_rejected(
-            "design-handoff.md", "주언어 확인만으로 프로파일 선택을 대신하지 않는다.",
+            "visual-design-review/references/design-handoff.md", "주언어 확인만으로 프로파일 선택을 대신하지 않는다.",
             "주언어 확인만으로 프로파일 선택을 대신하지 않는다. "
             "opt-in이 없으면 정책값을 자동 채택하지 않는다.", "Repeated opt-in")
 
     def test_independent_profile_evidence_guard_missing_rejected(self):
         for field in ("현재 프로젝트의 사용자 승인·A~H 선택·유효한 적용 범위", "자료 위치와 적용 범위"):
             with self.subTest(field=field):
-                self.assert_mutation_rejected("typography-presets.md", field,
+                self.assert_mutation_rejected("visual-design-review/references/typography-presets.md", field,
                                               "프로파일 이름", "independent activation evidence guard")
 
     def test_handoff_without_activation_evidence_rejected(self):
@@ -57,11 +58,11 @@ class PolicyActivationTests(unittest.TestCase):
             ('evidence: "current_project_brief#typography"', "Active-profile handoff"),
         ):
             with self.subTest(field=field):
-                self.assert_mutation_rejected("design-handoff.md", field, "", reason)
+                self.assert_mutation_rejected("visual-design-review/references/design-handoff.md", field, "", reason)
 
     def test_positive_scenario_without_opt_in_rejected(self):
         self.assert_mutation_rejected(
-            "architecture-scenarios.md", "A~H 프로젝트 프로파일을 명시적으로 적용",
+            "visual-design-review/tests/architecture-scenarios.md", "A~H 프로젝트 프로파일을 명시적으로 적용",
             "기본값 추천", "Positive preset scenario")
 
     def test_active_profile_scenario_requires_evidence_and_no_repeat(self):
@@ -70,14 +71,14 @@ class PolicyActivationTests(unittest.TestCase):
                       "opt-in 반복 없음", "opt-in을 다시 요구", "17pt 초기 시안 미제시",
                       "활성화 근거 누락"):
             with self.subTest(field=field):
-                self.assert_mutation_rejected("architecture-scenarios.md", field,
+                self.assert_mutation_rejected("visual-design-review/tests/architecture-scenarios.md", field,
                                               "", "verified active-profile scenario")
 
     def test_no_activation_scenario_cannot_inherit_presets(self):
         for field in ("| R-35 |", "현재 작업의 opt-in 없음", "확인된 활성 프로파일 없음",
                       "저장소에 승인 기록만", "후보/미결정 유지", "A~H 자동 채택"):
             with self.subTest(field=field):
-                self.assert_mutation_rejected("architecture-scenarios.md", field,
+                self.assert_mutation_rejected("visual-design-review/tests/architecture-scenarios.md", field,
                                               "", "no-activation scenario")
 
 

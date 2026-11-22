@@ -14,7 +14,7 @@ ROW = "| RA-1 | 1200 | 120,420,720 | 0.10,0.35,0.60 | 300,300 | 300 | 120 | 300 
 
 class ReferenceMathTests(unittest.TestCase):
     def check_mutation(self, replacement):
-        doc = contract.read(contract.PKG / "references/reference-analysis.md")
+        doc = contract.read(contract.REVIEW / "references/reference-analysis.md")
         self.assertIn(ROW, doc)
         with patch.object(contract, "read", return_value=doc.replace(ROW, replacement)):
             contract.check_reference_math()

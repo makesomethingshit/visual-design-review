@@ -115,7 +115,7 @@ class FontPairingFixtureTest(unittest.TestCase):
             self.assertEqual(sentinel.read_text(encoding="utf-8"), "preserve")
 
     def test_installed_package_validates_default_fixture_without_repository(self):
-        package = ROOT / "plugins/visual-design-review/skills/visual-design-review"
+        package = ROOT / "plugins/visual-design/skills/visual-design-review"
         with tempfile.TemporaryDirectory() as directory:
             installed = Path(directory) / "installed-skill"
             shutil.copytree(package, installed)

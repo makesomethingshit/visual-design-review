@@ -4,13 +4,16 @@
 
 ## 무엇이 설치되는가
 
-- Marketplace: .agents/plugins/marketplace.json
-- Plugin manifest: plugins/visual-design-review/.codex-plugin/plugin.json
-- 설치용 스킬: plugins/visual-design-review/skills/visual-design-review/SKILL.md
-- 스킬에 필요한 references 및 (존재하는 경우) scripts/assets
-- **visual-design-review/**만 사람이 편집하는 단일 원본이다. plugins 내부의 스킬은 생성된 배포 사본으로 직접 편집하지 않는다.
-- visual-design-review/tests의 평가 로그와 테스트 자료는 배포에 포함하지 않는다.
-- 글꼴 비교 렌더러의 실행 입력은 assets/font-pairing-study-fixtures.json으로 포함한다. Windows 시스템 폰트 경로를 기록한 예제이므로 다른 환경에서는 --fixture로 로컬 폰트 경로가 담긴 입력을 지정한다. 폰트 파일은 배포하지 않는다.
+- Marketplace: `.agents/plugins/marketplace.json` (플러그인 `visual-design`)
+- Plugin manifest: `plugins/visual-design/.codex-plugin/plugin.json`
+- 설치되는 스킬 셋과 진입점
+  - `skills/visual-design-planning/SKILL.md` — 레벨 1 기획
+  - `skills/visual-design-drafting/SKILL.md` — 레벨 2 시안(초안)
+  - `skills/visual-design-review/SKILL.md` — 레벨 3 리뷰·검증
+- 각 스킬의 references 및 (존재하는 경우) scripts/assets
+- 루트의 `visual-design-planning/`, `visual-design-drafting/`, `visual-design-review/`만 사람이 편집하는 원본이다. `plugins/visual-design/skills/` 아래는 생성된 배포 사본으로 직접 편집하지 않는다.
+- `visual-design-review/tests`의 평가 로그와 테스트 자료는 배포에 포함하지 않는다.
+- 글꼴 비교 렌더러의 실행 입력은 review 스킬의 `assets/font-pairing-study-fixtures.json`으로 포함한다. Windows 시스템 폰트 경로를 기록한 예제이므로 다른 환경에서는 `--fixture`로 로컬 폰트 경로가 담긴 입력을 지정한다. 폰트 파일은 배포하지 않는다.
 
 ## 소스 등록 및 설치 (지원되는 클라이언트)
 
@@ -19,9 +22,17 @@ codex plugin marketplace add makesomethingshit/visual-design-review
 codex plugin marketplace list
 ~~~
 
-이 명령은 **마켓플레이스 소스 등록**이다. 지원되는 ChatGPT 데스크톱/Codex의 Plugins 화면에서 Makesomethingshit Design → Visual Design Planning를 설치·활성화한다. 소스 등록만으로 설치·자동 스킬 선택까지 성공했다고 주장할 수 없다.
+이 명령은 **마켓플레이스 소스 등록**이다. 지원되는 ChatGPT 데스크톱/Codex의 Plugins 화면에서 Makesomethingshit Design → Visual Design을 설치·활성화한다. 소스 등록만으로 설치·자동 스킬 선택까지 성공했다고 주장할 수 없다.
 
-새 Codex 세션에서 시각디자인 포스터 리뷰를 자연어로 요청하여 실제 스킬 선택 및 필요한 reference의 열람을 확인한다. CSS 코드 리뷰·일반 소프트웨어 결함 분석처럼 대상 밖인 요청에서는 스킬이 잘못 선택되지 않아야 한다. 사용한 파일명만 대답에 등장하는 것을 실제 열람 증거로 해석하지 않는다.
+플러그인 하나에 스킬 셋이 들어 있으므로 설치 뒤 세 스킬이 모두 활성화된다. 새 Codex 세션에서 레벨별 요청을 자연어로 넣어 실제 스킬 선택과 필요한 reference 열람을 확인한다.
+
+| 요청 예 | 기대 |
+| --- | --- |
+| 첨부한 관람객 기록으로 전시 안내물의 정보 구조 근거를 정리해줘. | 레벨 1 planning 선택 |
+| 레벨 1 인계로 A/B 시안 두 개를 만들어줘. | 레벨 2 drafting 선택 |
+| 이 포스터의 구성과 타이포그래피를 리뷰해줘. | 레벨 3 review 선택 |
+
+CSS 코드 리뷰·일반 소프트웨어 결함 분석처럼 대상 밖인 요청에서는 어느 스킬도 잘못 선택되지 않아야 한다. 사용한 파일명만 대답에 등장하는 것을 실제 열람 증거로 해석하지 않는다.
 
 플러그인에는 별도 MCP 서버·로그인·GitHub 쓰기 권한이 포함되지 않는다. 외부 GitHub 작업은 Codex에 이미 연결된 도구와 사용자의 명시적 요청이 있어야 한다.
 
@@ -37,15 +48,15 @@ Windows에서 python3가 없다면 py -3으로 대체한다.
 
 Windows 정션 검사는 Python 3.11·3.14에서 실행한다. 검사 시점에 존재하는 reparse point를 읽기·쓰기 전에 거부한다. 검사와 삭제·복사는 원자적이지 않으므로 그 사이 다른 프로세스가 경로를 링크로 바꾸는 동시 변경은 보호 범위 밖이다. 갱신 중에는 다른 프로세스로 원본·패키지 경로를 변경하거나 동기화 도구를 동시에 실행하지 않는다. 동시 변경까지 보호해야 한다면 디렉터리 핸들 기반 접근 또는 경로 교체를 포함한 원자적 갱신 설계를 별도로 검토해야 한다.
 
---write는 패키지의 스킬 하위 디렉터리를 원본 SKILL.md/references/scripts/assets와 정확히 같게 재구성한다. manifest와 marketplace는 보존한다. --check는 SHA에 상응하는 바이트 동일성, 누락/여분 파일, 플러그인 경로, 필요한 reference가 존재하는지 검사한다. **CI는 --write를 실행하지 않아야** 원본만 변경하고 사본을 갱신하지 않은 작업을 차단할 수 있다.
+--write는 `plugins/visual-design/skills/<스킬>/`을 각 원본의 SKILL.md·references·scripts·assets와 정확히 같게 재구성한다. manifest와 marketplace는 보존한다. --check는 스킬 셋의 누락·여분 디렉터리, SHA에 상응하는 바이트 동일성, 누락/여분 파일, 플러그인 경로, 각 스킬의 frontmatter 이름, 필요한 reference 존재를 검사한다. **CI는 --write를 실행하지 않아야** 원본만 변경하고 사본을 갱신하지 않은 작업을 차단할 수 있다.
 
-기존의 전역 스킬 설치 스크립트와 docs/INSTALL.md는 계속 유효하다. 두 설치 방식을 동시에 활성화할 때 충돌이 있는지는 별도 실사용 검증이 필요하다. 이중 스킬 등록이 관측되면 중복 경로를 비활성화하고 되돌리는 절차를 먼저 검증한다.
+기존의 전역 스킬 설치 스크립트와 docs/INSTALL.md는 계속 유효하며, 세 스킬을 각각 설치한다. 플러그인 설치와 전역 설치를 동시에 활성화할 때 충돌이 있는지는 별도 실사용 검증이 필요하다. 이중 스킬 등록이 관측되면 중복 경로를 비활성화하고 되돌리는 절차를 먼저 검증한다.
 
 ## 검증 범위
 
-- 정적: JSON manifest/marketplace, 이름·상대경로, 스킬 설명의 frontmatter, reference 링크 해소, 패키지 바이트 동일성 및 drift 실패 반례.
-- macOS 로컬 marketplace source에서 등록·설치·활성화 상태 조회·제거를 격리 `CODEX_HOME`으로 검증했다. 자세한 명령과 결과는 `docs/validation/plugin-distribution-2026-10-26.md`에 기록한다.
-- 미검증: 원격 GitHub marketplace source, 플러그인 UI 노출, 자연어 자동 선택, 기존 전역 스킬과의 공존, 캐시 갱신.
-- 레벨 1 자동 선택과 실제 모델 실행의 검증은 패키지 파일 검사와 별도로 수행한다.
+- 정적: JSON manifest/marketplace, 이름·상대경로, 세 스킬의 frontmatter, reference 링크 해소, 패키지 바이트 동일성 및 drift 실패 반례.
+- 2026-10-26에는 이전 식별자(`visual-design-review`, 단일 스킬)의 macOS 로컬 marketplace source에서 등록·설치·활성화 상태 조회·제거를 격리 `CODEX_HOME`으로 검증했다. 기록은 `docs/validation/plugin-distribution-2026-10-26.md`에 있다.
+- **미검증:** 현재 식별자(`visual-design`, 스킬 셋)로의 marketplace 등록·설치, 원격 GitHub marketplace source, 플러그인 UI 노출, 자연어 자동 선택, 스킬 셋 간 라우팅, 기존 전역 스킬과의 공존, 캐시 갱신.
+- 레벨별 자동 선택과 실제 모델 실행의 검증은 패키지 파일 검사와 별도로 수행한다.
 
 참고: [공식 플러그인 문서](https://developers.openai.com/plugins/build/plugins), [공식 Skills activation](https://developers.openai.com/plugins/concepts/skills).

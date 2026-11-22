@@ -8,7 +8,9 @@ from pathlib import Path
 from statistics import median
 
 ROOT = Path(__file__).resolve().parents[1]
-PKG = ROOT / "visual-design-review"
+PLANNING = ROOT / "visual-design-planning"
+DRAFTING = ROOT / "visual-design-drafting"
+REVIEW = ROOT / "visual-design-review"
 
 
 def read(path: Path) -> str:
@@ -21,7 +23,7 @@ def check(condition: bool, reason: str) -> None:
 
 
 def check_preset_mapping() -> None:
-    text = read(PKG / "references/typography-presets.md")
+    text = read(REVIEW / "references/typography-presets.md")
     rows: dict[str, list[str]] = {}
     for line in text.splitlines():
         if line.startswith("| "):
@@ -57,11 +59,17 @@ def check_links() -> None:
     # Verify relative links as GitHub resolves them, relative to each Markdown file.
     docs = [
         ROOT / "README.md",
+        ROOT / "ARCHITECTURE.md",
         ROOT / "docs/skill-architecture-extension.md",
-        PKG / "SKILL.md",
-        *sorted((PKG / "references").rglob("*.md")),
-        PKG / "tests/architecture-scenarios.md",
-        PKG / "tests/legacy-review-entrypoint.md",
+        ROOT / "docs/CODEX-PLUGIN.md",
+        ROOT / "docs/INSTALL.md",
+        PLANNING / "SKILL.md",
+        *sorted((PLANNING / "references").rglob("*.md")),
+        DRAFTING / "SKILL.md",
+        *sorted((DRAFTING / "references").rglob("*.md")),
+        REVIEW / "SKILL.md",
+        *sorted((REVIEW / "references").rglob("*.md")),
+        REVIEW / "tests/architecture-scenarios.md",
     ]
     pattern = re.compile(r"\[[^\]]+\]\(([^)\s]+)(?:\s+[^)]+)?\)")
     for doc in docs:
@@ -79,7 +87,7 @@ def check_links() -> None:
 
 
 def check_review_invocation() -> None:
-    skill = read(PKG / "tests/legacy-review-entrypoint.md")
+    skill = read(REVIEW / "SKILL.md")
     header = skill.split("---", 2)[1]
     for trigger in ("print preflight", "typography critique",
                     "composition analysis", "포스터 피드백", "편집디자인 검토"):
@@ -88,14 +96,14 @@ def check_review_invocation() -> None:
                       "review-output.md", "reference-analysis.md",
                       "typography-presets.md", "design-handoff.md"):
         check(reference in skill, f"Skill link not surfaced: {reference}")
-    review_output = read(PKG / "references/review-output.md")
+    review_output = read(REVIEW / "references/review-output.md")
     for contract in ("Quick Review", "Deep / Aggressive Review",
                      "Critical / Major / Minor / Exploratory", "Keep / Fix / Push"):
         check(contract in review_output, f"Missing legacy review contract {contract}")
 
 
 def check_reference_math() -> None:
-    doc = read(PKG / "references/reference-analysis.md")
+    doc = read(REVIEW / "references/reference-analysis.md")
     for must_have in ("Frame", "Object", "Relation", "Hypothesis",
                       "evidence_status", "UNVERIFIED", "e_x=", "median(",
                       "경쟁 모델", "임의 가중치", "재구성"):
@@ -132,19 +140,19 @@ def check_reference_math() -> None:
 
 
 def check_print_routing() -> None:
-    routing = read(PKG / "references/knowledge-routing.md")
+    routing = read(REVIEW / "references/knowledge-routing.md")
     for guard in ("매체가 디지털 전용으로 확정되고 인쇄 요청·제약이 없는 경우만",
                   "텍스트 없는 인쇄용 로고 PDF", "UNVERIFIED"):
         check(guard in routing, f"Missing print routing guard: {guard}")
     check("심볼만 있으면 인쇄 프리플라이트 생략" not in routing,
           "Symbol-only output must not bypass print checks")
-    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    scenarios = read(REVIEW / "tests/architecture-scenarios.md")
     for scenario in ("| R-4 |", "| R-23 |", "| R-24 |"):
         check(scenario in scenarios, f"Missing digital/print routing case {scenario}")
 
 
 def check_typography_widths() -> None:
-    doc = read(PKG / "references/typography-relations.md")
+    doc = read(REVIEW / "references/typography-relations.md")
     for formula in ("W_raw = Σ(a_raw_i + Δadvance_i) / S × F + T_remaining",
                     "W_shaped = Σa_shaped_i / S × F + T_remaining"):
         check(formula in doc, f"Missing width input contract: {formula}")
@@ -180,17 +188,17 @@ def check_policy_activation() -> None:
     # Static consistency only: actual agent reads and activation behavior need #7.
     gate = ("현재 작업의 **명시적 opt-in** 또는 "
             "**독립적으로 확인된 현재 프로젝트의 활성 프로파일**")
-    for relative in ("tests/legacy-review-entrypoint.md", "references/knowledge-routing.md",
+    for relative in ("SKILL.md", "references/knowledge-routing.md",
                      "references/design-handoff.md", "references/typography-presets.md"):
-        text = read(PKG / relative)
+        text = read(REVIEW / relative)
         check(gate in text, f"Missing alternative activation routes: {relative}")
         check("opt-in이 없으면 정책값을 자동 채택하지 않는다." not in text,
               f"Repeated opt-in requirement contradicts active profile: {relative}")
-    presets = read(PKG / "references/typography-presets.md")
+    presets = read(REVIEW / "references/typography-presets.md")
     for required in ("별도 프로젝트 설정/브리프", "현재 프로젝트의 사용자 승인·A~H 선택·유효한 적용 범위",
                      "자료 위치와 적용 범위", "opt-in을 반복 요구하지 않는다", "두 활성화 근거가 모두 없거나 불명확하면"):
         check(required in presets, f"Missing independent activation evidence guard: {required}")
-    handoff = read(PKG / "references/design-handoff.md")
+    handoff = read(REVIEW / "references/design-handoff.md")
     policies = re.findall(r"^policy: \{([^\n]+)\}$", handoff, flags=re.M)
     check(any("opt_in: true" in p and
               "activation_basis: explicit_user_request_for_current_project" in p
@@ -200,7 +208,7 @@ def check_policy_activation() -> None:
                   "profile: A-H", "project: current_project",
                   'evidence: "current_project_brief#typography"')) for p in policies),
           "Active-profile handoff must include project-scoped activation evidence")
-    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    scenarios = read(REVIEW / "tests/architecture-scenarios.md")
     rows = {cells[0]: cells for line in scenarios.splitlines()
             if line.startswith("| R-")
             for cells in [[cell.strip() for cell in line.strip("|").split("|")]]}
@@ -225,25 +233,45 @@ def check_policy_activation() -> None:
 
 
 def check_rule_contract() -> None:
-    contract = read(PKG / "references/rule-contract.md")
+    contract = read(REVIEW / "references/rule-contract.md")
     for required in ("knowledge_kind", "rule_strength", "source_version",
                      "document_status", "scope", "conditions", "exceptions",
                      "verification_method", "PROJECT_POLICY", "UNVERIFIED"):
         check(required in contract, f"Missing rule contract field {required}")
-    for path in ("tests/legacy-review-entrypoint.md", "references/knowledge-routing.md",
+    for path in ("SKILL.md", "references/knowledge-routing.md",
                  "references/design-handoff.md", "references/typography-relations.md"):
-        check("rule-contract.md" in read(PKG / path),
+        check("rule-contract.md" in read(REVIEW / path),
               f"Rule contract not linked from {path}")
-    scenarios = read(PKG / "tests/architecture-scenarios.md")
+    scenarios = read(REVIEW / "tests/architecture-scenarios.md")
     for code in range(29, 34):
         check(f"| R-{code} |" in scenarios,
               f"Missing knowledge-boundary scenario R-{code}")
-    presets = read(PKG / "references/typography-presets.md")
+    presets = read(REVIEW / "references/typography-presets.md")
     check("PROJECT_POLICY" in presets and "opt-in" in presets,
           "User-approved project policy must be scoped and opt-in")
 
+def check_level_chain() -> None:
+    # Static role boundary between the three skills; not a routing evaluation.
+    planning = read(PLANNING / "SKILL.md")
+    drafting = read(DRAFTING / "SKILL.md")
+    review = read(REVIEW / "SKILL.md")
+    check("[레벨 1 실행 흐름](references/workflow/level-1.md)" in planning,
+          "Planning skill must open the level 1 workflow")
+    check("[레벨 2 실행 흐름](references/workflow/level-2.md)" in drafting,
+          "Drafting skill must open the level 2 workflow")
+    check("visual-design-review" in planning and "visual-design-review" in drafting,
+          "Planning and drafting must name the review skill as their next or boundary step")
+    check("visual-design-planning" in review and "visual-design-planning" in drafting,
+          "Drafting and review must name the planning skill as their input or boundary step")
+    workflow = read(DRAFTING / "references/workflow/level-2.md")
+    for step in ("## 1. 인계 자산 로드", "## 2. 조형 번역", "## 3. 복수 시안 생성",
+                 "## 4. 선택·확정 및 인계", "review-v1.md", "design-handoff",
+                 "reference-analysis", "근거 ID"):
+        check(step in workflow, f"Level 2 workflow missing {step}")
+
+
 def check_planning_library() -> None:
-    methods = PKG / "references/methods"
+    methods = PLANNING / "references/methods"
     index = methods / "01.methods-index.md"
     linked = re.findall(r"\]\((\d{2}-[^)/]+/[^)/]+\.md)\)", read(index))
     cards = {path.relative_to(methods).as_posix() for path in methods.glob("*/*.md")}
@@ -264,6 +292,7 @@ def check_planning_library() -> None:
 if __name__ == "__main__":
     check_preset_mapping()
     check_links()
+    check_level_chain()
     check_planning_library()
     check_review_invocation()
     check_reference_math()
@@ -271,5 +300,5 @@ if __name__ == "__main__":
     check_typography_widths()
     check_rule_contract()
     check_policy_activation()
-    print("PASS: policy mappings, local docs links, legacy triggers, reference-math examples, "
-          "print routing guards, documented typography widths")
+    print("PASS: policy mappings, local docs links, level 1-2-3 boundaries, legacy triggers, "
+          "reference-math examples, print routing guards, documented typography widths")

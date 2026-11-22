@@ -26,10 +26,16 @@ PATH="$native_bin" /bin/bash "$root/tests/smoke-install-linux.sh"
 export CODEX_HOME="$sandbox/한글 경로 with spaces/codex-home"
 installer="$root/scripts/install-linux.sh"
 target="$CODEX_HOME/skills/visual-design-review"
+for name in visual-design-planning visual-design-drafting visual-design-review; do
+  [[ -f "$root/$name/SKILL.md" ]] || fail "missing source skill: $name"
+done
 PATH="$native_bin" /bin/bash "$installer" install --dry-run >/dev/null
 [[ ! -e "$CODEX_HOME" ]] || fail 'dry-run created custom home'
 PATH="$native_bin" /bin/bash "$installer" install >/dev/null
 PATH="$native_bin" /bin/bash "$installer" check >/dev/null
+for name in visual-design-planning visual-design-drafting visual-design-review; do
+  [[ -f "$CODEX_HOME/skills/$name/SKILL.md" ]] || fail "install missing: $name"
+done
 printf '\nrollback-local-edit\n' >> "$target/SKILL.md"
 cp "$target/SKILL.md" "$sandbox/expected-skill.md"
 

@@ -7,8 +7,11 @@ trap 'rm -rf -- "$sandbox"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 mkdir -p "$sandbox/repo/scripts"
 cp "$root/scripts/install-linux.sh" "$sandbox/repo/scripts/"
+cp -a "$root/visual-design-planning" "$sandbox/repo/"
+cp -a "$root/visual-design-drafting" "$sandbox/repo/"
 cp -a "$root/visual-design-review" "$sandbox/repo/"
 installer="$sandbox/repo/scripts/install-linux.sh"
+SKILLS=(visual-design-planning visual-design-drafting visual-design-review)
 source_copy="$sandbox/repo/visual-design-review"
 ln -s "$source_copy" "$sandbox/source-alias"
 nested_home="$sandbox/source-alias/new-home/deeper"
@@ -47,7 +50,9 @@ export CODEX_HOME="$sandbox/safe-alias/new-home/deeper"
 /bin/bash "$installer" install >/dev/null
 /bin/bash "$installer" check >/dev/null
 /bin/bash "$installer" remove >/dev/null
-[[ ! -e "$CODEX_HOME/skills/visual-design-review" ]] || fail 'safe remove left active skill'
+for name in "${SKILLS[@]}"; do
+  [[ ! -e "$CODEX_HOME/skills/$name" ]] || fail 'safe remove left active skill'
+done
 
 # Long valid SKILL.md must not trip pipefail when a reader stops after frontmatter.
 printf '\n' >> "$source_copy/SKILL.md"

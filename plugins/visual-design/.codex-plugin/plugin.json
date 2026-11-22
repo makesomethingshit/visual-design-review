@@ -1,0 +1,14 @@
+{
+  "name": "visual-design",
+  "version": "0.2.0",
+  "description": "Visual design planning from brief to designer decision, and evidence-grounded visual design review, reference deconstruction and formula-based handoff.",
+  "repository": "https://github.com/makesomethingshit/visual-design-review",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Visual Design",
+    "shortDescription": "기존 자료에 근거한 시각디자인 기획과 리뷰",
+    "developerName": "makesomethingshit",
+    "category": "Creativity"
+  }
+}

@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "visual-design-review",
+      "name": "visual-design",
       "source": {
         "source": "local",
-        "path": "./plugins/visual-design-review"
+        "path": "./plugins/visual-design"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -19,7 +19,7 @@
       },
       "category": "Creativity",
       "interface": {
-        "displayName": "Visual Design Planning"
+        "displayName": "Visual Design"
       }
     }
   ]

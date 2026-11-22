@@ -5,6 +5,7 @@ $installer = Join-Path $repo 'scripts/install-windows.ps1'
 $previous = $env:CODEX_HOME
 $work = Join-Path ([IO.Path]::GetTempPath()) ('vdr-smoke-' + [guid]::NewGuid().ToString('N'))
 $env:CODEX_HOME = Join-Path $work 'custom-home'
+$skillNames = @('visual-design-planning', 'visual-design-drafting', 'visual-design-review')
 $target = Join-Path $env:CODEX_HOME 'skills/visual-design-review'
 $backupsRoot = Join-Path $env:CODEX_HOME 'skill-backups/visual-design-review'
 function Assert-True([bool]$Condition, [string]$Message) {
@@ -21,14 +22,16 @@ try {
         Assert-True $rejected "accepted non-absolute path: $invalid"
     }
     $env:CODEX_HOME = $validHome
-    foreach ($file in @('scripts/install-linux.sh', 'tests/smoke-install-linux.sh', 'tests/smoke-install-macos.sh', 'visual-design-review/SKILL.md')) {
+    foreach ($file in @('scripts/install-linux.sh', 'tests/smoke-install-linux.sh', 'tests/smoke-install-macos.sh', 'visual-design-planning/SKILL.md', 'visual-design-drafting/SKILL.md', 'visual-design-review/SKILL.md')) {
         Assert-True (-not ([IO.File]::ReadAllText((Join-Path $repo $file))).Contains([string][char]13)) "CRLF in Linux input: $file"
     }
     & $installer -Action install -DryRun | Out-Null
     Assert-True (-not (Test-Path -LiteralPath $env:CODEX_HOME)) 'dry-run wrote to filesystem'
     & $installer -Action install | Out-Null
     & $installer -Action check | Out-Null
-    Assert-True (Test-Path -LiteralPath (Join-Path $target 'SKILL.md')) 'installation missing'
+    foreach ($name in $skillNames) {
+        Assert-True (Test-Path -LiteralPath (Join-Path $env:CODEX_HOME "skills/$name/SKILL.md")) "installation missing: $name"
+    }
     $output = (& $installer -Action install) -join ' '
     Assert-True ($output.Contains('Already up to date')) 'idempotence check failed'
     Add-Content -LiteralPath (Join-Path $target 'SKILL.md') -Value 'local-change' -Encoding UTF8
@@ -38,20 +41,24 @@ try {
     & $installer -Action check | Out-Null
     $backups = @(Get-ChildItem -LiteralPath $backupsRoot -Directory)
     Assert-True ($backups.Count -eq 1) 'update backup missing'
-    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq 1) 'duplicate skill after update'
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq $skillNames.Count) 'duplicate skill after update'
     Assert-True ((Get-Content -LiteralPath (Join-Path $backups[0].FullName 'SKILL.md') -Tail 1) -eq 'local-change') 'backup lost local edit'
     & $installer -Action remove -DryRun | Out-Null
     Assert-True (Test-Path -LiteralPath $target) 'remove dry-run changed files'
     & $installer -Action remove | Out-Null
-    Assert-True (-not (Test-Path -LiteralPath $target)) 'removed skill still active'
+    foreach ($name in $skillNames) {
+        Assert-True (-not (Test-Path -LiteralPath (Join-Path $env:CODEX_HOME "skills/$name"))) "removed skill still active: $name"
+    }
     $backups = @(Get-ChildItem -LiteralPath $backupsRoot -Directory)
     Assert-True ($backups.Count -eq 2) 'removal backup missing'
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq 0) 'backup discoverable after remove'
-    $restore = @($backups | Where-Object { (Get-Content -LiteralPath (Join-Path $_.FullName 'SKILL.md') -Tail 1) -ne 'local-change' })
-    Assert-True ($restore.Count -eq 1) 'removal backup ambiguous'
-    Move-Item -LiteralPath $restore[0].FullName -Destination $target
+    foreach ($name in $skillNames) {
+        $skillBackups = @(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME "skill-backups/$name") -Directory | Sort-Object Name)
+        Assert-True ($skillBackups.Count -ge 1) "removal backup missing: $name"
+        Move-Item -LiteralPath $skillBackups[-1].FullName -Destination (Join-Path $env:CODEX_HOME "skills/$name")
+    }
     & $installer -Action check | Out-Null
-    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq 1) 'restored skill not unique'
+    Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq $skillNames.Count) 'restored skills not unique'
     & $installer -Action remove | Out-Null
     $checkFailed = $false
     try { & $installer -Action check | Out-Null } catch { $checkFailed = $true }
@@ -104,10 +111,11 @@ try {
     $removeHome = Join-Path $work 'remove-home'
     $env:CODEX_HOME = $removeHome
     & $installer -Action install | Out-Null
-    $removeTarget = Join-Path $removeHome 'skills/visual-design-review'
     & (Join-Path $removeRepo 'scripts/install-windows.ps1') -Action remove | Out-Null
-    Assert-True (-not (Test-Path -LiteralPath $removeTarget)) 'remove failed without source'
-    Assert-True (Test-Path -LiteralPath (Join-Path $removeHome 'skill-backups/visual-design-review')) 'remove without source lost backup'
+    foreach ($name in $skillNames) {
+        Assert-True (-not (Test-Path -LiteralPath (Join-Path $removeHome "skills/$name"))) "remove failed without source: $name"
+        Assert-True (Test-Path -LiteralPath (Join-Path $removeHome "skill-backups/$name")) "remove without source lost backup: $name"
+    }
     $env:CODEX_HOME = $validHome
 
     # CODEX_HOME nested under the source tree must be rejected before creation.
@@ -167,7 +175,7 @@ try {
     $linkHome = Join-Path $work 'link-home'
     New-Item -ItemType Directory -Path $linkHome -Force | Out-Null
     $env:CODEX_HOME = $linkHome
-    foreach ($linked in @('skills', 'skill-backups', 'skill-backups/visual-design-review')) {
+    foreach ($linked in @('skills', 'skill-backups', 'skill-backups/visual-design-planning', 'skill-backups/visual-design-drafting', 'skill-backups/visual-design-review')) {
         $linkPath = Join-Path $linkHome $linked
         New-Item -ItemType Directory -Path (Split-Path -Parent $linkPath) -Force | Out-Null
         New-Item -ItemType Junction -Path $linkPath -Target $repo | Out-Null
@@ -179,7 +187,9 @@ try {
                 }
                 Assert-True $rejected "linked root accepted: $linked ($action)"
             }
-            Assert-True (Test-Path -LiteralPath (Join-Path $repo 'visual-design-review/SKILL.md')) 'linked remove moved source'
+            foreach ($name in $skillNames) {
+                Assert-True (Test-Path -LiteralPath (Join-Path $repo "$name/SKILL.md")) "linked remove moved source: $name"
+            }
         } finally {
             [IO.Directory]::Delete($linkPath)
         }

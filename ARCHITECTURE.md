@@ -1,12 +1,41 @@
-# 시각디자인 기획 아키텍처
+# 시각디자인 스킬 아키텍처
 
-현재 진입점과 과제 처리 순서는 [레벨 1 실행 흐름](visual-design-review/references/workflow/level-1.md)에 있다. 사람과 총괄·하위의 역할은 [아키텍처 다이어그램](docs/architecture.html)을 참고한다.
+이 저장소는 Codex 플러그인 `visual-design` 하나와, 그 안의 스킬 셋을 배포한다. 이름은 개편 단계의 임시 이름이며 후속 개편에서 바뀔 수 있다.
 
-개별 방법 카드의 실제 경로는 [방법론 인덱스](visual-design-review/references/methods/01.methods-index.md)에 있다. 다이어그램의 파일명은 예시이며 배포본에서는 분류 폴더 안의 카드를 지정한다.
+## 1. 현재 구성
+
+| 레벨 | 스킬 | 원본(사람이 편집) | 배포 사본 | 역할 |
+| --- | --- | --- | --- | --- |
+| 1 기획 | visual-design-planning | visual-design-planning/ | plugins/visual-design/skills/visual-design-planning/ | 의뢰 정리와 기존 자료 근거 만들기 |
+| 2 시안 | visual-design-drafting | visual-design-drafting/ | plugins/visual-design/skills/visual-design-drafting/ | 기획 근거를 조형 시안과 설계 스펙으로 전환 |
+| 3 리뷰 | visual-design-review | visual-design-review/ | plugins/visual-design/skills/visual-design-review/ | 완성 작품 비평, 레퍼런스 역분석, 제작 명세 검수 |
+
+- 플러그인 manifest는 `plugins/visual-design/.codex-plugin/plugin.json`, marketplace는 `.agents/plugins/marketplace.json`이다. `plugins/` 아래 스킬은 `scripts/sync-codex-plugin.py --write`가 만드는 생성물이며 직접 편집하지 않는다.
+- 전역 설치는 `scripts/install-linux.sh`, `scripts/install-windows.ps1`이 세 원본 폴더를 각각 `$CODEX_HOME/skills/<스킬 이름>`에 넣는다. 스킬마다 백업 경로가 따로 있다.
+- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 `review-v1.md`의 채택 방향·근거 ID·제약·미결 쟁점을 남기고, 시안은 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다.
+- 지식은 스킬별로 나눠 둔다. 레벨 1 방법 카드는 planning의 `references/methods/`, 레벨 2 워크플로는 drafting의 `references/workflow/`, 비평·수식·프린트 검사 지식은 review의 `references/`에 있다. 서로의 절차를 섞지 않는다.
+
+## 2. 레벨 1 기획 아키텍처
+
+진입점과 과제 처리 순서는 [레벨 1 실행 흐름](visual-design-planning/references/workflow/level-1.md)에 있다. 사람과 총괄·하위의 역할은 [아키텍처 다이어그램](docs/architecture.html)을 참고한다.
+
+개별 방법 카드의 실제 경로는 [방법론 인덱스](visual-design-planning/references/methods/01.methods-index.md)에 있다. 다이어그램의 파일명은 예시이며 배포본에서는 분류 폴더 안의 카드를 지정한다.
 
 새 의뢰에는 새 실행 경로를 할당한다. 다이어그램의 같은 슬롯 기록 삭제는 사용자가 정리 대상을 확인한 경우에 적용한다.
 
-아래는 이전 리뷰 스킬의 설계 기록이다.
+## 3. 레벨 2 시안 아키텍처 (초안)
+
+`visual-design-drafting`은 레벨 1 인계를 받아 조형을 확정하고 비교 가능한 시안을 만든다. 현재 상태는 워크플로와 인계 계약만 있는 **뼈대**이며, 조형 규칙·자동 산출 도구 연동은 실제 사례가 쌓이면 보강한다.
+
+- 실행 흐름: [레벨 2 워크플로](visual-design-drafting/references/workflow/level-2.md) — 인계 자산 로드 → 조형 번역 → 복수 시안 생성 → 선택·확정 및 인계.
+- 근거 연결: 시안마다 레벨 1 근거 ID와 벗어난 결정·미검증 값을 기록한다. 근거 없는 수치·팔레트·비율을 채우지 않는다.
+- 산출물: 사용할 수 있는 도구·형식(SVG, HTML, 연결된 디자인 도구 등)이 있을 때만 실제 파일을 만들고, 없으면 만들지 못한 이유와 필요한 도구를 밝힌다.
+- 인계: 확정 시안과 설계 스펙을 레벨 3(`visual-design-review`) 검수로 넘긴다. 스펙 형식은 review의 `references/design-handoff.md` 계약을 따른다.
+- 미구현: 시안 품질 평가, 자동 레이아웃 생성, 도구별 어댑터. 레벨 3의 비평·심각도 판정을 레벨 2에서 대신하지 않는다.
+
+## 4. 레벨 3 리뷰 설계 기록
+
+아래는 이전 리뷰 스킬의 설계 기록을 그대로 보존한 것이다. 경로는 모두 현재 `visual-design-review/` 스킬 기준이며, 위 레벨 1·2 절과 판정 절차를 공유하지 않는다.
 
 # 수식·제약조건 기반 시각디자인 스킬 아키텍처
 
