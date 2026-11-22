@@ -55,7 +55,9 @@ try {
     foreach ($name in $skillNames) {
         $skillBackups = @(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME "skill-backups/$name") -Directory | Sort-Object Name)
         Assert-True ($skillBackups.Count -ge 1) "removal backup missing: $name"
-        Move-Item -LiteralPath $skillBackups[-1].FullName -Destination (Join-Path $env:CODEX_HOME "skills/$name")
+        $restore = @($skillBackups | Where-Object { (Get-Content -LiteralPath (Join-Path $_.FullName 'SKILL.md') -Tail 1) -ne 'local-change' })
+        Assert-True ($restore.Count -ge 1) "removal backup ambiguous: $name"
+        Move-Item -LiteralPath $restore[-1].FullName -Destination (Join-Path $env:CODEX_HOME "skills/$name")
     }
     & $installer -Action check | Out-Null
     Assert-True (@(Get-ChildItem -LiteralPath (Join-Path $env:CODEX_HOME 'skills') -Recurse -Filter SKILL.md).Count -eq $skillNames.Count) 'restored skills not unique'
@@ -68,7 +70,9 @@ try {
     $badRepo = Join-Path $work 'bad-repo'
     New-Item -ItemType Directory -Path (Join-Path $badRepo 'scripts') -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $repo 'scripts/install-windows.ps1') -Destination (Join-Path $badRepo 'scripts/install-windows.ps1')
-    Copy-Item -LiteralPath (Join-Path $repo 'visual-design-review') -Destination $badRepo -Recurse
+    foreach ($name in $skillNames) {
+        Copy-Item -LiteralPath (Join-Path $repo $name) -Destination $badRepo -Recurse
+    }
     $badSkill = Join-Path $badRepo 'visual-design-review/SKILL.md'
     $badLines = @(Get-Content -LiteralPath $badSkill -Encoding UTF8)
     $badOut = New-Object System.Collections.Generic.List[string]
@@ -138,7 +142,9 @@ try {
     $junctionRepo = Join-Path $work 'junction-repo'
     New-Item -ItemType Directory -Path (Join-Path $junctionRepo 'scripts') -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $repo 'scripts/install-windows.ps1') -Destination (Join-Path $junctionRepo 'scripts/install-windows.ps1')
-    Copy-Item -LiteralPath (Join-Path $repo 'visual-design-review') -Destination $junctionRepo -Recurse
+    foreach ($name in $skillNames) {
+        Copy-Item -LiteralPath (Join-Path $repo $name) -Destination $junctionRepo -Recurse
+    }
     $junctionSource = Join-Path $junctionRepo 'visual-design-review'
     $junctionAlias = Join-Path $work 'source-alias'
     New-Item -ItemType Junction -Path $junctionAlias -Target $junctionSource | Out-Null
