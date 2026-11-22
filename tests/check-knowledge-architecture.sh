@@ -64,4 +64,9 @@ awk 'BEGIN {
 }' || fail 'numeric example arithmetic regression'
 python3 "$root/tests/check-knowledge-contract.py"
 python3 -m unittest discover -s "$root/tests" -p 'test_*.py'
+# Level 1 planning evaluation suite: fixtures, guide and contract tests.
+[[ -f "$planning/tests/eval-cases.md" ]] || fail 'level 1 eval cases guide missing'
+[[ -f "$planning/tests/evaluation/level1/cases.json" ]] || fail 'level 1 eval fixtures missing'
+grep -Fq '| E3-7 |' "$planning/tests/eval-cases.md" || fail 'level 1 eval handoff rubric missing'
+python3 -m unittest discover -s "$planning/tests" -p 'test_*.py'
 echo 'PASS: level 1-2-3 boundaries, architecture references, formula examples'

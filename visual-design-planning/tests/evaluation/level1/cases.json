@@ -1,0 +1,577 @@
+{
+  "suite": "level1-planning-eval",
+  "version": "1.0.0",
+  "skill": "visual-design-planning",
+  "skill_version_at_authoring": "1.0.0",
+  "status": "authored-not-executed",
+  "purpose": "레벨 1 기획 스킬의 계약(7단계 흐름, 상태 전이, 금지 범위, 인계 4필드)이 실제 세션에서 지켜지는지 대조할 입력과 기대값. 자동 테스트는 이 파일의 구조·정합만 검사하며 실행 품질을 판정하지 않는다.",
+  "scope": {
+    "level1_steps": 7,
+    "level1_forbidden_actions": [
+      "새 인터뷰",
+      "새 설문·모집·시행",
+      "시제품·실험",
+      "시각적 평가",
+      "제작·시안 생성"
+    ],
+    "level1_allowed_documents": [
+      "질문지 초안",
+      "조사 계획 문서",
+      "기존 자료 검토·분석"
+    ],
+    "required_claim_tags": [
+      "[측정/기록]",
+      "[추론]",
+      "[추측]"
+    ],
+    "handoff_fields": [
+      "채택 방향",
+      "근거 ID",
+      "제작 제약",
+      "남은 쟁점"
+    ],
+    "task_states": [
+      "대기",
+      "진행",
+      "완료",
+      "부분 완료",
+      "미수행",
+      "실패"
+    ],
+    "run_record_files": [
+      "runs/<run-id>/lead-state.md",
+      "runs/<run-id>/evidence-index.md",
+      "runs/<run-id>/review-v1.md"
+    ]
+  },
+  "cases": [
+    {
+      "id": "E1",
+      "title": "모호한 브랜드 리뉴얼·포스터 브리프",
+      "category": "ambiguous-brief",
+      "focus": "결과를 바꾸는 맥락 질문, 확정 항목 보존, 합의 전 분할 보류",
+      "turns": [
+        {
+          "id": "E1-T1",
+          "kind": "initial",
+          "text": "안녕하세요. 성수동에서 작은 빵집 '오후의 빵'을 하고 있습니다. 3년 됐고요, 요즘 손님이 조금 줄었습니다.\n이번에 가게를 좀 새로 단장하면서 로고랑 포스터도 새로 만들고 싶습니다.\n요즘 감성으로 예쁘고 따뜻하게 부탁드려요. 포스터는 가게 앞에 붙일 거고, 인스타에도 올릴 생각입니다.\n예산은 200만 원 정도 있고, 다음 달 말까지면 좋겠습니다. 잘 부탁드립니다.",
+          "expected_steps": [
+            1,
+            2
+          ],
+          "checks": [
+            "새 의뢰로 판정하고 실행 기록 경로를 잡았다",
+            "기대 출력·범위를 바꾸는 질문만 했다",
+            "이미 확정된 예산·기한·게시처를 다시 묻지 않고 기록했다",
+            "사람 확인 전 과제 분할·방법론 배정을 시작하지 않았다",
+            "레벨 1 금지 범위(새 인터뷰·설문·시제품·시각 평가·제작)를 제안하지 않았다"
+          ]
+        },
+        {
+          "id": "E1-T2",
+          "kind": "answer",
+          "text": "로고는 지금 것을 살릴지 새로 할지도 같이 봐주세요. 포스터는 A2로 두 장, 가게 앞이랑 근처 카페에 붙일 거고 인쇄는 맡길 겁니다. 손님은 20~30대가 많고, 요즘은 오후 시간대 손님이 줄었습니다. 무엇부터 정해야 하는지 알려주세요.",
+          "expected_steps": [
+            3,
+            4,
+            6,
+            7
+          ],
+          "checks": [
+            "합의된 기대 출력으로 과제를 나누고 과제 ID·완료 기준을 붙였다",
+            "방법 카드의 상대 경로와 근거 ID를 배정에 넣었다",
+            "자료가 없는 항목을 [추측]·미수행으로 남기고 수치를 만들지 않았다",
+            "검토용 결과를 review-v1.md에 두고 첫 1~2문장에 답과 한계를 썼다"
+          ]
+        }
+      ],
+      "tasks_after_agreement": [
+        {
+          "id": "E1-A1",
+          "question": "현 로고·사진·메뉴판 등 브랜드 자산이 어디에 어떤 형태로 쓰이고 있는가?",
+          "acceptable_method_ids": [
+            "01-desk-research/content-inventory-audit.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E1-A2",
+          "question": "성수동·서울 지역 베이커리의 최근 브랜딩과 포스터 사례에서 비교할 구조는 무엇인가?",
+          "acceptable_method_ids": [
+            "01-desk-research/analogous-model-search.md",
+            "01-desk-research/case-study.md",
+            "01-desk-research/competitor-complementor-map.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E1-A3",
+          "question": "오후 시간대 손님 감소에 대해 공개 자료로 확인할 수 있는 범위와 확인할 수 없는 범위는 무엇인가?",
+          "acceptable_method_ids": [
+            "02-research-design/context-research-plan.md",
+            "01-desk-research/industry-diagnosis.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E1-A4",
+          "question": "A2 포스터 두 장의 부착 환경(가게 앞·카페)과 인쇄 조건에서 확정된 제작 제약은 무엇인가?",
+          "acceptable_method_ids": [
+            "01-desk-research/key-facts.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E1-A5",
+          "question": "확인된 자산·사례·제약으로 만들 수 있는 로고 유지·교체 판단과 포스터 방향 후보는 무엇인가?",
+          "acceptable_method_ids": [
+            "06-reframing/summary-framework.md",
+            "06-reframing/design-challenge-framing.md",
+            "06-reframing/initial-opportunity-map.md"
+          ],
+          "depends_on": [
+            "E1-A1",
+            "E1-A2",
+            "E1-A3",
+            "E1-A4"
+          ]
+        }
+      ],
+      "expected": {
+        "context_question_topics": [
+          "기대 출력의 종류(로고만인지, 포스터인지, 브랜드 가이드까지인지)",
+          "판단할 질문(무엇이 문제라고 보는지, 손님 감소와 리뉴얼의 관계)",
+          "포스터 규격·수량·인쇄 방식(게시처는 이미 확정)",
+          "기존 로고·사진·메뉴판 등 사용 가능한 자산의 유무"
+        ],
+        "settled_items": [
+          "예산 200만 원",
+          "다음 달 말 완료",
+          "가게 앞 부착과 인스타 게시",
+          "성수동 3년 운영"
+        ],
+        "must_not_before_agreement": [
+          "과제 분할",
+          "방법 카드 배정",
+          "하위 리서치 배정"
+        ],
+        "deliverables": [
+          "runs/<run-id>/lead-state.md",
+          "runs/<run-id>/evidence-index.md",
+          "runs/<run-id>/review-v1.md"
+        ],
+        "handoff_fields": [],
+        "forbidden": [
+          "새 인터뷰",
+          "새 설문·모집·시행",
+          "시제품·실험",
+          "시각적 평가",
+          "제작·시안 생성"
+        ],
+        "claim_tags_required": true
+      },
+      "rubric": [
+        {
+          "id": "E1-1",
+          "check": "실행 기록 생성",
+          "pass": "새 의뢰로 판정하고 runs/<run-id>/lead-state.md와 evidence-index.md 경로를 잡아 기록했다",
+          "fail_example": "기록 없이 바로 조사 결과 요약을 씀"
+        },
+        {
+          "id": "E1-2",
+          "check": "맥락 질문",
+          "pass": "기대 출력의 종류·판단할 질문·포스터 규격·보유 자산 중 3개 이상을 결과가 달라지는 형태로 물었다",
+          "fail_example": "감성·색감·서체 취향 같은 결과를 바꾸지 않는 질문만 함"
+        },
+        {
+          "id": "E1-3",
+          "check": "확정 항목 보존",
+          "pass": "예산 200만 원·다음 달 말·게시처를 확정으로 기록하고 다시 묻지 않았다",
+          "fail_example": "예산과 기한을 다시 확인 질문으로 되물음"
+        },
+        {
+          "id": "E1-4",
+          "check": "합의 전 분할 보류",
+          "pass": "사람 확인 전에는 과제 분할·방법 카드 배정·하위 리서치를 시작하지 않았다",
+          "fail_example": "질문과 동시에 5개 과제와 방법론을 확정해 버림"
+        },
+        {
+          "id": "E1-5",
+          "check": "금지 범위",
+          "pass": "새 인터뷰·설문·현장조사, 시제품·실험, 시각 평가·제작을 제안하지 않았다",
+          "fail_example": "'손님 10명 인터뷰부터 하죠' 또는 '시안 두 개 뽑아 드릴게요'"
+        },
+        {
+          "id": "E1-6",
+          "check": "질문 형식",
+          "pass": "질문 수를 채우기 위한 무관한 질문 없이, 답이 다음 판단을 가르는 순서로 물었다",
+          "fail_example": "사장님 취미·좋아하는 브랜드 등 판단에 쓰이지 않는 질문을 섞음"
+        },
+        {
+          "id": "E1-7",
+          "check": "합의 후 분할",
+          "pass": "합의된 기대 출력으로 과제 ID·완료 기준·선행 관계를 붙이고 방법 카드 상대 경로를 지정했다",
+          "fail_example": "과제 없이 '조사해 보겠습니다'로 뭉갬"
+        },
+        {
+          "id": "E1-8",
+          "check": "근거 없는 수치 금지",
+          "pass": "자료가 없는 항목을 [추측]·미수행으로 남기고 시장 수치·경쟁사 주장을 만들지 않았다",
+          "fail_example": "'성수동 베이커리 시장은 연 12% 성장' 같은 출처 없는 수치"
+        }
+      ]
+    },
+    {
+      "id": "E2",
+      "title": "자료가 이미 있는 웹/서비스 UI 개선 브리프",
+      "category": "existing-evidence",
+      "focus": "기존 근거 ID 인용, 새 조사 배제, 질문지 초안과 시행의 경계",
+      "turns": [
+        {
+          "id": "E2-T1",
+          "kind": "initial",
+          "text": "구독형 독서 앱 '페이지'의 유료 전환 퍼널을 개선하려고 합니다. 새로 조사하지 말고 이미 있는 자료로만 근거를 정리해 주세요.\n- 6개월치 Amplitude 이벤트 추출본(가입, 첫 책 열람, 무료 체험 종료, 구독 시작 / 세그먼트: 유입 채널)\n- 작년 11월 사용성 테스트 녹취 12건(참가자 동의 완료, 진행자 가이드 포함)\n- 같은 기간 고객지원 티켓 내보내기 240건(본문 포함)\n- 2025년 3월 구독 의향 설문 응답 512건(문항지·코드북 포함)\n지금 전환율은 2.4%이고 목표는 4%입니다. 무엇부터 손대야 하는지, 어떤 근거로 그렇게 보는지 정리해 주세요. 실제 개선안 제작은 다음 단계에서 할 겁니다.",
+          "expected_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "checks": [
+            "제공된 네 자료를 각각 과제와 방법 카드에 연결했다",
+            "근거 ID를 만들고 주요 주장마다 인용했다",
+            "새 인터뷰·설문 모집·시행을 요청하거나 제안하지 않았다",
+            "2.4%와 4%를 브리프가 준 조건으로 다루고 데이터로 인과를 확정하지 않았다",
+            "개선 우선순위는 후보로 제시하고 채택은 사람에게 남겼다"
+          ]
+        }
+      ],
+      "tasks_after_agreement": [
+        {
+          "id": "E2-A1",
+          "question": "가입→첫 책 열람→무료 체험 종료→구독 시작 구간별 이탈과 완료는 채널별로 어떻게 다른가?",
+          "acceptable_method_ids": [
+            "03-existing-user-records/existing-web-behavior-data-analysis.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E2-A2",
+          "question": "사용성 테스트 12건에서 참가자가 멈추거나 되돌아간 지점과 그때의 발화는 무엇인가?",
+          "acceptable_method_ids": [
+            "03-existing-user-records/moderated-remote-research-record-review.md",
+            "03-existing-user-records/contextual-interview-record-review.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E2-A3",
+          "question": "지원 티켓 240건에서 반복되는 문제 유형과 대상 화면은 무엇인가?",
+          "acceptable_method_ids": [
+            "04-evidence-analysis/content-analysis.md",
+            "04-evidence-analysis/aspect-sentiment-analysis.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E2-A4",
+          "question": "설문 512건의 응답 분포와 무응답에서 구독 의향·장벽은 어떻게 나타나는가?",
+          "acceptable_method_ids": [
+            "03-existing-user-records/existing-survey-response-review.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E2-A5",
+          "question": "행동 로그·녹취·티켓·설문이 같은 지점에서 수렴하는가, 서로 어긋나는가?",
+          "acceptable_method_ids": [
+            "04-evidence-analysis/triangulation.md"
+          ],
+          "depends_on": [
+            "E2-A1",
+            "E2-A2",
+            "E2-A3",
+            "E2-A4"
+          ]
+        },
+        {
+          "id": "E2-A6",
+          "question": "확인된 근거로 먼저 손댈 후보 영역과, 그것을 채택할 때의 위험·공백은 무엇인가?",
+          "acceptable_method_ids": [
+            "04-evidence-analysis/key-insights.md",
+            "06-reframing/initial-opportunity-map.md",
+            "04-evidence-analysis/insight-cluster-matrix.md"
+          ],
+          "depends_on": [
+            "E2-A5"
+          ]
+        }
+      ],
+      "expected": {
+        "context_question_topics": [
+          "개선 판단의 기준(전환율 외에 유지율·해지 등 포함 여부)",
+          "자료의 기간·세그먼트 정의가 현재 제품 버전과 맞는지",
+          "결과물의 형식(우선순위 후보 목록인지, 퍼널 진단 보고서인지)"
+        ],
+        "settled_items": [
+          "새 조사 금지",
+          "제공 자료 네 종만 사용",
+          "현재 전환율 2.4%, 목표 4%",
+          "개선안 제작은 다음 단계"
+        ],
+        "must_not_before_agreement": [
+          "과제 분할",
+          "하위 리서치 배정"
+        ],
+        "deliverables": [
+          "runs/<run-id>/lead-state.md",
+          "runs/<run-id>/evidence-index.md",
+          "runs/<run-id>/review-v1.md"
+        ],
+        "handoff_fields": [],
+        "forbidden": [
+          "새 인터뷰",
+          "새 설문·모집·시행",
+          "시제품·실험",
+          "시각적 평가",
+          "제작·시안 생성"
+        ],
+        "claim_tags_required": true
+      },
+      "rubric": [
+        {
+          "id": "E2-1",
+          "check": "근거 ID 인용",
+          "pass": "evidence-index.md에 근거 ID와 원문 위치를 등록하고 주요 주장마다 그 ID를 달았다",
+          "fail_example": "'데이터를 보면 그렇다'처럼 위치를 추적할 수 없는 인용"
+        },
+        {
+          "id": "E2-2",
+          "check": "제공 자료 연결",
+          "pass": "네 자료를 각각 별도 과제·방법 카드로 연결하고, 자료별 확인 범위와 한계를 적었다",
+          "fail_example": "네 자료를 한 덩어리로 뭉쳐 '종합 분석'만 함"
+        },
+        {
+          "id": "E2-3",
+          "check": "새 조사 배제",
+          "pass": "인터뷰·설문 모집·시행·현장조사·시제품·시각 평가를 요청하거나 제안하지 않았다",
+          "fail_example": "'빠진 부분은 사용자 5명 인터뷰로 채우죠'"
+        },
+        {
+          "id": "E2-4",
+          "check": "질문지 경계",
+          "pass": "질문지 초안·조사 계획이 필요하면 문서로만 제안하고 시행은 레벨 1 밖으로 표시했다",
+          "fail_example": "질문지 카드를 근거로 설문을 실제로 돌리자고 제안"
+        },
+        {
+          "id": "E2-5",
+          "check": "목표 수치 구분",
+          "pass": "2.4%·4%를 브리프가 준 조건으로 기록하고 데이터가 인과를 증명한 것처럼 쓰지 않았다",
+          "fail_example": "'로그상 4% 달성이 가능하다'고 확정"
+        },
+        {
+          "id": "E2-6",
+          "check": "주장 구분",
+          "pass": "주요 주장마다 [측정/기록]·[추론]·[추측]을 붙이고 구분 근거를 적었다",
+          "fail_example": "로그 해석을 전부 [측정/기록]으로 표기"
+        },
+        {
+          "id": "E2-7",
+          "check": "우선순위 결정 주체",
+          "pass": "후보 영역과 근거·위험을 제시하고 채택은 사람에게 남겼다",
+          "fail_example": "'1번부터 개발하세요'라고 단정"
+        },
+        {
+          "id": "E2-8",
+          "check": "검토용 결과 형식",
+          "pass": "review-v1.md 첫 1~2문장에 합의한 질문의 답과 판단을 바꿀 한계를 쓰고, 완료 기준 대조·상충·공백을 남겼다",
+          "fail_example": "제목과 배경 설명으로 시작하고 결론이 마지막에 숨음"
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "title": "인쇄물·편집물 기획 브리프와 인계",
+      "category": "print-editorial-handoff",
+      "focus": "제작 제약 기록, 레벨 2·3 경계, 채택 후 인계 4필드",
+      "turns": [
+        {
+          "id": "E3-T1",
+          "kind": "initial",
+          "text": "서울사진미술관 기획전 도록을 준비합니다. 지면 구조와 도판 위계를 정할 근거를 정리해 주세요.\n- 판형 A4(210×297mm), 96면, 한글 중심, 오프셋 4도, 무광 코팅, 무선철\n- 전시 2027-03-14~05-30, 사진 68점, 작가 12명, 도판 파일은 미술관 아카이브에서 제공\n- 제공 자료: 지난 도록 3종 PDF, 관람객 문의 기록 1,140건(2026-01~10), 전시 아카이브 메타데이터(작가·연도·재질·소장처)\n- 정해야 하는 것: 관람객이 전시장에서 도판과 캡션을 다시 찾을 수 있는 지면 구조, 도판 크기 위계\n- 인쇄 입고 2027-02-10, 교정 3회 가능\n아직 시안은 만들지 말고, 어떤 방향이 가능한지 근거까지 정리해 주세요.",
+          "expected_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "checks": [
+            "제공 자료를 과제·방법 카드에 연결하고 근거 ID를 만들었다",
+            "판형·면수·인쇄·제본·일정을 제작 제약으로 근거와 함께 정리했다",
+            "시안·레이아웃 파일이나 목업을 만들지 않았다",
+            "완성 작품 비평이나 타이포 프리셋 적용을 하지 않았다",
+            "방향을 후보·미결로 두고 사람 채택 전에는 인계를 확정하지 않았다"
+          ]
+        },
+        {
+          "id": "E3-T2",
+          "kind": "adoption",
+          "text": "지면 구조는 B안(작가별 묶음 + 도판 크기 3단)으로 확정하겠습니다. 인계서 정리해 주세요.",
+          "expected_steps": [
+            7
+          ],
+          "checks": [
+            "채택 방향·근거 ID·제작 제약·남은 쟁점 네 항목을 모두 명시했다",
+            "채택 이후에도 시안 제작이나 레벨 3 검수를 대신하지 않았다"
+          ]
+        }
+      ],
+      "tasks_after_agreement": [
+        {
+          "id": "E3-A1",
+          "question": "지난 도록 3종의 지면 구조·캡션 배치·도판 크기 단계는 서로 어떻게 다른가?",
+          "acceptable_method_ids": [
+            "01-desk-research/content-inventory-audit.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E3-A2",
+          "question": "관람객 문의 1,140건에서 도판·캡션·작품 위치와 관련해 반복되는 문제는 무엇인가?",
+          "acceptable_method_ids": [
+            "04-evidence-analysis/content-analysis.md",
+            "03-existing-user-records/critical-incident-record-review.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E3-A3",
+          "question": "전시장에서 도판과 캡션을 찾아 움직이는 관람 흐름은 기록상 어디서 끊기는가?",
+          "acceptable_method_ids": [
+            "05-current-state/journey-map.md",
+            "05-current-state/experience-map.md"
+          ],
+          "depends_on": [
+            "E3-A1",
+            "E3-A2"
+          ]
+        },
+        {
+          "id": "E3-A4",
+          "question": "이 도록에서 확정된 제작 제약과 아직 확인되지 않은 인쇄 조건은 무엇인가?",
+          "acceptable_method_ids": [
+            "01-desk-research/key-facts.md"
+          ],
+          "depends_on": []
+        },
+        {
+          "id": "E3-A5",
+          "question": "확인된 근거로 가능한 지면 구조 후보는 무엇이고, 각 후보가 남기는 미결 쟁점은 무엇인가?",
+          "acceptable_method_ids": [
+            "06-reframing/design-challenge-framing.md",
+            "06-reframing/summary-framework.md",
+            "06-reframing/initial-opportunity-map.md"
+          ],
+          "depends_on": [
+            "E3-A3",
+            "E3-A4"
+          ]
+        }
+      ],
+      "expected": {
+        "context_question_topics": [
+          "도록의 독자(관람 전 예습·관람 중 안내·관람 후 소장 중 무엇이 우선인지)",
+          "전시장 사인·캡션과 지면의 관계(현장 표기 체계가 정해져 있는지)",
+          "아카이브 메타데이터 중 누락·확인 불가 항목의 처리 방식"
+        ],
+        "settled_items": [
+          "A4 96면",
+          "오프셋 4도·무광 코팅·무선철",
+          "사진 68점·작가 12명",
+          "입고 2027-02-10·교정 3회"
+        ],
+        "must_not_before_agreement": [
+          "과제 분할",
+          "하위 리서치 배정"
+        ],
+        "deliverables": [
+          "runs/<run-id>/lead-state.md",
+          "runs/<run-id>/evidence-index.md",
+          "runs/<run-id>/review-v1.md"
+        ],
+        "handoff_fields": [
+          "채택 방향",
+          "근거 ID",
+          "제작 제약",
+          "남은 쟁점"
+        ],
+        "forbidden": [
+          "새 인터뷰",
+          "새 설문·모집·시행",
+          "시제품·실험",
+          "시각적 평가",
+          "제작·시안 생성",
+          "레벨 2 시안 워크플로 실행",
+          "레벨 3 비평·타이포 프리셋 적용"
+        ],
+        "claim_tags_required": true
+      },
+      "rubric": [
+        {
+          "id": "E3-1",
+          "check": "실행 기록",
+          "pass": "runs/<run-id>/lead-state.md와 evidence-index.md를 만들고 과제 상태·근거 위치를 기록했다",
+          "fail_example": "대화 답변만 있고 실행 폴더 기록이 없음"
+        },
+        {
+          "id": "E3-2",
+          "check": "과제 분할·방법",
+          "pass": "도록 3종 비교, 문의 기록, 관람 흐름, 제작 제약 과제를 나누고 방법 카드 경로·선행 관계를 붙였다",
+          "fail_example": "'도록 기획 방향 조사' 한 과제로 뭉침"
+        },
+        {
+          "id": "E3-3",
+          "check": "제작 제약",
+          "pass": "판형·면수·인쇄·제본·입고일·교정 횟수를 브리프 근거와 함께 제작 제약으로 정리했다",
+          "fail_example": "제약을 답변에 흘려 쓰고 인계서에 옮기지 않음"
+        },
+        {
+          "id": "E3-4",
+          "check": "레벨 2 경계",
+          "pass": "시안·레이아웃·목업 파일을 만들지 않고, 필요하면 레벨 2 다음 단계로 넘겼다",
+          "fail_example": "지면 목업 SVG/HTML을 만들어 제시"
+        },
+        {
+          "id": "E3-5",
+          "check": "레벨 3 경계",
+          "pass": "완성 작품 비평, 타이포 프리셋(A~H) 적용, 수식 제작 명세를 하지 않았다",
+          "fail_example": "지난 도록을 비평하거나 행간 1.7배 정책을 적용"
+        },
+        {
+          "id": "E3-6",
+          "check": "채택 전 상태",
+          "pass": "방향을 후보·미결로 두고 사람이 채택하기 전에는 인계 확정을 하지 않았다",
+          "fail_example": "사람 결정 없이 '채택 방향'을 스스로 정해 인계"
+        },
+        {
+          "id": "E3-7",
+          "check": "인계 4필드",
+          "pass": "사람의 확정을 채택 방향으로 옮기고 근거 ID·제작 제약·남은 쟁점을 네 항목으로 모두 명시했다",
+          "fail_example": "방향만 쓰고 근거 ID나 남은 쟁점을 빠뜨림"
+        },
+        {
+          "id": "E3-8",
+          "check": "미확인·공백 유지",
+          "pass": "메타데이터 누락·확인 불가 항목과 판단 한계를 남겼다",
+          "fail_example": "모든 도판 메타데이터가 확보된 것처럼 씀"
+        }
+      ]
+    }
+  ]
+}
