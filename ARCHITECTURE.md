@@ -12,7 +12,7 @@
 
 - 플러그인 manifest는 `plugins/visual-design/.codex-plugin/plugin.json`, marketplace는 `.agents/plugins/marketplace.json`이다. `plugins/` 아래 스킬은 `scripts/sync-codex-plugin.py --write`가 만드는 생성물이며 직접 편집하지 않는다.
 - 전역 설치는 `scripts/install-linux.sh`, `scripts/install-windows.ps1`이 세 원본 폴더를 각각 `$CODEX_HOME/skills/<스킬 이름>`에 넣는다. 스킬마다 백업 경로가 따로 있다.
-- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 `review-v1.md`의 채택 방향·근거 ID·제약·미결 쟁점을 남기고, 시안은 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다.
+- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 `review-vN.md` 안의 `## 채택` 절에 채택 방향·근거 ID·제작 제약·남은 쟁점을 남기고(별도 `handoff.md`를 만들지 않는다), 시안은 그 절을 인계서로 읽어 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다. 인계 ID(`DIR`·`C`·`U`)와 필드 이름은 [레벨 1 실행 기록 규칙](visual-design-planning/references/workflow/lead-state-lifecycle.md)의 '인계 기록' 절이 유일한 기준이다.
 - 지식은 스킬별로 나눠 둔다. 레벨 1 방법 카드는 planning의 `references/methods/`, 레벨 2 워크플로는 drafting의 `references/workflow/`, 비평·수식·프린트 검사 지식은 review의 `references/`에 있다. 서로의 절차를 섞지 않는다.
 
 ## 2. 레벨 1 기획 아키텍처
@@ -23,7 +23,7 @@
 
 새 의뢰에는 새 실행 경로를 할당한다. 다이어그램의 같은 슬롯 기록 삭제는 사용자가 정리 대상을 확인한 경우에 적용한다.
 
-레벨 1 계약(7단계·상태·금지 범위·인계 4필드)을 실제 세션에서 대조하는 입력과 판정표는 [레벨 1 실전 평가 케이스](visual-design-planning/tests/eval-cases.md)에 있다. 세 브리프 픽스처는 모호한 브랜드 리뉴얼, 기존 자료가 있는 서비스 개선, 인쇄물 기획·인계를 다루며, `visual-design-planning/tests/test_level1_eval_contract.py`가 문서·픽스처·가이드의 정합만 자동 검사한다. 실행 품질 판정은 아직 없다.
+레벨 1 계약(7단계·상태·금지 범위·인계 4필드)을 실제 세션에서 대조하는 입력과 판정표는 [레벨 1 실전 평가 케이스](visual-design-planning/tests/eval-cases.md)에 있다. 세 브리프 픽스처는 모호한 브랜드 리뉴얼, 기존 자료가 있는 서비스 개선, 인쇄물 기획·인계를 다루며, E2·E3에는 표본 자료와 범위·한계를 적은 `fixtures/` 폴더가 함께 있다. `visual-design-planning/tests/test_level1_eval_contract.py`가 문서·픽스처·가이드의 정합과 실행 기록 형식만 자동 검사하고, `cases.json`의 상태는 실행 전·일부 실행·실행 완료를 모두 허용한다. 실행 품질 판정은 아직 없다.
 
 ## 3. 레벨 2 시안 아키텍처
 

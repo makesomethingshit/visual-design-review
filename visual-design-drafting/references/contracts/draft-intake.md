@@ -10,18 +10,33 @@
 | `project` | 작업 이름 한 줄 | 필수 |
 | `handoff_status` | `READY` / `PARTIAL` / `DIRECT` / `BLOCKED`와 이유 한 줄 | 필수 |
 | `level1_run` | 레벨 1 실행 폴더와 `source_review` 파일명·버전 | `READY`·`PARTIAL`에서 필수 |
+| `id_origin` | 인계 ID의 부여 주체: `LEVEL1`(채택 절) / `LEVEL2_NORMALIZED`(레벨 2가 로드 시 부여) / `DIRECT` | 필수 |
 | `decision` | 사람이 채택한 시점, 채택자, 반려된 안과 사유 | 필수 |
 | `question` | 시안이 답해야 할 질문(리뷰 첫 문단에서 옮김) | 필수 |
 | `scope_limit` | 판단을 바꿀 한계, 시안이 다루지 않는 범위 | 필수 |
-| `adopted` | 채택한 방향: `DIR` ID, 이름, 요약, 근거 ID 목록 | 필수(방향이 있으면) |
-| `constraints` | 제약: `C` ID, 항목, 값·단위, `origin`, 출처 위치 | 필수 |
+| `adopted` | 채택 방향: `DIR` ID, 이름, 요약, 근거 ID 목록 | 필수(방향이 있으면) |
+| `constraints` | 제작 제약: `C` ID, 항목, 값·단위, `origin`, 출처 위치 | 필수 |
 | `evidence` | 근거: `EV` ID, 주장, 원문 위치, 근거 수준, 한계·예외 | 필수(`DIRECT`는 빈 목록 허용) |
-| `unresolved` | 미결: `U` ID, 쟁점, 결정 주체, 시안에 미치는 영향 | 필수 |
+| `unresolved` | 남은 쟁점: `U` ID, 쟁점, 결정 주체, 시안에 미치는 영향 | 필수 |
 | `gaps` | 공백과 처리: `ASSUMED` / `ASKED` / `DEFERRED`와 근거 | 필수 |
 | `assumptions` | 시안에 쓰기로 한 가정과 그것이 바뀌면 달라지는 것 | `PARTIAL`·`DIRECT`에서 필수 |
 | `checks` | 정합 확인 항목별 결과(아래 형식) | 필수 |
 
-`evidence`의 ID는 레벨 1 `evidence-index.md`의 ID를 그대로 쓴다. 리뷰에 ID 없이 적힌 주장은 원문 위치로 찾아 연결하고, 없으면 `NO-EVIDENCE`로 둔다.
+`adopted`·`constraints`·`unresolved`의 필드 이름과 순서는 레벨 1 채택 절의 인계 4필드(채택 방향·근거 ID·제작 제약·남은 쟁점)를 그대로 옮긴 것이다. 다른 이름을 새로 만들지 않는다.
+
+## 인계 ID 규칙
+
+| ID | 대상 | 부여 시점 |
+| --- | --- | --- |
+| `DIR-01` | 방향 후보(채택·반려 포함) | 레벨 1 채택 절. 사람이 고른 후보도 자기 ID를 유지한다 |
+| `EV-01` | 근거 | 레벨 1 `evidence-index.md` |
+| `C-01` | 제작 제약 | 레벨 1 채택 절 |
+| `U-01` | 남은 쟁점 | 레벨 1 채택 절 |
+
+- 두 자리 번호를 쓴다(`DIR-1`이 아니라 `DIR-01`). 리뷰 파일 안에서 유일하면 되고, 다음 리뷰 버전에서 이어 쓴다.
+- 레벨 1이 부여한 ID를 표기 그대로 쓰고, 번호를 다시 매기거나 문서에 없는 ID를 만들지 않는다. `id_origin: LEVEL1`이 그 상태다.
+- 채택 절은 있는데 ID가 없는 인계(이전 버전 리뷰 등)라면 레벨 2가 읽은 순서대로 부여하고 `id_origin: LEVEL2_NORMALIZED`로 적는다. 이때도 근거 ID(`EV`)는 새로 만들지 않고 `NO-EVIDENCE`로 둔다.
+- `evidence`의 ID는 레벨 1 `evidence-index.md`의 ID를 그대로 쓴다. 리뷰에 ID 없이 적힌 주장은 원문 위치로 찾아 연결하고, 없으면 `NO-EVIDENCE`로 둔다.
 
 ## 정합 확인 기록 형식
 
@@ -53,11 +68,12 @@ project: 전시 안내물 (A2 포스터 + 3단 리플릿)
 handoff_status: PARTIAL - 안내문 원고 미확정, 판형·위계 근거는 확보
 level1_run: /work/exhibition-01/runs/exhibition-01
 source_review: review-v2.md
-decision: {adopted_at: "2026-11-20", by: USER, rejected: [DIR-2 "정보 과밀, 1차 대상 아님"]}
+id_origin: LEVEL1
+decision: {adopted_at: "2026-11-20", by: USER, rejected: [DIR-02 "정보 과밀, 1차 대상 아님"]}
 question: 관람객이 입구에서 열린 전시와 시간을 먼저 찾게 할 것
 scope_limit: 야외 사이니지·디지털 화면은 범위 밖
 adopted:
-  - id: DIR-1
+  - id: DIR-01
     name: 시간 우선형
     summary: 관람 시간과 현재 열린 전시를 첫 층위로, 위치·요금을 둘째 층위로
     evidence: [EV-04, EV-07, EV-11]

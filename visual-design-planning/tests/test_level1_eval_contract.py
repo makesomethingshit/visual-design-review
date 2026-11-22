@@ -10,6 +10,7 @@ import hashlib
 import json
 import re
 import unittest
+from datetime import datetime
 from pathlib import Path
 
 TESTS = Path(__file__).resolve().parent
@@ -32,13 +33,15 @@ STEP_KEYWORDS = {
     7: ("review-v1.md",),
 }
 
-# level-1.md의 인계 필드와 다른 문서의 표기. 같은 필드의 이전 표기를 허용한다.
-HANDOFF_FIELD_ALIASES = {
-    "채택 방향": ("채택한 방향", "채택된 방향", "채택 방향"),
-    "근거 ID": ("근거 ID",),
-    "제작 제약": ("제작에 필요한 제약", "제작 제약"),
-    "남은 쟁점": ("남은 쟁점", "미결 쟁점"),
-}
+# 인계 4필드의 기준 표기. lead-state-lifecycle.md의 '인계 기록' 절이 유일한 기준이다.
+HANDOFF_FIELDS = ("채택 방향", "근거 ID", "제작 제약", "남은 쟁점")
+# 인계 필드별 ID 접두어와 한 문서 안의 번호 표기.
+HANDOFF_ID_PREFIXES = {"채택 방향": "DIR-01", "근거 ID": "EV-01",
+                       "제작 제약": "C-01", "남은 쟁점": "U-01"}
+# 통일 전 표기. 필드 이름으로 다시 쓰지 않는다.
+OLD_FIELD_LABELS = ("채택한 방향", "채택된 방향", "미결 쟁점")
+# cases.json의 status 허용값. 실행 후 상태를 갱신해도 계약 검사가 깨지지 않아야 한다.
+ALLOWED_CASE_STATUSES = {"authored-not-executed", "partially-executed", "executed"}
 
 # level-1 금지 행위를 문서에서 뒷받침하는 문구.
 FORBIDDEN_SOURCES = {
@@ -150,15 +153,51 @@ class WorkflowContractTest(unittest.TestCase):
 
     def test_handoff_fields(self) -> None:
         scope = load_cases()["scope"]
-        self.assertEqual(scope["handoff_fields"],
-                         ["채택 방향", "근거 ID", "제작 제약", "남은 쟁점"])
-        for field, aliases in HANDOFF_FIELD_ALIASES.items():
-            self.assertTrue(any(alias in self.level1 for alias in aliases),
-                            f"level-1.md에 인계 필드 '{field}'가 없다")
-        # 레벨 2는 같은 필드를 '미결 쟁점'으로 부른다.
+        self.assertEqual(scope["handoff_fields"], list(HANDOFF_FIELDS))
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
         level2 = read(ROOT / "visual-design-drafting/references/workflow/level-2.md")
-        for alias in ("채택된 방향과 그 근거 ID", "제작 제약", "미결 쟁점"):
-            self.assertIn(alias, level2, f"레벨 2 인계 계약에 '{alias}'가 없다")
+        intake = read(ROOT / "visual-design-drafting/references/contracts/draft-intake.md")
+        for field in HANDOFF_FIELDS:
+            self.assertIn(field, self.level1, f"level-1.md 7단계에 인계 필드 '{field}'가 없다")
+            self.assertIn(field, lifecycle, f"인계 기록 절에 '{field}'가 없다")
+            self.assertIn(field, level2, f"레벨 2 인계 계약에 '{field}'가 없다")
+            self.assertIn(field, intake, f"draft-intake.md에 '{field}'가 없다")
+        # 기준 표는 하나만 두고 순서를 고정한다.
+        table_fields = re.findall(r"(?m)^\| \d \| \*\*(.+?)\*\* \|", lifecycle)
+        self.assertEqual(tuple(table_fields), HANDOFF_FIELDS,
+                         "lead-state-lifecycle.md의 인계 필드 표 순서가 기준과 다르다")
+        for label in OLD_FIELD_LABELS:
+            for name, text in (("level-2.md", level2), ("draft-intake.md", intake)):
+                self.assertNotIn(label, text, f"{name}에 통일 전 표기 '{label}'가 남아 있다")
+
+    def test_handoff_ids_are_defined_once(self) -> None:
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        intake = read(ROOT / "visual-design-drafting/references/contracts/draft-intake.md")
+        level2 = read(ROOT / "visual-design-drafting/references/workflow/level-2.md")
+        for field, identifier in HANDOFF_ID_PREFIXES.items():
+            self.assertIn(identifier, lifecycle, f"인계 기록 절에 '{field}'의 ID "
+                                                  f"예시 {identifier}가 없다")
+            self.assertIn(identifier, intake, f"draft-intake.md에 ID 예시 {identifier}가 없다")
+        for token in ("id_origin", "LEVEL2_NORMALIZED", "NO-EVIDENCE", "부여"):
+            self.assertIn(token, lifecycle, f"인계 기록 절에 ID 규칙 '{token}'가 없다")
+        for token in ("id_origin", "LEVEL2_NORMALIZED", "NO-EVIDENCE", "다시 매기"):
+            self.assertIn(token, intake, f"draft-intake.md에 ID 규칙 '{token}'가 없다")
+        self.assertIn("다시 매기", level2, "level-2.md가 ID 재부여를 긍정하지 않는다")
+
+    def test_handoff_lives_in_the_review_adoption_section(self) -> None:
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        for name, text in (("level-1.md", self.level1), ("lead-state-lifecycle.md", lifecycle)):
+            self.assertIn("## 채택", text, f"{name}에 채택 절 규칙이 없다")
+            self.assertIn("review-vN.md", text, f"{name}가 채택 절 파일명을 밝히지 않는다")
+            self.assertIn("번호가 가장 높은", text,
+                          f"{name}가 레벨 2가 여는 리뷰 파일을 밝히지 않는다")
+            self.assertIn("handoff.md", text, f"{name}가 별도 인계 파일을 언급하지 않는다")
+        self.assertIn("visual-design-drafting", self.level1,
+                      "level-1.md가 레벨 2 다음 단계를 밝히지 않는다")
+        self.assertIn("PARTIAL", self.level1,
+                      "레벨 2가 채택 절 없는 리뷰를 PARTIAL로 본다는 연결이 없다")
+        self.assertIn("visual-design-drafting", self.skill,
+                      "planning SKILL.md가 레벨 2 다음 단계를 밝히지 않는다")
 
     def test_forbidden_scope(self) -> None:
         self.assertIn("새 인터뷰·설문·현장조사", self.skill)
@@ -173,6 +212,10 @@ class WorkflowContractTest(unittest.TestCase):
         exchange = read(WORKFLOW / "task-exchange.md")
         for tag in ("[측정/기록]", "[추론]", "[추측]"):
             self.assertIn(tag, exchange, f"주장 구분 '{tag}'가 task-exchange.md에 없다")
+            self.assertIn(tag, self.level1,
+                          f"7단계가 '{tag}'를 검토 보고서에 적용하지 않는다")
+        self.assertIn("review-vN.md", exchange, "태그 규칙이 총괄 자신의 보고서를 가리키지 않는다")
+        self.assertIn("총괄", exchange)
 
 
 class MethodIndexTest(unittest.TestCase):
@@ -211,8 +254,44 @@ class FixtureContractTest(unittest.TestCase):
 
     def test_three_cases(self) -> None:
         self.assertEqual(list(self.cases), ["E1", "E2", "E3"])
-        self.assertEqual(self.data["status"], "authored-not-executed")
         self.assertEqual(len(self.scope["task_states"]), 6)
+
+    def test_status_is_a_known_execution_state(self) -> None:
+        self.assertIn(self.data["status"], ALLOWED_CASE_STATUSES,
+                      "cases.json의 status가 허용된 실행 상태가 아니다")
+
+    def test_guide_banner_matches_execution_state(self) -> None:
+        guide = read(GUIDE)
+        path = EVAL / "runs.jsonl"
+        records = ([line for line in read(path).splitlines() if line.strip()]
+                   if path.exists() else [])
+        if self.data["status"] == "authored-not-executed":
+            self.assertFalse(records,
+                             "runs.jsonl에 기록이 있는데 status가 authored-not-executed다")
+            self.assertIn("실행 기록이 없다", guide,
+                          "실행 전인데 가이드가 그 사실을 밝히지 않는다")
+        else:
+            self.assertNotIn("아직 어떤 세션에서도 실행되지 않았다", guide,
+                             "status를 실행됨으로 바꿨는데 가이드가 실행 전이라고 말한다")
+
+    def test_material_fixtures_exist(self) -> None:
+        for case in self.data["cases"]:
+            materials = case.get("materials")
+            if not materials:
+                continue
+            folder = TESTS / materials["path"]
+            self.assertTrue(folder.is_dir(), f"{case['id']} 자료 폴더가 없다: {materials['path']}")
+            self.assertIn("README.md", materials["files"],
+                          f"{case['id']} 자료에 범위·한계를 적은 README가 없다")
+            for name in materials["files"]:
+                self.assertTrue((folder / name).is_file(),
+                                f"{case['id']} 자료 파일이 없다: {name}")
+            self.assertIn("materials/", case["turns"][0]["text"],
+                          f"{case['id']} 프롬프트가 자료 위치를 알려 주지 않는다")
+            self.assertTrue(case["expected"].get("materials_not_provided", "").strip(),
+                            f"{case['id']}에 자료 미제공 분기가 없다")
+        self.assertNotIn("materials", self.cases["E1"],
+                         "E1은 제공 자료가 없는 브리프이므로 자료 폴더를 두지 않는다")
 
     def test_scope_matches_documents(self) -> None:
         self.assertEqual(self.scope["level1_steps"], 7)
@@ -367,9 +446,12 @@ class GuideContractTest(unittest.TestCase):
             self.assertIn(case["turns"][0]["text"][:20], prompt)
 
     def test_guide_states_it_is_not_evidence(self) -> None:
-        for phrase in ("자동 테스트가 확인하는 것", "실행 기록", "PASS가 아니다",
+        for phrase in ("자동 테스트가 확인하는 것", "실행 기록",
                        "새 인터뷰", "질문지 초안"):
             self.assertIn(phrase, self.text, f"가이드에 '{phrase}' 안내가 없다")
+        # 실행 기록이 생겨 배너를 고쳐도 이 경고는 남아야 한다(표현은 둘 중 하나면 된다).
+        self.assertTrue("PASS가 아니다" in self.text or "PASS 처리하지 않는다" in self.text,
+                        "가이드가 테스트 통과를 PASS로 오해하지 않게 하는 문장이 없다")
         self.assertNotIn("검증 완료", self.text)
 
 
@@ -414,44 +496,122 @@ class PackagingTest(unittest.TestCase):
                          "평가 케이스는 canonical 스킬 폴더에만 둔다")
         for path in ("tests/eval-cases.md", "tests/test_level1_eval_contract.py",
                      "tests/eval_prompt.py",
-                     "tests/evaluation/level1/cases.json"):
+                     "tests/evaluation/level1/cases.json",
+                     "tests/evaluation/level1/fixtures/README.md",
+                     "tests/evaluation/level1/fixtures/e2/README.md",
+                     "tests/evaluation/level1/fixtures/e3/README.md"):
             self.assertTrue((PLANNING / path).is_file(), f"평가 자산이 없다: {path}")
 
 
 class RunRecordTest(unittest.TestCase):
-    """실행 기록이 있다면 형식과 근거 인용을 검사한다."""
+    """실행 기록이 있다면 형식·경로·근거 인용을 검사한다.
+
+    기록이 없으면 기존과 같은 안내만 확인하고 통과한다. 실제 실행 전에는
+    이 검사가 아무 기록도 요구하지 않는다.
+    """
 
     REQUIRED = {"run_id", "case_id", "turn_id", "date", "model",
-                "prompt_sha256", "verdicts"}
+                "skill_version", "isolation", "prompt_sha256", "transcript",
+                "artifacts", "verdicts"}
+    ALLOWED_SUFFIXES = (".md", ".jsonl", ".json", ".txt", ".csv",
+                        ".png", ".jpg", ".jpeg", ".svg", ".html", ".pdf")
+    PLACEHOLDERS = {"todo", "tbd", "n/a", "미정", "없음", "-", "?"}
+
+    def _path_problem(self, value: object) -> str | None:
+        if not isinstance(value, str) or not value.strip():
+            return "빈 경로"
+        if value.startswith(("http://", "https://")):
+            return None
+        if ".." in Path(value).parts:
+            return "상위 경로 이동(..)"
+        if not Path(value).name:
+            return "파일 이름이 없는 경로"
+        if Path(value).suffix.lower() not in self.ALLOWED_SUFFIXES:
+            return f"허용하지 않는 확장자: {Path(value).suffix or '(없음)'}"
+        return None
 
     def test_run_records_if_present(self) -> None:
         path = EVAL / "runs.jsonl"
         cases = {case["id"]: case for case in load_cases()["cases"]}
         template = load_template()
-        if not path.exists():
+        lines = ([line for line in read(path).splitlines() if line.strip()]
+                 if path.exists() else [])
+        if not lines:
             self.assertIn("실행 기록이 없다", read(GUIDE),
                           "실행 기록이 없으면 가이드가 그 상태를 밝혀야 한다")
             return
-        for number, line in enumerate(read(path).splitlines(), 1):
-            if not line.strip():
-                continue
+        for number, line in enumerate(lines, 1):
             record = json.loads(line)
-            self.assertTrue(self.REQUIRED <= set(record),
-                            f"{number}행에 필수 필드가 없다")
+            missing = self.REQUIRED - set(record)
+            self.assertFalse(missing, f"{number}행에 필수 필드가 없다: {sorted(missing)}")
+
+            self.assertIsInstance(record["run_id"], str)
+            self.assertTrue(record["run_id"].strip(), f"{number}행 run_id가 비었다")
+            self.assertIn(record["case_id"], cases, f"{number}행의 케이스 ID가 픽스처에 없다")
             case = cases[record["case_id"]]
             turn = [turn for turn in case["turns"] if turn["id"] == record["turn_id"]]
             self.assertTrue(turn, f"{number}행의 턴 ID가 픽스처에 없다")
-            rubric_ids = {row["id"] for row in case["rubric"]}
+
+            try:
+                parsed_date = datetime.fromisoformat(record["date"])
+            except (TypeError, ValueError):
+                self.fail(f"{number}행 date가 ISO 8601이 아니다: {record['date']!r}")
+            self.assertIsNotNone(parsed_date.tzinfo,
+                                 f"{number}행 date에 시간대가 없다")
+            self.assertTrue(str(record["model"]).strip(), f"{number}행 model이 비었다")
+            self.assertRegex(str(record["skill_version"]), r"^\d+\.\d+\.\d+$",
+                             f"{number}행 skill_version 형식이 다르다")
+            self.assertIn(record["isolation"], ("network-off", "network-on"),
+                          f"{number}행 isolation 값이 잘못됐다")
+
             expected = assemble_prompt(template, case, case["turns"].index(turn[0]))
             self.assertEqual(record["prompt_sha256"],
                              hashlib.sha256(expected.encode("utf-8")).hexdigest(),
                              f"{number}행의 프롬프트 해시가 픽스처와 다르다")
-            for verdict in record["verdicts"]:
-                self.assertIn(verdict["rubric_id"], rubric_ids)
-                self.assertIn(verdict["verdict"], ("pass", "fail", "blocked"))
-                if verdict["verdict"] == "pass":
-                    self.assertTrue(verdict.get("evidence", "").strip(),
-                                    f"{verdict['rubric_id']}: 근거 없는 pass")
+
+            problem = self._path_problem(record["transcript"])
+            self.assertIsNone(problem, f"{number}행 transcript 경로: {problem}")
+
+            artifacts = record["artifacts"]
+            self.assertIsInstance(artifacts, list, f"{number}행 artifacts가 목록이 아니다")
+            self.assertTrue(artifacts, f"{number}행 artifacts가 비었다")
+            self.assertEqual(len(artifacts), len(set(artifacts)),
+                             f"{number}행 artifacts에 중복 경로가 있다")
+            for artifact in artifacts:
+                problem = self._path_problem(artifact)
+                self.assertIsNone(problem, f"{number}행 artifact 경로: {problem}")
+                parts = Path(artifact).parts
+                if parts and parts[0] == "runs":
+                    self.assertGreaterEqual(len(parts), 3,
+                                            f"{number}행 artifact가 runs/<run-id>/ 파일이 아니다")
+                    self.assertTrue(record["run_id"].startswith(parts[1]),
+                                    f"{number}행 artifact의 실행 폴더({parts[1]})가 "
+                                    f"run_id({record['run_id']})와 맞지 않는다")
+
+            if "materials" in record:
+                materials = record["materials"]
+                self.assertTrue(materials == "none" or
+                                (isinstance(materials, str) and materials.strip()),
+                                f"{number}행 materials가 비었다")
+
+            verdicts = record["verdicts"]
+            self.assertIsInstance(verdicts, list, f"{number}행 verdicts가 목록이 아니다")
+            self.assertTrue(verdicts, f"{number}행 verdicts가 비었다")
+            rubric_ids = {row["id"] for row in case["rubric"]}
+            for verdict in verdicts:
+                self.assertIn(verdict["rubric_id"], rubric_ids,
+                              f"{number}행에 픽스처에 없는 판정 ID가 있다")
+                self.assertIn(verdict["verdict"], ("pass", "fail", "blocked"),
+                              f"{number}행 verdict 값이 잘못됐다")
+                if verdict["verdict"] in ("pass", "fail"):
+                    evidence = verdict.get("evidence", "")
+                    self.assertIsInstance(evidence, str)
+                    self.assertTrue(evidence.strip(),
+                                    f"{verdict['rubric_id']}: 근거 없는 {verdict['verdict']}")
+                    self.assertGreaterEqual(len(evidence.strip()), 4,
+                                            f"{verdict['rubric_id']}: 근거가 너무 짧다")
+                    self.assertNotIn(evidence.strip().lower(), self.PLACEHOLDERS,
+                                     f"{verdict['rubric_id']}: 자리표시자 근거")
 
 
 if __name__ == "__main__":
