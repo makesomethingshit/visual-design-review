@@ -25,15 +25,18 @@
 
 레벨 1 계약(7단계·상태·금지 범위·인계 4필드)을 실제 세션에서 대조하는 입력과 판정표는 [레벨 1 실전 평가 케이스](visual-design-planning/tests/eval-cases.md)에 있다. 세 브리프 픽스처는 모호한 브랜드 리뉴얼, 기존 자료가 있는 서비스 개선, 인쇄물 기획·인계를 다루며, `visual-design-planning/tests/test_level1_eval_contract.py`가 문서·픽스처·가이드의 정합만 자동 검사한다. 실행 품질 판정은 아직 없다.
 
-## 3. 레벨 2 시안 아키텍처 (초안)
+## 3. 레벨 2 시안 아키텍처
 
-`visual-design-drafting`은 레벨 1 인계를 받아 조형을 확정하고 비교 가능한 시안을 만든다. 현재 상태는 워크플로와 인계 계약만 있는 **뼈대**이며, 조형 규칙·자동 산출 도구 연동은 실제 사례가 쌓이면 보강한다.
+`visual-design-drafting`은 레벨 1 인계를 받아 조형을 확정하고 비교 가능한 시안을 만든다. 실행 흐름과 단계별 계약이 있으며, 시안 품질 평가·자동 레이아웃 생성·도구별 어댑터는 아직 없다.
 
-- 실행 흐름: [레벨 2 워크플로](visual-design-drafting/references/workflow/level-2.md) — 인계 자산 로드 → 조형 번역 → 복수 시안 생성 → 선택·확정 및 인계.
-- 근거 연결: 시안마다 레벨 1 근거 ID와 벗어난 결정·미검증 값을 기록한다. 근거 없는 수치·팔레트·비율을 채우지 않는다.
+- 실행 흐름: [레벨 2 워크플로](visual-design-drafting/references/workflow/level-2.md) — 인계 자산 로드·정합 확인 → 조형 번역 → 복수 시안 생성·근거 매핑 → 선택·확정 및 인계.
+- 실행 기록: 레벨 1 실행 폴더의 `drafts/` 아래 `10-intake.md`(인계 판정) → `20-translation.md`(조형 값·식) → `30-evidence-map.md`(근거 추적) → `40-selection.md`·`handoff-v1.md`(선택·스펙)로 남긴다. 계약 문서는 [인계 기록](visual-design-drafting/references/contracts/draft-intake.md)·[근거 매핑](visual-design-drafting/references/contracts/evidence-map.md)·[인계](visual-design-drafting/references/contracts/draft-handoff.md)이다.
+- 조형 규칙: 영역별 번역 기준은 [조형 번역 기준](visual-design-drafting/references/form-translation.md)에 있고, 수식·정책은 레벨 3의 `typography-relations`·`typography-presets`를 인용한다. 레벨 2가 정책을 활성화하거나 새 수치를 승인하지 않는다.
+- 근거 연결: 시안마다 레벨 1 근거 ID와 벗어난 결정·미검증 값을 `FOLLOWS`/`DEVIATES`/`NEW`/`CONFLICT`로 기록한다. 근거 없는 수치·팔레트·비율을 채우지 않는다.
 - 산출물: 사용할 수 있는 도구·형식(SVG, HTML, 연결된 디자인 도구 등)이 있을 때만 실제 파일을 만들고, 없으면 만들지 못한 이유와 필요한 도구를 밝힌다.
 - 인계: 확정 시안과 설계 스펙을 레벨 3(`visual-design-review`) 검수로 넘긴다. 스펙 형식은 review의 `references/design-handoff.md` 계약을 따른다.
 - 미구현: 시안 품질 평가, 자동 레이아웃 생성, 도구별 어댑터. 레벨 3의 비평·심각도 판정을 레벨 2에서 대신하지 않는다.
+- 검증 범위: `tests/check-drafting-contract.py`가 계약 문서의 필드·어휘·문서 예시 산술·문서 간 값 일치를 정적으로 검사한다. 실제 시안 생성과 렌더 품질, 모델의 단계 선택은 이 검사와 별개다.
 
 ## 4. 레벨 3 리뷰 설계 기록
 

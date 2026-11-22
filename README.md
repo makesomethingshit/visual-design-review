@@ -15,7 +15,7 @@ $visual-design-review 이 포스터의 구성과 타이포그래피를 리뷰해
 ~~~
 
 - 레벨 1은 공개 웹과 사용이 허용된 제공 자료의 **기존 기록**을 활용합니다. 새 인터뷰·설문·현장조사, 시제품·실험, 시각 평가와 제작은 별도 단계입니다.
-- 레벨 2는 뼈대 단계입니다. 워크플로와 인계 계약은 있고, 조형 규칙은 실제 작업 사례가 쌓이면 보강합니다.
+- 레벨 2는 실행 흐름과 단계별 계약(인계 기록·조형 번역·근거 매핑·인계)까지 있습니다. 시안 품질 평가와 도구별 어댑터는 아직 없습니다.
 - 레벨 1의 방법 카드는 `visual-design-planning/references/methods/`에, 레벨 2 워크플로는 `visual-design-drafting/references/workflow/`, 레벨 3의 비평·수식·검증 지식은 `visual-design-review/references/`에 있습니다. 구조는 [ARCHITECTURE.md](ARCHITECTURE.md), 레벨 1 방법 카드 그림은 [아키텍처 다이어그램](docs/architecture.html)을 참고합니다.
 
 ## 설치와 검증

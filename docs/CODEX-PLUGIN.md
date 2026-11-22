@@ -8,7 +8,7 @@
 - Plugin manifest: `plugins/visual-design/.codex-plugin/plugin.json`
 - 설치되는 스킬 셋과 진입점
   - `skills/visual-design-planning/SKILL.md` — 레벨 1 기획
-  - `skills/visual-design-drafting/SKILL.md` — 레벨 2 시안(초안)
+  - `skills/visual-design-drafting/SKILL.md` — 레벨 2 시안
   - `skills/visual-design-review/SKILL.md` — 레벨 3 리뷰·검증
 - 각 스킬의 references 및 (존재하는 경우) scripts/assets
 - 루트의 `visual-design-planning/`, `visual-design-drafting/`, `visual-design-review/`만 사람이 편집하는 원본이다. `plugins/visual-design/skills/` 아래는 생성된 배포 사본으로 직접 편집하지 않는다.
