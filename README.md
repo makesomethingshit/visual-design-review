@@ -4,7 +4,7 @@
 
 | 레벨 | 스킬 | 역할 | 다음 단계로 넘기는 것 |
 | --- | --- | --- | --- |
-| 1 기획 | [visual-design-planning](visual-design-planning/SKILL.md) | 의뢰를 정리하고 기존 자료로 판단 근거를 만든다 | `review-vN.md`의 `## 채택` 절에 채택 방향·근거 ID·제작 제약·남은 쟁점 |
+| 1 기획 | [visual-design-planning](visual-design-planning/SKILL.md) | 의뢰를 정리하고 기존 자료로 판단 근거를 만든다 | `review-vN.md`의 `## 채택` 절에 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점 |
 | 2 시안 | [visual-design-drafting](visual-design-drafting/SKILL.md) | 기획 근거를 조형으로 옮겨 비교 가능한 시안 A/B와 설계 스펙을 만든다 | 확정 시안 산출물과 `design-handoff` 스펙 |
 | 3 리뷰 | [visual-design-review](visual-design-review/SKILL.md) | 완성 작품을 비평하고, 레퍼런스를 역분석하고, 제작 명세를 검수한다 | 판정·근거·검증 조건 |
 

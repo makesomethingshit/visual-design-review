@@ -12,7 +12,7 @@
 
 - 플러그인 manifest는 `plugins/visual-design/.codex-plugin/plugin.json`, marketplace는 `.agents/plugins/marketplace.json`이다. `plugins/` 아래 스킬은 `scripts/sync-codex-plugin.py --write`가 만드는 생성물이며 직접 편집하지 않는다.
 - 전역 설치는 `scripts/install-linux.sh`, `scripts/install-windows.ps1`이 세 원본 폴더를 각각 `$CODEX_HOME/skills/<스킬 이름>`에 넣는다. 스킬마다 백업 경로가 따로 있다.
-- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 `review-vN.md` 안의 `## 채택` 절에 채택 방향·근거 ID·제작 제약·남은 쟁점을 남기고(별도 `handoff.md`를 만들지 않는다), 시안은 그 절을 인계서로 읽어 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다. 인계 ID(`DIR`·`C`·`U`)와 필드 이름은 [레벨 1 실행 기록 규칙](visual-design-planning/references/workflow/lead-state-lifecycle.md)의 '인계 기록' 절이 유일한 기준이다.
+- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 `review-vN.md` 안의 `## 채택` 절에 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점(인계 5필드)을 남기고(별도 `handoff.md`를 만들지 않는다), 시안은 그 절을 인계서로 읽어 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다. 인계 ID(`DIR`·`DEL`·`C`·`U`)와 필드 이름은 [레벨 1 실행 기록 규칙](visual-design-planning/references/workflow/lead-state-lifecycle.md)의 '인계 기록' 절이 유일한 기준이다.
 - 지식은 스킬별로 나눠 둔다. 레벨 1 방법 카드는 planning의 `references/methods/`, 레벨 2 워크플로는 drafting의 `references/workflow/`, 비평·수식·프린트 검사 지식은 review의 `references/`에 있다. 서로의 절차를 섞지 않는다.
 
 ## 2. 레벨 1 기획 아키텍처
@@ -23,7 +23,7 @@
 
 새 의뢰에는 새 실행 경로를 할당한다. 다이어그램의 같은 슬롯 기록 삭제는 사용자가 정리 대상을 확인한 경우에 적용한다.
 
-레벨 1 계약(7단계·상태·금지 범위·인계 4필드)을 실제 세션에서 대조하는 입력과 판정표는 [레벨 1 실전 평가 케이스](visual-design-planning/tests/eval-cases.md)에 있다. 세 브리프 픽스처는 모호한 브랜드 리뉴얼, 기존 자료가 있는 서비스 개선, 인쇄물 기획·인계를 다루며, E2·E3에는 표본 자료와 범위·한계를 적은 `fixtures/` 폴더가 함께 있다. `visual-design-planning/tests/test_level1_eval_contract.py`가 문서·픽스처·가이드의 정합과 실행 기록 형식만 자동 검사하고, `cases.json`의 상태는 실행 전·일부 실행·실행 완료를 모두 허용한다. 실행 품질 판정은 아직 없다.
+레벨 1 계약(7단계·상태·금지 범위·인계 5필드)을 실제 세션에서 대조하는 입력과 판정표는 [레벨 1 실전 평가 케이스](visual-design-planning/tests/eval-cases.md)에 있다. 세 브리프 픽스처는 모호한 브랜드 리뉴얼, 기존 자료가 있는 서비스 개선, 인쇄물 기획·인계를 다루며, E2·E3에는 표본 자료와 범위·한계를 적은 `fixtures/` 폴더가 함께 있다. `visual-design-planning/tests/test_level1_eval_contract.py`가 문서·픽스처·가이드의 정합과 실행 기록 형식만 자동 검사하고, `cases.json`의 상태는 실행 전·일부 실행·실행 완료를 모두 허용한다. 실행 품질 판정은 아직 없다.
 
 ## 3. 레벨 2 시안 아키텍처
 
@@ -32,7 +32,7 @@
 - 실행 흐름: [레벨 2 워크플로](visual-design-drafting/references/workflow/level-2.md) — 인계 자산 로드·정합 확인 → 조형 번역 → 복수 시안 생성·근거 매핑 → 선택·확정 및 인계.
 - 실행 기록: 레벨 1 실행 폴더의 `drafts/` 아래 `10-intake.md`(인계 판정) → `20-translation.md`(조형 값·식) → `30-evidence-map.md`(근거 추적) → `40-selection.md`·`handoff-v1.md`(선택·스펙)로 남긴다. 계약 문서는 [인계 기록](visual-design-drafting/references/contracts/draft-intake.md)·[근거 매핑](visual-design-drafting/references/contracts/evidence-map.md)·[인계](visual-design-drafting/references/contracts/draft-handoff.md)이다.
 - 조형 규칙: 영역별 번역 기준은 [조형 번역 기준](visual-design-drafting/references/form-translation.md)에 있고, 수식·정책은 레벨 3의 `typography-relations`·`typography-presets`를 인용한다. 레벨 2가 정책을 활성화하거나 새 수치를 승인하지 않는다.
-- 근거 연결: 시안마다 레벨 1 근거 ID와 벗어난 결정·미검증 값을 `FOLLOWS`/`DEVIATES`/`NEW`/`CONFLICT`로 기록한다. 근거 없는 수치·팔레트·비율을 채우지 않는다.
+- 근거 연결: 시안마다 레벨 1 근거 ID와 벗어난 결정·미검증 값을 `FOLLOWS`/`DEVIATES`/`NEW`/`CONFLICT`로 기록하고, 어떤 값을 어느 `DEL` 항목(품목·매체)을 위해 정했는지 함께 남긴다. 근거 없는 수치·팔레트·비율을 채우지 않는다.
 - 산출물: 사용할 수 있는 도구·형식(SVG, HTML, 연결된 디자인 도구 등)이 있을 때만 실제 파일을 만들고, 없으면 만들지 못한 이유와 필요한 도구를 밝힌다.
 - 인계: 확정 시안과 설계 스펙을 레벨 3(`visual-design-review`) 검수로 넘긴다. 스펙 형식은 review의 `references/design-handoff.md` 계약을 따른다.
 - 미구현: 시안 품질 평가, 자동 레이아웃 생성, 도구별 어댑터. 레벨 3의 비평·심각도 판정을 레벨 2에서 대신하지 않는다.

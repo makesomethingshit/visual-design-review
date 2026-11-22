@@ -74,6 +74,8 @@ def check_workflow_contract() -> None:
         check(reached in text, f"workflow does not reach {reached}")
     for boundary in ("레벨 1의 자료 조사", "비평·심각도 판정", "design-handoff"):
         check(boundary in text, f"level 2 boundary missing: {boundary}")
+    for deliverable in ("필요 결과물", "DEL-01", "draft-a", "draft-b"):
+        check(deliverable in text, f"workflow does not map deliverables: {deliverable}")
     check("opt-in" in text and "활성화를 선언하지 않는다" in text,
           "workflow must keep the preset activation guard explicit")
     check("review-v1.md" in text, "workflow must open the named level 1 review file")
@@ -81,7 +83,7 @@ def check_workflow_contract() -> None:
 
 def check_contract_documents() -> None:
     intake = read(INTAKE)
-    for field in ("handoff_status", "adopted", "constraints", "evidence",
+    for field in ("handoff_status", "adopted", "deliverables", "constraints", "evidence",
                   "unresolved", "gaps", "assumptions", "checks"):
         check(field in intake, f"intake contract missing field {field}")
     for verdict in ("`OK`", "`ASKED`", "`ASSUMED`", "`CONFLICT`"):
@@ -110,6 +112,53 @@ def check_contract_documents() -> None:
     check("draft-a-v2" in handoff and "handoff-v2.md" in handoff,
           "handoff contract must keep versioned drafts and handoff")
     check("합성" in handoff, "handoff example must be marked synthetic")
+
+
+def check_deliverable_mapping() -> None:
+    """레벨 1의 필요 결과물(DEL-xx)이 인계·시안 트랙·근거 표·스펙까지 이어지는지."""
+    intake = read(INTAKE)
+    check("deliverables" in intake and "`DEL-01`" in intake,
+          "intake contract must carry the level 1 deliverables as DEL-xx")
+    check("draft_track" in intake,
+          "intake contract must map each deliverable to a draft track")
+    check("5필드" in intake, "intake contract must name the five handoff fields")
+
+    workflow = read(WORKFLOW)
+    rows = [cells(line) for line in workflow.splitlines()
+            if re.match(r"^\| DEL-\d{2} \|", line)]
+    check(len(rows) >= 2, "workflow needs a deliverable-to-draft-track mapping table")
+    commands: list[int] = []
+    for row in rows:
+        check(len(row) == 5, f"malformed deliverable mapping row: {row}")
+        identifier, medium, priority, tracks, _ = row
+        check(re.fullmatch(r"DEL-\d{2}", identifier),
+              f"deliverable id must be two digits: {identifier}")
+        check(medium.strip(), f"{identifier} has no item/medium")
+        commands.append(int(priority))
+        check("draft-a" in tracks or "draft-b" in tracks,
+              f"{identifier} is not mapped to a draft track")
+    check(commands == sorted(commands), "deliverable priorities must not be reordered")
+
+    evidence = read(EVIDENCE)
+    header = next((line for line in evidence.splitlines()
+                   if line.startswith("| 항목 ID | 시안")), None)
+    check(header is not None, "evidence map column header missing")
+    columns = cells(header)
+    check("필요 결과물" in columns, "evidence map needs a deliverable column")
+    index = columns.index("필요 결과물")
+    example_rows = [line for line in evidence.splitlines()
+                    if re.match(r"^\| E-[A-Z]+-\d{2} \|", line)]
+    check(example_rows, "evidence map example rows missing")
+    for line in example_rows:
+        row = cells(line)
+        check(re.fullmatch(r"DEL-\d{2}(?:, DEL-\d{2})*", row[index])
+              or "이유" in row[-1],
+              f"evidence map row needs a DEL link: {line}")
+
+    handoff = read(HANDOFF)
+    check("필요 결과물" in handoff and "DEL" in handoff,
+          "handoff contract must carry the deliverables list")
+    check("결과물 대응" in handoff, "handoff checklist must check deliverable coverage")
 
 
 def check_translation_math() -> None:
@@ -177,6 +226,7 @@ if __name__ == "__main__":
     check_files_and_links()
     check_workflow_contract()
     check_contract_documents()
+    check_deliverable_mapping()
     check_translation_math()
     check_example_consistency()
     print("PASS: level 2 intake, translation, evidence mapping and handoff contracts")

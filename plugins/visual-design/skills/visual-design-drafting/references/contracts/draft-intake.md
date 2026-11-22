@@ -15,6 +15,7 @@
 | `question` | 시안이 답해야 할 질문(리뷰 첫 문단에서 옮김) | 필수 |
 | `scope_limit` | 판단을 바꿀 한계, 시안이 다루지 않는 범위 | 필수 |
 | `adopted` | 채택 방향: `DIR` ID, 이름, 요약, 근거 ID 목록 | 필수(방향이 있으면) |
+| `deliverables` | 필요 결과물: `DEL` ID, 품목, 매체, 목적, 우선순위, 연결 근거 ID, 담당 시안 트랙 | 필수(방향이 있으면) |
 | `constraints` | 제작 제약: `C` ID, 항목, 값·단위, `origin`, 출처 위치 | 필수 |
 | `evidence` | 근거: `EV` ID, 주장, 원문 위치, 근거 수준, 한계·예외 | 필수(`DIRECT`는 빈 목록 허용) |
 | `unresolved` | 남은 쟁점: `U` ID, 쟁점, 결정 주체, 시안에 미치는 영향 | 필수 |
@@ -22,18 +23,21 @@
 | `assumptions` | 시안에 쓰기로 한 가정과 그것이 바뀌면 달라지는 것 | `PARTIAL`·`DIRECT`에서 필수 |
 | `checks` | 정합 확인 항목별 결과(아래 형식) | 필수 |
 
-`adopted`·`constraints`·`unresolved`의 필드 이름과 순서는 레벨 1 채택 절의 인계 4필드(채택 방향·근거 ID·제작 제약·남은 쟁점)를 그대로 옮긴 것이다. 다른 이름을 새로 만들지 않는다.
+`adopted`·`deliverables`·`constraints`·`unresolved`의 필드 이름과 순서는 레벨 1 채택 절의 인계 5필드(채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점)를 그대로 옮긴 것이다. `evidence`는 세 번째 필드인 근거 ID를 담는다. 다른 이름을 새로 만들지 않는다.
 
 ## 인계 ID 규칙
 
 | ID | 대상 | 부여 시점 |
 | --- | --- | --- |
 | `DIR-01` | 방향 후보(채택·반려 포함) | 레벨 1 채택 절. 사람이 고른 후보도 자기 ID를 유지한다 |
+| `DEL-01` | 필요 결과물(품목·매체) | 레벨 1 채택 절 |
 | `EV-01` | 근거 | 레벨 1 `evidence-index.md` |
 | `C-01` | 제작 제약 | 레벨 1 채택 절 |
 | `U-01` | 남은 쟁점 | 레벨 1 채택 절 |
 
 - 두 자리 번호를 쓴다(`DIR-1`이 아니라 `DIR-01`). 리뷰 파일 안에서 유일하면 되고, 다음 리뷰 버전에서 이어 쓴다.
+- `DEL` 항목은 품목 단위다. 같은 품목이라도 매체가 다르면 별도 `DEL`이고, 시안 트랙 하나가 두 항목을 다룰 수 있다. 우선순위는 레벨 1 값을 그대로 옮기고 레벨 2가 다시 매기지 않는다.
+- 어느 시안에도 매핑하지 않은 `DEL`은 지우지 않고 "쓰지 않음 + 이유"로 남긴다. 인계에 없는 품목을 `DEL`로 새로 만들지 않고, 필요하다고 보면 사람에게 추가를 요청한다.
 - 레벨 1이 부여한 ID를 표기 그대로 쓰고, 번호를 다시 매기거나 문서에 없는 ID를 만들지 않는다. `id_origin: LEVEL1`이 그 상태다.
 - 채택 절은 있는데 ID가 없는 인계(이전 버전 리뷰 등)라면 레벨 2가 읽은 순서대로 부여하고 `id_origin: LEVEL2_NORMALIZED`로 적는다. 이때도 근거 ID(`EV`)는 새로 만들지 않고 `NO-EVIDENCE`로 둔다.
 - `evidence`의 ID는 레벨 1 `evidence-index.md`의 ID를 그대로 쓴다. 리뷰에 ID 없이 적힌 주장은 원문 위치로 찾아 연결하고, 없으면 `NO-EVIDENCE`로 둔다.
@@ -77,6 +81,9 @@ adopted:
     name: 시간 우선형
     summary: 관람 시간과 현재 열린 전시를 첫 층위로, 위치·요금을 둘째 층위로
     evidence: [EV-04, EV-07, EV-11]
+deliverables:
+  - {id: DEL-01, item: 전시 안내 포스터, medium: "A2 오프셋 인쇄", purpose: 입구에서 열린 전시와 시간을 먼저 인지, priority: 1, evidence: [EV-04, EV-07], draft_track: [draft-a, draft-b]}
+  - {id: DEL-02, item: 3단 리플릿, medium: "A4 3단 접지", purpose: 관람 동선과 작품 위치 안내, priority: 2, evidence: [EV-07], draft_track: [draft-a, draft-b]}
 constraints:
   - {id: C-01, item: 포스터 판형, value: "420x594", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
   - {id: C-02, item: 필수 문구, value: "기관명·후원 로고·접근성 안내", origin: USER, source: "brief"}
@@ -95,6 +102,7 @@ assumptions:
   - {what: 본문 320자 내외, basis: 예시 원고, if_changed: 단 수·줄 수 재계산}
 checks:
   - {item: 판형·매체, result: OK, note: C-01}
+  - {item: 필요 결과물, result: OK, note: "DEL-01·DEL-02, 두 항목 모두 draft-a·draft-b에 매핑"}
   - {item: 실제 원고, result: ASSUMED, note: 예시 원고}
   - {item: 자산, result: CONFLICT, note: U-02}
 ```
@@ -104,6 +112,7 @@ checks:
 레벨 1 인계가 없으면 같은 파일을 `handoff_status: DIRECT`로 쓰고 다음만 채운다.
 
 - `question`: 이 시안이 답해야 할 질문 한 문장. 브리프에 없으면 사람에게 묻는다.
+- `deliverables`: 브리프가 요구한 매체·품목을 읽은 순서대로 `DEL-01`부터 부여해 적는다(품목·매체·목적·우선순위, 연결 근거는 `NO-EVIDENCE`). 브리프에 없는 품목을 만들지 않고, `id_origin`은 `DIRECT`다.
 - `constraints`: 브리프에 적힌 고정값(판형·매체·필수 문구·브랜드 자산). 이미 적혀 있는 것을 다시 묻지 않는다.
 - `evidence: []`와 `assumptions`: 근거가 없다는 사실과, 대신 쓴 가정.
 - `scope_limit`: 레벨 2가 조사하지 않은 범위(대상 조사·경쟁 작품 분석 등).

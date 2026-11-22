@@ -10,6 +10,7 @@
 | --- | --- |
 | 선택 시각·선택자 | 언제, 누가 골랐는지 (`USER`) |
 | 고른 시안 | 시안 ID와 진입 파일 경로 |
+| 대상 결과물 | 고른 시안이 다루는 `DEL` ID·품목·매체와, 같은 인계에서 아직 확정되지 않은 결과물의 처리 |
 | 고른 이유 | 사람이 말한 이유를 그대로 요약. 레벨 2의 해석은 별도 문단으로 분리 |
 | 함께 지시한 수정 | 요청 목록과 처리 상태 |
 | 남긴 대안 | 고르지 않은 시안과 그 이유(사람이 밝힌 것 / 레벨 2의 관찰) |
@@ -45,7 +46,7 @@
 
 | design-handoff 필드 | 채우는 내용 | 가져오는 곳 |
 | --- | --- | --- |
-| Brief & constraints | 실제 콘텐츠, 매체, 판형·고정값, 사용자 목적, 자산 상태 | `10-intake.md` |
+| Brief & constraints | 실제 콘텐츠, 매체, 판형·고정값, 사용자 목적, `필요 결과물`(`DEL`) 목록과 우선순위, 자산 상태 | `10-intake.md` |
 | Design values | 객체·관계 ID, 값·단위·원점·좌표계, 식 ID와 적용 조건 | `20-translation.md`, `30-evidence-map.md` |
 | Provenance | `USER` / `USER_APPROVED_PROJECT_POLICY` / `MEASURED` / `DERIVED` / `EMPIRICAL` / `INFERRED` / `UNKNOWN` | 표의 값을 그대로 |
 | Decision status | `DETERMINED` / `PROJECT_INITIAL_PRESET` / `CANDIDATE` / `UNRESOLVED` / `CONFLICT` | 표의 값을 그대로. 승격 금지 |
@@ -67,6 +68,9 @@ handoff_version: v1
 brief_constraints:
   format: {value: "148x210, 3단", unit: mm, origin: USER, source: "10-intake.md#C-03"}
   copy: {state: EXAMPLE-COPY, note: "U-01 결정 전 비교용"}
+deliverables:
+  - {id: DEL-01, item: 안내 포스터, medium: "A2 오프셋 인쇄", priority: 1, artifact: drafts/final/rl-poster/index.html, decision_status: DETERMINED}
+  - {id: DEL-02, item: 3단 리플릿, medium: "A4 3단 접지", priority: 2, artifact: drafts/draft-b/index.html, decision_status: CANDIDATE}
 design_values:
   - {id: G-COL-1, item: 본문 단폭, value: 38, unit: mm, formula: DG-1, inputs: {page: 148, margin: 12, gutter: 5, columns: 3, origin: USER}, provenance: DERIVED, decision_status: DETERMINED, verification: [FORMULA_CHECKED]}
   - {id: T-BODY-1, item: 본문 행간, value: 17, unit: pt, formula: T-LEADING, inputs: {font_size: 10, ratio: 1.7, ratio_origin: USER}, provenance: DERIVED, decision_status: DETERMINED, verification: [FORMULA_CHECKED]}
@@ -86,6 +90,7 @@ verification_request:
 - [ ] **확정 시안 경로:** `drafts/final/`의 진입 파일이 실제로 열리고, 캡처가 같은 상태를 보여 준다.
 - [ ] **INDEX 최신:** `drafts/INDEX.md`의 시안·버전·진입 파일이 폴더와 일치한다.
 - [ ] **스펙 필수 필드:** `handoff-v1.md`에 Brief & constraints, Design values, Provenance, Decision status, Verification status, Unresolved가 값과 함께 있다.
+- [ ] **결과물 대응:** `10-intake.md`의 `DEL` 전 항목이 확정 시안이나 스펙의 어느 파일·항목에 대응하는지 적혔고, 빠진 품목은 이유와 함께 있다.
 - [ ] **근거 양방향:** 인계·번역·매핑의 ID가 서로 맞고, 인계에 없는 ID가 표에 없다.
 - [ ] **상태 승격 없음:** 사람이 고르지 않은 값이 `DETERMINED`가 아니고, 렌더를 보지 않은 값이 `OUTPUT_INSPECTED`가 아니다.
 - [ ] **미결 목록:** 미결·가정·`UNVERIFIED` 항목과 각 결정 주체가 한 목록으로 모였다.

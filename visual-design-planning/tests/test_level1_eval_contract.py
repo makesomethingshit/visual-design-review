@@ -33,11 +33,12 @@ STEP_KEYWORDS = {
     7: ("review-v1.md",),
 }
 
-# 인계 4필드의 기준 표기. lead-state-lifecycle.md의 '인계 기록' 절이 유일한 기준이다.
-HANDOFF_FIELDS = ("채택 방향", "근거 ID", "제작 제약", "남은 쟁점")
+# 인계 5필드의 기준 표기. lead-state-lifecycle.md의 '인계 기록' 절이 유일한 기준이다.
+HANDOFF_FIELDS = ("채택 방향", "필요 결과물", "근거 ID", "제작 제약", "남은 쟁점")
 # 인계 필드별 ID 접두어와 한 문서 안의 번호 표기.
-HANDOFF_ID_PREFIXES = {"채택 방향": "DIR-01", "근거 ID": "EV-01",
-                       "제작 제약": "C-01", "남은 쟁점": "U-01"}
+HANDOFF_ID_PREFIXES = {"채택 방향": "DIR-01", "필요 결과물": "DEL-01",
+                       "근거 ID": "EV-01", "제작 제약": "C-01",
+                       "남은 쟁점": "U-01"}
 # 통일 전 표기. 필드 이름으로 다시 쓰지 않는다.
 OLD_FIELD_LABELS = ("채택한 방향", "채택된 방향", "미결 쟁점")
 # cases.json의 status 허용값. 실행 후 상태를 갱신해도 계약 검사가 깨지지 않아야 한다.
@@ -183,6 +184,36 @@ class WorkflowContractTest(unittest.TestCase):
         for token in ("id_origin", "LEVEL2_NORMALIZED", "NO-EVIDENCE", "다시 매기"):
             self.assertIn(token, intake, f"draft-intake.md에 ID 규칙 '{token}'가 없다")
         self.assertIn("다시 매기", level2, "level-2.md가 ID 재부여를 긍정하지 않는다")
+
+    def test_deliverable_list_is_a_fifth_handoff_field(self) -> None:
+        """인계 5번째 필드 '필요 결과물'(`DEL-xx`)이 레벨 1·2 문서에서 같은 뜻으로 이어진다."""
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        level2 = read(ROOT / "visual-design-drafting/references/workflow/level-2.md")
+        intake = read(ROOT / "visual-design-drafting/references/contracts/draft-intake.md")
+        evidence = read(ROOT / "visual-design-drafting/references/contracts/evidence-map.md")
+        handoff = read(ROOT / "visual-design-drafting/references/contracts/draft-handoff.md")
+        # 레벨 1: 항목별 품목·매체·목적·우선순위·연결 근거 ID와 두 자리 DEL 번호.
+        for token in ("필요 결과물", "DEL-01", "품목", "매체", "목적",
+                      "우선순위", "두 자리"):
+            self.assertIn(token, lifecycle, f"인계 기록 절에 '{token}'가 없다")
+        self.assertIn("조사·삼각검증", self.level1 + self.skill,
+                      "레벨 1이 필요 결과물을 조사·삼각검증 뒤에 정한다고 밝히지 않는다")
+        # 레벨 2: 필수 인계 필드와 시안 트랙 매핑.
+        for token in ("필요 결과물", "deliverables", "DEL-01", "draft_track"):
+            self.assertIn(token, intake, f"draft-intake.md에 '{token}'가 없다")
+        for token in ("필요 결과물", "DEL", "draft-a", "draft-b"):
+            self.assertIn(token, level2, f"level-2.md에 '{token}' 연결이 없다")
+        for name, text in (("evidence-map.md", evidence), ("draft-handoff.md", handoff)):
+            for token in ("필요 결과물", "DEL"):
+                self.assertIn(token, text, f"{name}에 '{token}' 연결이 없다")
+        # 픽스처·가이드: 5필드 계약이 E3 채택 턴과 판정표에 반영됐다.
+        scope = load_cases()["scope"]
+        self.assertIn("필요 결과물", scope["handoff_fields"])
+        e3 = [case for case in load_cases()["cases"] if case["id"] == "E3"][0]
+        self.assertIn("필요 결과물", " ".join(e3["turns"][1]["checks"]))
+        self.assertTrue(any("DEL" in row["pass"] for row in e3["rubric"]),
+                        "E3 판정표에 DEL-xx를 요구하는 항목이 없다")
+        self.assertIn("필요 결과물", read(GUIDE))
 
     def test_handoff_lives_in_the_review_adoption_section(self) -> None:
         lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
