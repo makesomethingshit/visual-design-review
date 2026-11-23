@@ -17,7 +17,7 @@
 
 ## 2. 레벨 1 기획 아키텍처
 
-진입점과 과제 처리 순서는 [레벨 1 실행 흐름](visual-design-planning/references/workflow/level-1.md)에 있다. 사람과 총괄·하위의 역할은 [아키텍처 다이어그램](docs/architecture.html)을 참고한다.
+진입점과 과제 처리 순서는 [레벨 1 실행 흐름](visual-design-planning/references/workflow/level-1.md)에 있다. 중간 조건 합의는 기록·정렬 상태이지 별도 승인 게이트가 아니며, 사용자가 명시한 최종 승인·채택만 레벨 1 종료와 인계의 사용자 결정이다. 레벨 1은 시각·표현 방향 후보를 만들지 않는다. 사람과 총괄·하위의 역할은 [아키텍처 다이어그램](docs/architecture.html)을 참고한다.
 
 개별 방법 카드의 실제 경로는 [방법론 인덱스](visual-design-planning/references/methods/01.methods-index.md)에 있다. 다이어그램의 파일명은 예시이며 배포본에서는 분류 폴더 안의 카드를 지정한다.
 
