@@ -1,6 +1,6 @@
 # v1.0.1 검증 상태 — F1–F3 후속 완료
 
-검증일: 2026-10-18. [후속 검증 보고서](visual-design-review/tests/evaluation/FOLLOWUP.md)가
+검증일: 2026-10-18. [후속 검증 보고서](../../visual-design-review/tests/evaluation/FOLLOWUP.md)가
 최종 심각도 회귀 및 고정 라우팅 사례의 현재 상태다. 기존 실행 기록은 보존했다.
 
 ## 변경과 확인
@@ -14,7 +14,7 @@
   새로 설정한 이상적 독해 과업이나 Probable 표기는 손실 증거를 대신하지 못한다.
 
 ## 실제 실행 결과
-원래 비교 평가 [52개 기록](visual-design-review/tests/evaluation/runs.jsonl)은
+원래 비교 평가 [52개 기록](../../visual-design-review/tests/evaluation/runs.jsonl)은
 21개 완료/31개 usage-limit 차단 상태 그대로다. 차단을 실패나 합격으로 세지 않는다.
 이번 후속은 별도 세 스냅샷의 각 20개, 총 60개 실행을 모두 완료했다.
 중간 실패는 최종 통과로 덮어쓰지 않는다.
@@ -26,8 +26,8 @@
 - CSS·UI 접근성·일반 코드 리뷰 R4/R5/R6 각 2회: 대상 스킬 읽기 없이 해당 범위에 답했다.
 
 선택 선언만으로 성공 처리하지 않았다. 성공한 Python JSON 읽기 이벤트의 본문을
-최종 설치 파일과 대조했다. [읽기 증거](visual-design-review/tests/evaluation/verified/read-evidence.jsonl)와
-[원문·해시·실행 정보](visual-design-review/tests/evaluation/verified/runs.jsonl)를 제공한다.
+최종 설치 파일과 대조했다. [읽기 증거](../../visual-design-review/tests/evaluation/verified/read-evidence.jsonl)와
+[원문·해시·실행 정보](../../visual-design-review/tests/evaluation/verified/runs.jsonl)를 제공한다.
 PowerShell의 한글 인코딩 문제 후 UTF-8 내용이 보존되는 재읽기를 확인했다.
 Windows sandbox 옵션은 호출 단위이며 설정 파일은 수정하지 않았다.
 
@@ -51,5 +51,5 @@ F는 두 반복의 정확한 severity가 Major/Critical로 달랐다. 둘 다 �
 스크립트·고정 미감 수치를 추가하지 않았다. YAML·링크·JSON/JSONL·프롬프트/응답
 해시·최종 설치본 일치를 검증했다. 정적 검사는 행동 합격의 대체 근거가 아니다.
 
-이전 기록: [v1.0.1 초기 검증](VALIDATION-v1.0.1-initial.md),
-[v1.0.0 검증](VALIDATION-v1.0.0.md).
+이전 기록: [v1.0.1 초기 검증](review-v1.0.1-initial-2026-10-18.md),
+[v1.0.0 검증](review-v1.0.0-2026-10-18.md).

@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import platform
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -46,6 +47,8 @@ def _task_names(task: dict[str, Any]) -> tuple[str, list[str]]:
 
 def load_fixture(path: Path) -> dict[str, Any]:
     fixture = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(fixture, dict):
+        raise ValueError("fixture must be a JSON object")
     if fixture.get("schema_version") != "1.0":
         raise ValueError("unsupported fixture schema")
     tasks = fixture.get("pair_tasks")
@@ -174,22 +177,27 @@ def write_manifests(fixture: dict[str, Any], fixture_path: Path,
     )
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fixture", type=Path, default=FIXTURE)
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--validate-only", action="store_true")
-    args = parser.parse_args()
-    fixture = load_fixture(args.fixture)
-    if args.validate_only:
-        print(f"PASS: validated {len(fixture['pair_tasks'])} controlled font-pair tasks")
-        return 0
-    if args.output_dir is None:
+    args = parser.parse_args(argv)
+    if not args.validate_only and args.output_dir is None:
         parser.error("--output-dir is required when rendering")
-    records: list[dict[str, Any]] = []
-    for task in fixture["pair_tasks"]:
-        records.extend(render_task(task, fixture, args.output_dir))
-    write_manifests(fixture, args.fixture, args.output_dir, records)
+    try:
+        fixture = load_fixture(args.fixture)
+        if args.validate_only:
+            print(f"PASS: validated {len(fixture['pair_tasks'])} controlled font-pair tasks")
+            return 0
+        records: list[dict[str, Any]] = []
+        for task in fixture["pair_tasks"]:
+            records.extend(render_task(task, fixture, args.output_dir))
+        write_manifests(fixture, args.fixture, args.output_dir, records)
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
+              file=sys.stderr)
+        return 2
     print(f"PASS: rendered {len(records)} PNGs with BASIC layout; human ratings remain pending")
     return 0
 

@@ -15,11 +15,11 @@
   이 검사는 행동의 정확성을 증명하지 않는다.
 
 ## 관측 가능한 행동 자료
-[평가 방법](visual-design-review/tests/evaluation/README.md),
-[입력·기대 판정](visual-design-review/tests/evaluation/cases.json),
-[정확한 지시 snapshot](visual-design-review/tests/evaluation/tested-instructions.txt),
-[원문 52개 기록](visual-design-review/tests/evaluation/runs.jsonl),
-[사례별 판정](visual-design-review/tests/evaluation/observed-results.md)을 공개한다.
+[평가 방법](../../visual-design-review/tests/evaluation/README.md),
+[입력·기대 판정](../../visual-design-review/tests/evaluation/cases.json),
+[정확한 지시 snapshot](../../visual-design-review/tests/evaluation/tested-instructions.txt),
+[원문 52개 기록](../../visual-design-review/tests/evaluation/runs.jsonl),
+[사례별 판정](../../visual-design-review/tests/evaluation/observed-results.md)을 공개한다.
 
 동일 요청 모델 gpt-6.1-sol/medium, CLI 0.163.0-alpha.10.2의 새 읽기 전용 세션으로
 A~J의 skill/without-skill 비교를 시도했다. 서버 내부 model revision은 노출되지 않는다.
@@ -58,4 +58,4 @@ native 명시·암시·음성 라우팅의 실제 파일 읽기/적용을 검증
 후속 심사는 최종 답을 받지 못해 완료로 계산하지 않는다. 원문 대조와 결과
 심사·보정·설치는 메인 에이전트가 수행했다.
 
-[이전 v1.0.0 검증 기록](VALIDATION-v1.0.0.md)은 당시 기록으로 보존한다.
+[이전 v1.0.0 검증 기록](review-v1.0.0-2026-10-18.md)은 당시 기록으로 보존한다.
