@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ALLOWED = {"PASS", "FAIL", "BLOCKED", "UNVERIFIED", "NOT_APPLICABLE"}
@@ -44,14 +45,20 @@ def normalize(pdf: bytes, report: bytes) -> dict:
     }
 
 
-def main() -> None:
-    p = argparse.ArgumentParser()
-    p.add_argument("--pdf", required=True, type=Path)
-    p.add_argument("--report", required=True, type=Path)
-    a = p.parse_args()
-    print(json.dumps(normalize(a.pdf.read_bytes(), a.report.read_bytes()),
-                     ensure_ascii=False, indent=2))
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--pdf", required=True, type=Path)
+    parser.add_argument("--report", required=True, type=Path)
+    args = parser.parse_args(argv)
+    try:
+        result = normalize(args.pdf.read_bytes(), args.report.read_bytes())
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
+              file=sys.stderr)
+        return 2
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
