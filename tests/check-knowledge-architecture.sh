@@ -30,6 +30,13 @@ for ref in knowledge-routing review-protocol critique-rubric review-output refer
   [[ -f "$review/references/$ref.md" ]] || fail "missing reference $ref"
   grep -Fq "(references/$ref.md)" "$review/SKILL.md" || fail "unreachable reference $ref"
 done
+# Every review reference must be reachable from SKILL.md or knowledge-routing.md.
+for ref in "$review"/references/*.md; do
+  name="$(basename -- "$ref" .md)"
+  grep -Fq "(references/$name.md)" "$review/SKILL.md" ||
+    grep -Fq "($name.md)" "$review/references/knowledge-routing.md" ||
+    fail "review reference not routed: $name"
+done
 for name in T-METRICS T-SPACING T-MEASURE T-LEADING T-CAPACITY T-HIERARCHY; do
   grep -Fq "$name" "$review/references/typography-relations.md" || fail "missing typography model $name"
 done
