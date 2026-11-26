@@ -57,6 +57,8 @@
 | Unresolved | 미결·충돌·미입력과 결정 주체 | `10-intake.md`의 `U`, 표의 `UNRESOLVED`/`CONFLICT` |
 | Verification request | 레벨 3에서 확인할 실제 속성과 허용 편차 | 근거가 있는 항목만 |
 
+`필요 결과물`이 여러 개면 `handoff-v1.md` 하나에 `DEL`별 항목을 나누어 적고, 이번에 확정하지 않은 품목은 `Unresolved`에 이유와 함께 남긴다. 확정되지 않은 품목의 값을 `DETERMINED`로 적지 않는다.
+
 ### 예시 (합성)
 
 값은 형식을 보여 주기 위한 합성 예시이며 실제 작품의 인계가 아니다.

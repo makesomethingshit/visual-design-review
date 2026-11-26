@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 CLOSING = frozenset(")]}〉》」』】、。，．！？!?,.;:)]")
@@ -50,6 +51,7 @@ RULE_METADATA = {
         "verification_method": "source_text_token_inspection",
     },
 }
+
 
 def _check(rule_id: str, status: str, **fields: object) -> dict:
     result = {"rule_id": rule_id, "status": status}
@@ -119,13 +121,19 @@ def check(payload: dict) -> dict:
             "scope": "limited text-level inspection", "checks": checks}
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="JSON with text, profile, optional rendered_lines")
-    args = parser.parse_args()
-    print(json.dumps(check(json.loads(args.input.read_text(encoding="utf-8"))),
-                     ensure_ascii=False, indent=2))
+    args = parser.parse_args(argv)
+    try:
+        result = check(json.loads(args.input.read_text(encoding="utf-8")))
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
+              file=sys.stderr)
+        return 2
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

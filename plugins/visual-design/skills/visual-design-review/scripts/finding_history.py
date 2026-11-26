@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import sys
 from pathlib import Path
 
 TRUSTED_BBOX = {"VERIFIED_SOURCE", "MEASURED_RASTER"}
@@ -88,15 +89,22 @@ def compare(before: dict, after: dict) -> list[dict]:
     return results
 
 
-def main() -> None:
-    p = argparse.ArgumentParser()
-    p.add_argument("before", type=Path)
-    p.add_argument("after", type=Path)
-    a = p.parse_args()
-    old = json.loads(a.before.read_text(encoding="utf-8"))
-    new = json.loads(a.after.read_text(encoding="utf-8"))
-    print(json.dumps(compare(old, new), ensure_ascii=False, indent=2))
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("before", type=Path)
+    parser.add_argument("after", type=Path)
+    args = parser.parse_args(argv)
+    try:
+        old = json.loads(args.before.read_text(encoding="utf-8"))
+        new = json.loads(args.after.read_text(encoding="utf-8"))
+        result = compare(old, new)
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
+              file=sys.stderr)
+        return 2
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -4,17 +4,22 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 STATUSES = {"PASS", "FAIL", "BLOCKED", "UNVERIFIED", "INCONCLUSIVE"}
 
 
 def summarize(samples: list[dict]) -> dict:
+    if not isinstance(samples, list):
+        raise ValueError("samples must be a list")
     outcomes = []
     seen = set()
     counts = {"RESOLVED_CANDIDATE": 0, "UNCHANGED_CANDIDATE": 0, "REGRESSION_CANDIDATE": 0,
               "INCONCLUSIVE": 0, "BLOCKED": 0}
     for s in samples:
+        if not isinstance(s, dict):
+            raise ValueError("Every sample must be an object")
         name = s.get("id")
         if not isinstance(name, str) or not name:
             raise ValueError("Every sample requires a stable id")
@@ -64,13 +69,22 @@ def summarize(samples: list[dict]) -> dict:
                        "not verified repair counts, expert preference, or a global quality score"}
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("cases", type=Path)
-    args = parser.parse_args()
-    raw = json.loads(args.cases.read_text(encoding="utf-8"))
-    print(json.dumps(summarize(raw["samples"]), ensure_ascii=False, indent=2))
+    args = parser.parse_args(argv)
+    try:
+        raw = json.loads(args.cases.read_text(encoding="utf-8"))
+        if not isinstance(raw, dict) or "samples" not in raw:
+            raise ValueError("cases file must be an object with a samples array")
+        result = summarize(raw["samples"])
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
+              file=sys.stderr)
+        return 2
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

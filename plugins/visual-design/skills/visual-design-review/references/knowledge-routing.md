@@ -25,6 +25,10 @@ A~H 정책은 현재 작업의 **명시적 opt-in** 또는 **독립적으로 확
 | 그리드·공간·정렬 | composition | 판면/잡지/정보 구조는 editorial-information 추가 |
 | 데이터/그래프·정보 계층 | editorial-information | 시각화에서만 데이터 인코딩 수식 적용 |
 | 아이덴티티/로고·출력 규격 | identity-production (실제 관련 시) | 인쇄 프리플라이트 생략은 매체가 디지털 전용으로 확정되고 인쇄 요청·제약이 없는 경우만 |
+| 실제 납품 PDF의 출력 검사 또는 외부 프리플라이트 보고서 가져오기 | [pdf-preflight-contract](pdf-preflight-contract.md) + identity-production | 실제 PDF와 출력 조건이 있을 때만. 검사기 통과를 원본 상태나 물리 교정의 증명으로 넓히지 않음 |
+| 한글·로마자 혼식 규칙의 출처·적용 조건 확인 | [mixed-script-knowledge](mixed-script-knowledge.md) + rule-contract | 출처 목록이며 판정기가 아님. 일반 비평에서 기본으로 읽지 않음 |
+| 버전이 있는 반복 리뷰에서 finding 이력 추적 | [finding-trace](finding-trace.md) | 실제 페이지·객체 증거가 있을 때만. Quick/Deep 출력 형식을 대체하지 않음 |
+| 한글·로마자 서체 조합의 통제 비교 | [font-pairing-study](font-pairing-study.md) + typography-relations | 미검증 연구 설계. 조합의 우열이나 보정 배율을 도출하지 않음 |
 | 역사·제작 계보·방법론 인용 | concept-context 또는 sources | 근거가 필요한 주장에만 추가 |
 
 **조건을 조합**한다. 포스터에는 장문이 있을 수도 없을 수도 있다.
