@@ -4,7 +4,7 @@
 
 | 레벨 | 스킬 | 역할 | 다음 단계로 넘기는 것 |
 | --- | --- | --- | --- |
-| 1 기획 | [visual-design-planning](visual-design-planning/SKILL.md) | 의뢰를 정리하고 기존 자료로 판단 근거를 만든다 | `review-vN.md`의 `## 채택` 절에 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점 |
+| 1 기획 | [visual-design-planning](visual-design-planning/SKILL.md) | 의뢰를 디자인 브리프로 정리하고 기존 자료로 판단 근거를 만든다 | `brief-vN.md` 브리프, `review-vN.md`의 `## 채택` 절에 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점 |
 | 2 시안 | [visual-design-drafting](visual-design-drafting/SKILL.md) | 기획 근거를 조형으로 옮겨 비교 가능한 시안 A/B와 설계 스펙을 만든다 | 확정 시안 산출물과 `design-handoff` 스펙 |
 | 3 리뷰 | [visual-design-review](visual-design-review/SKILL.md) | 완성 작품을 비평하고, 레퍼런스를 역분석하고, 제작 명세를 검수한다 | 판정·근거·검증 조건 |
 
@@ -14,7 +14,7 @@ $visual-design-drafting 레벨 1 인계 자산으로 A/B 시안 두 개를 만�
 $visual-design-review 이 포스터의 구성과 타이포그래피를 리뷰해줘.
 ~~~
 
-- 레벨 1은 결과를 바꾸는 정성 질문을 한 번에 하나씩 확인하고, 치수·형식·제작·접근성 같은 정량 조건은 공개 웹과 사용이 허용된 제공 자료의 **기존 기록**으로 확인합니다. 중간 조건 합의는 별도 승인 장벽이 아니며, 사용자가 명시한 최종 승인·채택만 종료·인계의 사용자 결정입니다. 시각·표현 방향 후보, 새 인터뷰·설문·현장조사, 시제품·실험, 시각 평가와 제작은 레벨 1에서 만들지 않습니다.
+- 레벨 1은 결과를 바꾸는 정성 질문을 한 번에 하나씩 확인해 12항목 브리프(`brief-vN.md`)로 저장하고, 치수·형식·제작·접근성 같은 정량 조건은 공개 웹과 사용이 허용된 제공 자료의 **기존 기록**으로 확인합니다. 중간 조건 합의는 별도 승인 장벽이 아니며, 사용자가 명시한 최종 승인·채택만 종료·인계의 사용자 결정입니다. 브리프만 요청하면 브리프를 넘기고 멈춥니다. 채택 방향은 과제 방향(풀 문제·우선 대상·우선순위·정보 단위와 순서)이며, 시각·표현 방향 후보, 새 인터뷰·설문·현장조사, 시제품·실험, 시각 평가와 제작은 레벨 1에서 만들지 않습니다.
 - 레벨 2는 실행 흐름과 단계별 계약(인계 기록·조형 번역·근거 매핑·인계)까지 있습니다. 시안 품질 평가와 도구별 어댑터는 아직 없습니다.
 - 레벨 1의 방법 카드는 `visual-design-planning/references/methods/`에, 레벨 2 워크플로는 `visual-design-drafting/references/workflow/`, 레벨 3의 비평·수식·검증 지식은 `visual-design-review/references/`에 있습니다. 구조는 [ARCHITECTURE.md](ARCHITECTURE.md), 레벨 1 방법 카드 그림은 [아키텍처 다이어그램](docs/architecture.html)을 참고합니다.
 

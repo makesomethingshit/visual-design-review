@@ -79,6 +79,8 @@ def check_workflow_contract() -> None:
     check("opt-in" in text and "활성화를 선언하지 않는다" in text,
           "workflow must keep the preset activation guard explicit")
     check("review-v1.md" in text, "workflow must open the named level 1 review file")
+    check("brief-vN.md" in text and "브리프 전용 경로" in text,
+          "workflow must read the level 1 brief file, including the brief-only route")
 
 
 def check_contract_documents() -> None:
@@ -91,6 +93,10 @@ def check_contract_documents() -> None:
     check("direct" in intake.lower() and "DIRECT" in intake,
           "intake contract must define the direct-brief route")
     check("합성" in intake, "intake example must be marked synthetic")
+    check("| `brief` |" in intake and "file: brief-v2.md" in intake,
+          "intake contract must carry the level 1 brief file and show it in the example")
+    check("`brief-vN.md`만 있고 채택 절이 없는 경우" in intake,
+          "intake contract must route a brief-only level 1 run to DIRECT")
 
     evidence = read(EVIDENCE)
     for relation in ("`FOLLOWS`", "`DEVIATES`", "`NEW`", "`CONFLICT`"):

@@ -12,7 +12,7 @@
 
 - 플러그인 manifest는 `plugins/visual-design/.codex-plugin/plugin.json`, marketplace는 `.agents/plugins/marketplace.json`이다. `plugins/` 아래 스킬은 `scripts/sync-codex-plugin.py --write`가 만드는 생성물이며 직접 편집하지 않는다.
 - 전역 설치는 `scripts/install-linux.sh`, `scripts/install-windows.ps1`이 세 원본 폴더를 각각 `$CODEX_HOME/skills/<스킬 이름>`에 넣는다. 스킬마다 백업 경로가 따로 있다.
-- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 `review-vN.md` 안의 `## 채택` 절에 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점(인계 5필드)을 남기고(별도 `handoff.md`를 만들지 않는다), 시안은 그 절을 인계서로 읽어 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다. 인계 ID(`DIR`·`DEL`·`C`·`U`)와 필드 이름은 [레벨 1 실행 기록 규칙](visual-design-planning/references/workflow/lead-state-lifecycle.md)의 '인계 기록' 절이 유일한 기준이다.
+- 단계 사이의 인계는 파일과 근거 ID로 한다. 기획은 맥락 확인에서 12항목 브리프 `brief-vN.md`를 쓰고(브리프만 요청하면 여기서 멈춘다), 조사 후 `review-vN.md` 안의 `## 채택` 절 첫 줄에 기준 브리프 버전을 적은 뒤 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점(인계 5필드)을 남기고(별도 `handoff.md`를 만들지 않는다), 시안은 그 절을 인계서로 읽어 확정 시안과 `design-handoff` 스펙을 남기며, 리뷰는 판정과 검증 조건을 남긴다. 인계 ID(`DIR`·`DEL`·`C`·`U`)와 필드 이름은 [레벨 1 실행 기록 규칙](visual-design-planning/references/workflow/lead-state-lifecycle.md)의 '인계 기록' 절이 유일한 기준이다.
 - 지식은 스킬별로 나눠 둔다. 레벨 1 방법 카드는 planning의 `references/methods/`, 레벨 2 워크플로는 drafting의 `references/workflow/`, 비평·수식·프린트 검사 지식은 review의 `references/`에 있다. 서로의 절차를 섞지 않는다.
 
 ## 2. 레벨 1 기획 아키텍처
