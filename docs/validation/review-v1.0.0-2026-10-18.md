@@ -8,8 +8,8 @@ Windows 네이티브 Desktop Codex와 활성 사용자 홈을 확인했다. WSL 
 skill-creator quick_validate.py, Python YAML 파싱, 정확한 파일 집합, BOM 부재, 모든 로컬 링크 검사와 설치본·후보·공개본의 바이트 일치 검사를 수행했다. 행동 보정 시 이번 작업 설치본을 백업하고 두 문서만 갱신했다. 프로젝트 AGENTS.md·.agents/skills·다른 전역 스킬·설정은 변경하지 않았다. 패키지나 MCP를 추가하지 않았다.
 
 ## 출처·라이선스
-6개 소스 경로/5개 저장소를 읽었다. E/F는 같은 저장소다. commit SHA·실제로 읽은 파일·통합 및 배제 결정은 [sources.md](visual-design-review/references/sources.md)에 기록했다.
-A/D/E/F는 루트 MIT, C는 스킬 패키지 한정 MIT 기반 허가문을 확인했다. C의 API NOASSERTION과 실제 LICENSE를 구분했다. B는 명시적 허가를 찾지 못해 원문·파일을 복제하지 않고 일반 방법론만 참고했다. 독자적으로 작성했으며 MIT 고지는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)에 보수적으로 보존했다. 외부 스크립트·hooks는 실행하지 않았다.
+6개 소스 경로/5개 저장소를 읽었다. E/F는 같은 저장소다. commit SHA·실제로 읽은 파일·통합 및 배제 결정은 [sources.md](../../visual-design-review/references/sources.md)에 기록했다.
+A/D/E/F는 루트 MIT, C는 스킬 패키지 한정 MIT 기반 허가문을 확인했다. C의 API NOASSERTION과 실제 LICENSE를 구분했다. B는 명시적 허가를 찾지 못해 원문·파일을 복제하지 않고 일반 방법론만 참고했다. 독자적으로 작성했으며 MIT 고지는 [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)에 보수적으로 보존했다. 외부 스크립트·hooks는 실행하지 않았다.
 
 ## A~E 설명 기반 행동 테스트
 독립 읽기 전용 에이전트가 실제 리뷰 응답을 작성했다. 이미지 없는 모의 테스트이며 시각 분석 성공이 아니다.
@@ -23,7 +23,7 @@ A/D/E/F는 루트 MIT, C는 스킬 패키지 한정 MIT 기반 허가문을 확�
 | E 이미지 없음 | 이미지/PDF 요청, 시각 관찰·결함 생성 유보. 새 세션에서도 확인 |
 
 ## 실제 이미지 보조 테스트
-자체 제작 [합성 PNG](visual-fixtures.png)를 메인과 별도 읽기 전용 에이전트가 실제 이미지 도구로 열었다. A 중첩 포스터/B 편집 와이어프레임/C 가상 계보/D 최소 아이덴티티다. 실제 본문·사진·역사 자료가 아니다.
+자체 제작 [합성 PNG](../../visual-fixtures.png)를 메인과 별도 읽기 전용 에이전트가 실제 이미지 도구로 열었다. A 중첩 포스터/B 편집 와이어프레임/C 가상 계보/D 최소 아이덴티티다. 실제 본문·사진·역사 자료가 아니다.
 
 첫 응답은 실패였다. A의 형식 탐구와 B의 캡션을 근거 없이 Major로 올리고, C의 가상 출처와 D의 미제공 응용물을 문제로 만들었다. Strength 여섯 필드와 Deep 9부분도 누락했다. 에이전트의 자체 PASS를 수용하지 않고 이미지·응답과 직접 대조했다.
 

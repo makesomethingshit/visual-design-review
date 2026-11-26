@@ -31,4 +31,4 @@ bash tests/smoke-install-linux.sh
 bash tests/check-knowledge-architecture.sh
 ~~~
 
-이전 리뷰 버전의 설계·검증 기록은 [docs/skill-architecture-extension.md](docs/skill-architecture-extension.md)와 [VALIDATION.md](VALIDATION.md)에 있으며, 각 버전의 범위에 해당합니다.
+이전 리뷰 버전의 설계·검증 기록은 [PR #5 리뷰 설계 기록](docs/review-design-record.md), [PR #6 구현 경계](docs/skill-architecture-extension.md), [검증 기록 색인](docs/validation/README.md)에 있으며, 각 버전의 범위에 해당합니다.

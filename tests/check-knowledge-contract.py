@@ -60,6 +60,9 @@ def check_links() -> None:
     docs = [
         ROOT / "README.md",
         ROOT / "ARCHITECTURE.md",
+        ROOT / "docs/review-design-record.md",
+        ROOT / "docs/validation/README.md",
+        *sorted((ROOT / "docs/validation").glob("review-v*.md")),
         ROOT / "docs/skill-architecture-extension.md",
         ROOT / "docs/CODEX-PLUGIN.md",
         ROOT / "docs/INSTALL.md",
