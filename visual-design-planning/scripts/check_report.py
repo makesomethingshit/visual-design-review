@@ -32,21 +32,24 @@ TEMPLATE_COMMENT = re.compile(
 # Matched against decoded text, so the template's &lt;run-id&gt; appears as <run-id>.
 PLACEHOLDER = re.compile(r"\{[A-Za-z가-힣_]{1,20}\}|<run-id>|brief-vN\.md|DIR-xx|EV-xx")
 EV = re.compile(r"\bEV-\d{2,}\b")
+FN_REF = re.compile(r"""\bhref\s*=\s*["']?#(fn\d+)\b""")
 WINDOW = 240
 BLOCK = re.compile(r"<(p|li|tr|figcaption|dd|blockquote|h[1-6])\b")
 
 
-def claim_block(body: str, start: int, end: int) -> str:
-    """The paragraph, list item or table row that holds a claim tag.
+def claim_blocks(body: str, start: int, end: int) -> list[str]:
+    """Every paragraph, list item or table row that encloses a claim tag,
+    innermost first, so a source in another cell of the same row counts.
 
     Falls back to a fixed window only when the tag sits in no such block.
     """
-    opens = [m for m in BLOCK.finditer(body, 0, start)]
-    for match in reversed(opens):
-        close = body.find(f"</{match.group(1)}>", end)
-        if close != -1 and body.find(f"</{match.group(1)}>", match.end(), start) == -1:
-            return body[match.start():close]
-    return body[max(0, start - WINDOW):end + WINDOW]
+    blocks = []
+    for match in reversed(list(BLOCK.finditer(body, 0, start))):
+        tag = match.group(1)
+        close = body.find(f"</{tag}>", end)
+        if close != -1 and body.find(f"</{tag}>", match.end(), start) == -1:
+            blocks.append(body[match.start():close])
+    return blocks or [body[max(0, start - WINDOW):end + WINDOW]]
 
 
 def visible_text(fragment: str) -> str:
@@ -83,8 +86,12 @@ def check(page: str, evidence: str | None = None) -> dict:
     if re.search(r"<script\b", body) or re.search(r'\bsrc="https?://', page):
         problems.append("스크립트나 외부 자원이 있음")
 
-    refs = sorted(set(re.findall(r'href="#(fn\d+)"', body)), key=lambda x: int(x[2:]))
-    notes = dict(re.findall(r'<li id="(fn\d+)"[^>]*>(.*?)</li>', body, flags=re.S))
+    refs = sorted(set(re.findall(FN_REF, body)), key=lambda x: int(x[2:]))
+    notes = {}
+    for attrs, note in re.findall(r"<li\b([^>]*)>(.*?)</li>", body, flags=re.S):
+        note_id = re.search(r"""\bid\s*=\s*["']?(fn\d+)\b""", attrs)
+        if note_id:
+            notes[note_id.group(1)] = note
     for ref in refs:
         if ref not in notes:
             problems.append(f"각주 참조에 대응하는 각주가 없음: #{ref}")
@@ -96,11 +103,11 @@ def check(page: str, evidence: str | None = None) -> dict:
             problems.append(f"각주에 근거 등급이 없음: {note_id}")
 
     for match in re.finditer(re.escape("[측정/기록]"), body):
-        around = claim_block(body, match.start(), match.end())
         # A value computed only from what the user said cites 사용자 확정
         # instead of an evidence entry (report-format.md, computed values).
-        if not (re.search(r'href="#fn\d+"', around) or EV.search(around)
-                or "사용자 확정" in visible_text(around)):
+        if not any(re.search(FN_REF, around) or EV.search(around)
+                   or "사용자 확정" in visible_text(around)
+                   for around in claim_blocks(body, match.start(), match.end())):
             line = visible_text(body[max(0, match.start() - 80):match.end()]).strip()
             problems.append(f"[측정/기록]과 같은 문단·항목·행에 각주·근거 ID·사용자 확정 출처가 없음: …{line[-60:]}")
 

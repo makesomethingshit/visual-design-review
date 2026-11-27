@@ -39,12 +39,19 @@ class CheckBriefTest(unittest.TestCase):
 
     def test_clean_brief_passes(self) -> None:
         self.assertEqual(self.problems(brief(MIXED)), [])
+        with_log = brief(MIXED) + "\n## 변경\n\n| 항목 | 이전 | 이유 |\n| --- | --- | --- |\n| 예산 | 미확인 | 발화 2 |\n"
+        self.assertEqual(self.problems(with_log), [])
 
     def test_rows_and_columns_are_fixed(self) -> None:
         extra = brief(MIXED).replace("| 미확인 |", "| 비고 | 추가 | [추론] | — |\n| 미확인 |", 1)
         self.assertTrue(any("항목 행" in p for p in self.problems(extra)))
         renamed = brief(MIXED).replace("| 항목 | 내용 | 상태 | 근거 |", "| 항목 | 내용 | 상태 |")
         self.assertTrue(any("열" in p for p in self.problems(renamed)))
+        short = brief(MIXED).replace("| 목표 | 사용자 확정: 목표 값 | 사용자 확정 | 사용자 발화 1 |", "| 목표 | 미확인 |")
+        self.assertTrue(any("칸 수" in p and "목표" in p for p in self.problems(short)))
+        no_evidence = "\n".join(l.rsplit("|", 2)[0] + "|" if l.startswith("| ") and "항목" not in l else l
+                                for l in brief(MIXED).splitlines())
+        self.assertTrue(any("칸 수" in p for p in self.problems(no_evidence)))
 
     def test_status_must_be_weakest(self) -> None:
         strong = {"예산": ("사용자 확정: 30만 원 / 미확인: 인쇄비 포함 여부", "사용자 확정")}

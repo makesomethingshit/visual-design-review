@@ -58,6 +58,10 @@ class CheckReportTest(unittest.TestCase):
         self.assertTrue(any("등급" in p for p in self.problems(no_grade)))
         self.assertEqual(self.problems(page(footnote='<li id="fn1">기사. EV-01 · B등급</li>')), [])
         self.assertTrue(any("근거 색인에 없는" in p for p in self.problems(page(), evidence="EV-02")))
+        reordered = page(footnote='<li class="source" id="fn1">기사. EV-01 · 등급 B</li>')
+        self.assertEqual(self.problems(reordered), [])
+        quoted = page(footnote="<li id='fn1'>기사. EV-01 · 등급 B</li>").replace('href="#fn1"', "href='#fn1'")
+        self.assertEqual(self.problems(quoted), [])
 
     def test_measured_tag_needs_source_nearby(self) -> None:
         far = page("<p>" + "가" * 400 + '<span class="badge b-rec">[측정/기록]</span></p>')
@@ -68,6 +72,9 @@ class CheckReportTest(unittest.TestCase):
         row = page('<table><tr><td>5/12 <span class="badge b-rec">[측정/기록]</span></td>'
                    '<td>' + "설명 " * 100 + '</td><td>EV-01</td></tr></table>')
         self.assertEqual(self.problems(row), [])
+        nested = page('<table><tr><td><p>5/12 <span class="badge b-rec">[측정/기록]</span></p></td>'
+                      '<td>EV-01</td></tr></table>')
+        self.assertEqual(self.problems(nested), [])
 
     def test_user_confirmed_calculation_needs_no_evidence_id(self) -> None:
         calc = page("<p>" + "가" * 400 + '마감까지 34일 <span class="badge b-rec">[측정/기록]</span>'

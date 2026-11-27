@@ -32,7 +32,13 @@ def cells(line: str) -> list[str]:
 
 
 def table(text: str) -> tuple[list[str], list[list[str]]]:
-    lines = [l for l in text.splitlines() if l.lstrip().startswith("|")]
+    # Only the first table; a later table (such as a change log) is not the brief.
+    lines: list[str] = []
+    for line in text.splitlines():
+        if line.lstrip().startswith("|"):
+            lines.append(line)
+        elif lines:
+            break
     if len(lines) < 2:
         return [], []
     header = cells(lines[0])
@@ -49,10 +55,13 @@ def check(text: str) -> dict:
     header, rows = table(text)
     if tuple(header) != COLUMNS:
         problems.append(f"표의 열이 계약과 다름: 기대 {list(COLUMNS)}, 실제 {header}")
+    for row in rows:
+        if len(row) != len(COLUMNS):
+            problems.append(f"행의 칸 수가 {len(COLUMNS)}이 아님: {row[0] or '(빈 항목)'} ({len(row)}칸)")
     names = [r[0] for r in rows]
     if tuple(names) != ITEMS:
         problems.append(f"항목 행이 계약과 다름: 기대 {list(ITEMS)}, 실제 {names}")
-    by_name = {r[0]: r for r in rows if len(r) >= 3}
+    by_name = {r[0]: r for r in rows if len(r) == len(COLUMNS)}
     open_row = by_name.get("미확인", ["", "", ""])[1]
     entries = [e.strip() for e in re.split(r"[①-⑳]|<br>|;", open_row) if e.strip()]
 
