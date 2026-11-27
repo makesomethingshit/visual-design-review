@@ -67,7 +67,7 @@ def check(page: str, evidence: str | None = None) -> dict:
     # is not part of the report, so every structural check below ignores it.
     body = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)
 
-    found = [s for s in re.findall(r'<(?:section|header)\b[^>]*\bid="([a-z]+)"', body)
+    found = [s for s in re.findall(r"""<(?:section|header)\b[^>]*\bid\s*=\s*["']?([a-z]+)\b""", body)
              if s in SECTIONS]
     expected = [s for s in SECTIONS if s in found or s not in OPTIONAL]
     if found != expected:
@@ -79,11 +79,11 @@ def check(page: str, evidence: str | None = None) -> dict:
     for variant in VARIANTS:
         if variant in text:
             problems.append(f"태그 변형 표기: {variant} (정해진 이름: {', '.join(TAGS)})")
-    for badge in re.findall(r'<span class="badge[^"]*">(.*?)</span>', body, flags=re.S):
+    for badge in re.findall(r"""<span\b[^>]*\bclass\s*=\s*["']?badge\b[^>]*>(.*?)</span>""", body, flags=re.S):
         label = visible_text(badge).strip()
         if label not in TAGS:
             problems.append(f"배지 이름이 태그와 다름: {label}")
-    if re.search(r"<script\b", body) or re.search(r'\bsrc="https?://', page):
+    if re.search(r"<script\b", body) or re.search(r"""\bsrc\s*=\s*["']?https?://""", page):
         problems.append("스크립트나 외부 자원이 있음")
 
     refs = sorted(set(re.findall(FN_REF, body)), key=lambda x: int(x[2:]))
@@ -116,12 +116,12 @@ def check(page: str, evidence: str | None = None) -> dict:
         for ev in sorted(set(EV.findall(text)) - known):
             problems.append(f"근거 색인에 없는 근거 ID: {ev}")
 
-    adoption = re.search(r'<section\b[^>]*\bid="adoption".*?</section>', body, flags=re.S)
+    adoption = re.search(r"""<section\b[^>]*\bid\s*=\s*["']?adoption\b.*?</section>""", body, flags=re.S)
     if adoption:
         block = adoption.group(0)
         if not re.search(r"기준 브리프:\s*brief-v\d+\.md", visible_text(block)):
             problems.append("채택 절에 기준 브리프 줄이 없음")
-        fields = tuple(visible_text(h).strip() for h in re.findall(r"<h3>(.*?)</h3>", block, flags=re.S))
+        fields = tuple(visible_text(h).strip() for h in re.findall(r"<h3\b[^>]*>(.*?)</h3>", block, flags=re.S))
         if fields != HANDOFF_FIELDS:
             problems.append(f"채택 절 필드가 계약과 다름: {list(fields)}")
 

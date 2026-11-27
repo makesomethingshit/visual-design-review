@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -93,6 +94,15 @@ class CheckReportTest(unittest.TestCase):
         self.assertTrue(any("절 순서" in p for p in self.problems(swapped)))
         broken = page(adoption=True).replace("<h3>근거 ID</h3>", "")
         self.assertTrue(any("채택 절 필드" in p for p in self.problems(broken)))
+        single_quote = lambda text: re.sub(r'id="([a-z0-9]+)"', r"id='\1'", text)
+        single = single_quote(page(adoption=True))
+        self.assertEqual(self.problems(single), [])
+        hidden_broken = single_quote(broken)
+        self.assertTrue(any("채택 절 필드" in p for p in self.problems(hidden_broken)))
+        no_basis = single.replace("기준 브리프: brief-v2.md", "")
+        self.assertTrue(any("기준 브리프" in p for p in self.problems(no_basis)))
+        quoted_badge = page("<p>단계 <span class='badge b-int'>해석</span></p>")
+        self.assertTrue(any("배지 이름" in p for p in self.problems(quoted_badge)))
 
     def test_template_itself_is_flagged(self) -> None:
         template = (ROOT / "assets" / "report-template.html").read_text(encoding="utf-8")
