@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>페이지 유료 전환 퍼널 · 디자인 기획 보고서</title>
+<style>
+:root{color-scheme:light;--ink:#16201c;--sub:#4a5a54;--muted:#7a8984;--line:#dfe6e2;--paper:#fbfbf8;--card:#fff;--accent:#165855;--accent-soft:#e6f0ec;--warn:#b0632b;--warn-soft:#f8ece2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+main{max-width:980px;margin:auto;padding:0 24px 80px}
+a{color:var(--accent);text-underline-offset:.15em}
+h1,h2,h3,h4{letter-spacing:-.025em;line-height:1.25;margin:0}
+p{margin:0 0 .9em}
+/* 표지 */
+.cover{padding:72px 0 40px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.cover h1{font-size:clamp(2.1rem,5.4vw,3.6rem);margin:.35em 0 .5em;font-weight:800}
+.problem{font-size:clamp(1.2rem,2.6vw,1.55rem);font-weight:700;line-height:1.45;padding:22px 26px;background:var(--accent);color:#fff;border-radius:14px;margin:0 0 22px}
+.problem small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.12em;opacity:.75;margin-bottom:6px}
+.summary{font-size:1.08rem;color:var(--sub);max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);margin-top:18px}
+.meta b{color:var(--sub);font-weight:600}
+/* 섹션 */
+section.part{padding:56px 0 8px}
+.part-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.num{font-size:2.4rem;font-weight:800;color:var(--accent);opacity:.25;line-height:1}
+.part-head h2{font-size:1.6rem}
+.lead{font-size:1.06rem;color:var(--sub);max-width:68ch;margin-bottom:22px}
+/* 수치 카드 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.stat .v{font-size:2rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1.1}
+.stat .l{font-size:.9rem;color:var(--sub);margin-top:6px}
+/* 방법 블록 */
+.method{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:0 0 22px}
+.method .tag{display:inline-block;font-size:.75rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.method h3{font-size:1.25rem;margin-bottom:6px}
+.method .why{color:var(--sub);margin-bottom:16px}
+figure{margin:0;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:720px;height:auto}
+figure svg a{cursor:pointer}
+.method .table-wrap+.reads,.method figure+.reads{margin-top:14px}
+.reads{margin-top:14px;padding:14px 18px;background:var(--accent-soft);border-radius:10px;font-size:.98rem}
+.reads b{color:var(--accent)}
+/* 인사이트 */
+.insights{display:grid;gap:14px}
+.insight{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.insight .i{font-size:1.5rem;font-weight:800;color:var(--accent)}
+.insight h3{font-size:1.15rem;margin-bottom:6px}
+.insight p{color:var(--sub);margin:0}
+.insight .but{margin-top:8px;padding-left:10px;border-left:3px solid var(--warn);color:var(--sub)}
+/* 재정의·기회 */
+.reframe{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:22px}
+.reframe .box{border-radius:12px;padding:18px 20px}
+.reframe .from{background:#eef0ee;color:var(--sub)}
+.reframe .to{background:var(--accent);color:#fff;font-weight:700}
+.reframe .box small{display:block;font-size:.72rem;letter-spacing:.1em;opacity:.75;margin-bottom:6px}
+.reframe .arrow{align-self:center;font-size:1.6rem;color:var(--accent)}
+.hmw{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.hmw li{background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:14px 18px;font-weight:600}
+.hmw li span{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:4px}
+/* 방향 카드 */
+.directions{display:grid;gap:18px}
+.method+.directions{margin-top:4px}
+.direction{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:14px;padding:24px 26px}
+.direction .dn{font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.direction h3{font-size:1.35rem;margin:.2em 0 .4em}
+.direction .concept{font-size:1.06rem;margin-bottom:14px}
+.direction dl{display:grid;grid-template-columns:120px 1fr;gap:8px 16px;margin:0}
+.direction dt{font-size:.85rem;font-weight:700;color:var(--muted)}
+.direction dd{margin:0}
+.principles{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.principles li{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-size:.9rem;font-weight:600}
+.trace{margin-top:16px;font-size:.84rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+/* 다음 단계 */
+.next{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.next li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.next li b{color:var(--accent);margin-right:6px}
+/* 배지·각주 */
+.badge{display:inline-block;font-size:.68rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:.12em}
+.b-rec{background:#e3ece8;color:#165855}.b-int{background:#eae6f4;color:#4b3f7a}.b-hyp{background:var(--warn-soft);color:var(--warn)}.b-user{background:#eef0ee;color:var(--sub)}
+sup a{text-decoration:none;font-size:.72rem;font-weight:700;padding:0 1px}
+/* 표 */
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:.93rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.8rem;color:var(--muted);font-weight:700;background:#f4f6f4}
+/* 채택 */
+.adoption{background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:26px;margin-top:8px}
+.adoption .basis{font-weight:700;color:var(--accent)}
+.adoption h3{font-size:1.1rem;margin:22px 0 10px}
+.status{display:inline-block;font-size:.75rem;font-weight:700;border-radius:4px;padding:1px 7px;background:#eef0ee;color:var(--sub)}
+.status.on{background:var(--accent);color:#fff}
+/* 부록 */
+.appendix{margin-top:64px;border-top:2px solid var(--ink);padding-top:18px}
+.appendix h2{font-size:1rem;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details>div{padding:12px 0;font-size:.93rem}
+details h3{font-size:.95rem;margin:18px 0 8px}
+details h3:first-child{margin-top:0}
+details ul{margin:0;padding-left:1.2em}
+details li{margin-bottom:4px}
+ol.fn{padding-left:1.4em;font-size:.88rem;color:var(--sub)}
+ol.fn li{margin-bottom:6px}
+@media (max-width:640px){.reframe{grid-template-columns:1fr}.reframe .arrow{transform:rotate(90deg);justify-self:center}.direction dl{grid-template-columns:1fr}.insight{grid-template-columns:1fr}}
+@media print{body{background:#fff}.method,.direction,.insight,.stat{break-inside:avoid}}
+</style>
+</head>
+<body><main>
+
+<header class="cover" id="cover">
+<p class="kicker">Design Planning Report · visual-design-planning Level 1</p>
+<h1>페이지 유료 전환 퍼널 · 무엇부터 손댈 것인가</h1>
+<p class="problem"><small>PROBLEM STATEMENT</small>무료 체험을 시작·진행·종료하는 페이지 사용자가 판단 시점에 "언제 과금되는지, 체험이 언제 끝나는지, 끝나면 무엇이 남는지, 한 달에 얼마인지"를 알 수 없어 구독 판단에서 막힌다.</p>
+<p class="summary">먼저 손댈 곳은 <b>무료 체험의 끝(종료일 인지·종료 후 상태·월 기준 가격 비교)</b>이고, 다음이 <b>체험 시작의 카드 등록·과금 시점 안내</b>다 — 사용성 녹취와 티켓 표본이 같은 지점을 가리킨다 <span class="badge b-int">[추론]</span>. 다만 이벤트 로그로는 어느 단계가 가장 많이 새는지 가릴 수 없고(사용자 ID 없는 월별 집계), 말씀하신 2.4%는 제공 로그에서 재현되지 않으며(가입→구독 도달 수 비 17.2%), 개선이 4%에 닿을지도 이 자료로는 판정할 수 없다<sup><a href="#fn1">1</a></sup> <span class="badge b-rec">[측정/기록]</span>.</p>
+<div class="meta"><span><b>의뢰</b> 유료 전환 퍼널 개선의 우선순위와 근거</span><span><b>대상</b> 가입~구독 판단 단계의 페이지 사용자</span><span><b>조사</b> 2026-11-27 · 제공 자료만(새 조사 없음)</span><span><b>자료</b> Amplitude 집계 2025-05~10 · 사용성 녹취 12건 2025-11 · 티켓 표본 40/240 · 설문 표본 32/512 2025-03</span><span><b>방법</b> 웹 행동 데이터 분석 · 원격 조사 기록 검토 · 내용 분석 · 설문 검토 · 여정 지도 · 삼각검증 · HMW · 원칙 생성</span><span><b>기준 브리프</b> brief-v1.md</span><span><b>실행 경로</b> runs/page-funnel-01/</span></div>
+</header>
+
+<section class="part" id="situation" aria-labelledby="p1"><div class="part-head"><span class="num">01</span><h2 id="p1">상황 한눈에</h2></div>
+<p class="lead">로그는 규모와 채널 차이를, 녹취·티켓은 막히는 지점을 보여 준다. 아래 수치는 분모가 서로 다르므로 카드끼리 맞비교하지 않는다.</p>
+<div class="stats">
+<div class="stat"><div class="v">17.2%</div><div class="l">가입→구독 도달 수 비. 2025-05~10 subscribe 3,308 ÷ signup 19,266(월별 도달 수 합, 코호트 아님). 사용자 확정 2.4%와 불일치 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">±0.1%p</div><div class="l">6개월 동안 월별 단계 도달 수 비의 변동 폭. 2025-08 체험 7→14일 변경·7월 수집 장애에도 흔적 없음 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a>,<a href="#fn2">2</a></sup></div></div>
+<div class="stat"><div class="v">12.0%</div><div class="l">paid_social 가입→구독 도달 수 비(761 ÷ 6,341). 가입의 32.9%를 차지하는 채널 중 가장 낮음(organic 19.0%, referral 25.0%) <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">3 / 3</div><div class="l">사용성 테스트의 체험 종료 후 미구독 참가자 3명 전원이 종료 시점 정보(종료일·종료 후 서재 상태)에서 막힘. 2025-11, 등급 A <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a>,<a href="#fn6">6</a></sup></div></div>
+<div class="stat"><div class="v">5 / 12</div><div class="l">사용성 참가자 중 요금제를 한 달 기준으로 바로 비교하지 못한 사람 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn4">4</a></sup></div></div>
+<div class="stat"><div class="v">8 / 40</div><div class="l">티켓 무작위 표본 중 '무료 체험' 범주(종료 알림 3·카드 등록 막힘 3·기간 표기 불일치 2). 2025-05~10 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn11">11</a></sup></div></div>
+</div>
+</section>
+
+<section class="part" id="methods" aria-labelledby="p2"><div class="part-head"><span class="num">02</span><h2 id="p2">문제 들여다보기</h2></div>
+
+<div class="method"><span class="tag">기존 웹 행동 데이터 분석</span>
+<h3>로그는 "어느 단계가 가장 새는가"를 가려 주지 못하고, 2.4%도 재현되지 않는다</h3>
+<p class="why">퍼널 수치의 출발점이라 먼저 열었다. 추출본은 월·채널·단계별 도달 사용자 수 집계이고 사용자 ID가 없어, 같은 사람의 단계 이동(코호트 전환율)을 셀 수 없다. 그래서 아래 비율은 '도달 수 비'이며 단계끼리 크기 순위를 매기지 않는다<sup><a href="#fn1">1</a>,<a href="#fn18">18</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>채널(가입 비중)</th><th>signup</th><th>first_book</th><th>trial_end</th><th>subscribe</th><th>first_book÷signup</th><th>trial_end÷first_book</th><th>subscribe÷trial_end ※</th><th>subscribe÷signup</th></tr>
+<tr><td>organic_search (47.0%)</td><td>9,060</td><td>5,618</td><td>2,537</td><td>1,722</td><td>62.0%</td><td>45.2%</td><td>67.9%</td><td>19.0%</td></tr>
+<tr><td>paid_social (32.9%)</td><td>6,341</td><td>3,488</td><td>1,396</td><td>761</td><td>55.0%</td><td>40.0%</td><td>54.5%</td><td>12.0%</td></tr>
+<tr><td>referral (11.9%)</td><td>2,295</td><td>1,629</td><td>804</td><td>574</td><td>71.0%</td><td>49.4%</td><td>71.4%</td><td>25.0%</td></tr>
+<tr><td>content_blog (8.1%)</td><td>1,570</td><td>911</td><td>392</td><td>251</td><td>58.0%</td><td>43.0%</td><td>64.0%</td><td>16.0%</td></tr>
+<tr><td><b>합계</b></td><td>19,266</td><td>11,646</td><td>5,129</td><td>3,308</td><td>60.4%</td><td>44.0%</td><td>64.5%</td><td>17.2%</td></tr>
+</table></div>
+<p class="why" style="margin-top:10px">※ subscribe가 trial_end의 부분집합인지(체험 중 구독 포함 여부) 정의에 없다. 이 열은 참고용이며 다른 열과 같은 단계 전환으로 읽지 않는다<sup><a href="#fn2">2</a></sup>. 체험 시작·카드 등록 이벤트는 추출본에 없다.</p>
+<p class="reads"><b>이 그림이 말하는 것</b> 같은 단계 정의 안에서 paid_social은 세 도달 수 비가 모두 가장 낮고 referral은 모두 가장 높다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 그러나 월별 비율이 6개월 내내 ±0.1%p 안에서 같고 8월 체험 기간 변경·7월 수집 장애가 보이지 않아, 집계 방식(고정 비율 산출 여부)을 확인하기 전에는 이 수치로 단계 우선순위나 개선 효과를 판단하지 않는 것이 안전하다 <span class="badge b-int">[추론]</span> EV-01, EV-02.</p>
+</div>
+
+<div class="method"><span class="tag">진행자 동반 원격 조사 기록 검토</span>
+<h3>12명의 막힘은 체험의 시작과 끝, 그리고 요금제 비교에 몰려 있다</h3>
+<p class="why">대상 집단을 직접 관찰한 유일한 1차 기록(A)이라 막힘의 위치를 정하는 중심 근거로 썼다. 세션 요약과 발화 3~4개만 있고 과업별 성공·실패 수와 힌트 사용 여부는 기록되지 않았으며, 관찰 메모는 진행자 1명이 썼다<sup><a href="#fn10">10</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>막힘 코드(과업)</th><th>무료 6명</th><th>체험 종료 후 미구독 3명</th><th>월 구독 3명</th><th>계</th><th>근거</th></tr>
+<tr><td>요금제를 한 달 기준으로 비교 못 함·가격이 화면마다 다름(③)</td><td>P02 [15:44], P05 [17:33], P12 [05:37]</td><td>P03 [13:20], P06 [16:50]</td><td>—</td><td>5/12</td><td><sup><a href="#fn4">4</a></sup></td></tr>
+<tr><td>체험 종료일·종료 알림을 찾지 못함(③)</td><td>P02 [09:18]</td><td>P03 [04:02], P09 [03:35]·[11:12]</td><td>—</td><td>3/12</td><td><sup><a href="#fn3">3</a></sup></td></tr>
+<tr><td>체험 시작 시 카드 등록·과금 시점·해지 조건 모름(②)</td><td>P01 [12:05], P08 [12:58], P12 [10:02]</td><td>—</td><td>—</td><td>3/12</td><td><sup><a href="#fn5">5</a></sup></td></tr>
+<tr><td>체험 종료 후 서재가 남는지 모름·결제 화면 선노출(③)</td><td>—</td><td>P06 관찰·[04:19], P03 [19:11]·[08:37]</td><td>—</td><td>2/12</td><td><sup><a href="#fn6">6</a></sup></td></tr>
+<tr><td>무료 범위(어디까지·몇 권) 모름(①②)</td><td>P01 [07:40], P05 [11:26]</td><td>—</td><td>—</td><td>2/12</td><td><sup><a href="#fn7">7</a></sup></td></tr>
+<tr><td>첫 책 찾기 혼동(카드 구분·부분 검색·표지·"뭘 읽을지")(①)</td><td>P01, P02, P05, P10</td><td>—</td><td>—</td><td>4/12</td><td><sup><a href="#fn9">9</a></sup></td></tr>
+<tr><td>동기화 불신·구독 중 체험 배너·결제 수단 변경(④·구독 후)</td><td>—</td><td>—</td><td>P04, P07, P11</td><td>3/12</td><td><sup><a href="#fn8">8</a></sup></td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 체험 종료 후 미구독 3명은 전원이 체험의 끝(종료일·종료 후 상태·월 가격)에서 막혔고, 무료 사용자 6명 중 3명은 체험 시작의 카드·과금 조건에서 멈칫했다 <span class="badge b-rec">[측정/기록]</span> EV-03~EV-06. 반대로 P09는 "비싸다기보다 몇 권 읽을지 몰라서" 망설였다고 말해, 가격 자체보다 가치 판단 정보가 문제일 수 있다는 반례가 있다<sup><a href="#fn4">4</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">내용 분석</span>
+<h3>티켓 표본에서 전환 전 단계 문의는 '체험 조건'과 '요금제 차이'로 모인다</h3>
+<p class="why">사용성 테스트와 독립된 자연 발생 기록이라 교차 확인용으로 골랐다. 무작위 표본 40건(전수 240건)이고, 고유 본문 16종이 각 2~3회 반복돼 실제 반복 문의인지 발췌 과정의 복제인지 확인이 필요하다<sup><a href="#fn14">14</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>범주(건/40)</th><th>본문 코드(건)</th><th>퍼널 위치</th><th>근거</th></tr>
+<tr><td>무료 체험 8</td><td>체험 시작 카드 등록 화면에서 막힘 3 · 종료 알림 못 받음 3 · 7일/14일 표기가 화면마다 다름 2</td><td>체험 시작·체험 중·체험 종료</td><td><sup><a href="#fn11">11</a></sup></td></tr>
+<tr><td>결제·가격 8</td><td>월/연 차이("화면에는 할인율만") 3 · 해지 후 결제 3 · 카드 만료 결제수단 변경 2</td><td>구독 결정 3 / 구독 후 5</td><td><sup><a href="#fn12">12</a></sup></td></tr>
+<tr><td>동기화 8 · 검색 8 · UI 혼동 4 · 계정 2 · 기타 2</td><td>위치·서재·북마크 동기화, 부분 제목 검색·완독 필터·자동완성, 밝기·카드 구분, 로그인 방식</td><td>단계 미상(대부분 사용 중 문제)</td><td><sup><a href="#fn13">13</a></sup></td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 전환 전 단계로 위치를 특정할 수 있는 티켓은 11건(무료 체험 8 + 월/연 차이 3)이고, 모두 체험 시작·종료와 요금제 비교에 걸린다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn11">11</a>,<a href="#fn12">12</a></sup>. 7일/14일 표기 불일치는 2025-07-02, 즉 체험 기간 변경(08-01) 전에도 접수됐다<sup><a href="#fn11">11</a>,<a href="#fn2">2</a></sup>. 동기화·검색은 건수가 많지만 전환 전 문제인지 알 수 없다.</p>
+</div>
+
+<div class="method"><span class="tag">기존 설문 자료 검토 · 기존 설문 응답 조사</span>
+<h3>설문은 하나의 우세한 망설임 이유를 보여 주지 않고, 표본 자체에 무결성 문제가 있다</h3>
+<p class="why">구독 의향과 망설임 이유를 직접 묻는 유일한 자료라 열었다. 2025-03 실시로 체험 기간이 7일이던 때이며, 앱 내 배너로 모집한 기존 사용자만 응답했다<sup><a href="#fn15">15</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>문항</th><th>현재 질문과의 정렬</th><th>표본 32건 결과</th><th>재사용 판단</th></tr>
+<tr><td>Q6 망설임 이유</td><td>직접 관련</td><td>무응답 7, 무료 책 부족 5, 동기화 불안·읽을 시간 부족·결제 수단·가격·기타 각 4</td><td>분포만 참고. 우세 이유 없음</td></tr>
+<tr><td>Q4 가격 적정(1=매우 비쌈)</td><td>관련</td><td>평균 2.44</td><td>가격 인식 참고. '비교 가능성'은 묻지 않음</td></tr>
+<tr><td>Q3 체험 충분</td><td>부분(7일 시절)</td><td>평균 3.44</td><td>현재 14일 체험에 그대로 쓰지 않음</td></tr>
+<tr><td>Q2 경로 × plan × Q7</td><td>채널 비교에 쓸 수 있어 보이나</td><td>세 변수가 1:1로 완전히 겹침(지인 추천=무료=필기 8건 등), 32건 중 10건이 실시 기간 밖 날짜</td><td>교차 분석 제외. 원자료 확인 필요</td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 가격을 비싸게 느끼는 경향(Q4 평균 2.44, 척도 중앙 3보다 0.56 낮음)은 있으나 '가격'을 가장 큰 망설임으로 고른 응답은 32건 중 4건이다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn16">16</a></sup>. 표본의 날짜·교차 구조 이상 때문에 설문은 보조 근거로만 쓴다<sup><a href="#fn17">17</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">여정 지도</span>
+<h3>대상 집단 기록이 겹치는 구간은 '체험 시작 → 체험 종료 → 구독 결정'이고, 그 구간은 로그에 이벤트가 비어 있다</h3>
+<p class="why">네 자료의 막힘을 한 흐름 위에 놓아 어디에 근거가 몰리고 어디가 비는지 보려고 그렸다. 단계 순서는 이벤트 정의와 과업 순서에서 가정했고, 근거 없는 칸은 채우지 않았다<sup><a href="#fn2">2</a>,<a href="#fn10">10</a></sup>.</p>
+<figure>
+<svg viewBox="0 0 1000 432" role="img" aria-label="구독 판단 흐름 단계별 근거 유무" font-family="Pretendard, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<text x="110" y="18" font-size="12" fill="#b0632b" font-weight="700">가정한 구조: 단계 순서는 이벤트 정의(EV-02)와 사용성 과업 순서(EV-10)에서 가정. 사용자 단위 경로는 확인되지 않음</text>
+<rect x="112.0" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="172.85714285714286" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">가입</text>
+<rect x="237.71428571428572" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="298.57142857142856" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">첫 책 찾기·열람</text>
+<rect x="363.42857142857144" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="424.2857142857143" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">체험 시작(카드 등록)</text>
+<rect x="489.1428571428571" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="550.0" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">체험 중</text>
+<rect x="614.8571428571429" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="675.7142857142858" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">체험 종료</text>
+<rect x="740.5714285714286" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="801.4285714285714" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">구독 결정·결제</text>
+<rect x="866.2857142857142" y="26" width="121.71428571428571" height="20" rx="4" fill="#165855"/><text x="927.1428571428571" y="40" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">구독 후</text>
+<text x="4" y="89.0" font-size="12" font-weight="700" fill="#16201c">로그 EV-01</text>
+<a href="#fn1"><rect x="113.0" y="54" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="172.85714285714286" y="72" font-size="11" text-anchor="middle" fill="#16201c">도달 19,266</text>
+</a>
+<a href="#fn1"><rect x="238.71428571428572" y="54" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="298.57142857142856" y="72" font-size="11" text-anchor="middle" fill="#16201c">도달 11,646</text>
+</a>
+<a href="#fn1"><rect x="364.42857142857144" y="54" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="424.2857142857143" y="72" font-size="11" text-anchor="middle" fill="#7a8984">이벤트 없음 ·</text>
+<text x="424.2857142857143" y="87" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn1"><rect x="490.1428571428571" y="54" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="550.0" y="72" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn1"><rect x="615.8571428571429" y="54" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="675.7142857142858" y="72" font-size="11" text-anchor="middle" fill="#16201c">도달 5,129</text>
+</a>
+<a href="#fn1"><rect x="741.5714285714286" y="54" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="801.4285714285714" y="72" font-size="11" text-anchor="middle" fill="#16201c">도달 3,308</text>
+</a>
+<a href="#fn1"><rect x="867.2857142857142" y="54" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="927.1428571428571" y="72" font-size="11" text-anchor="middle" fill="#7a8984">환불·취소 미기록</text>
+<text x="927.1428571428571" y="87" font-size="11" text-anchor="middle" fill="#7a8984">· 근거 없음</text>
+</a>
+<text x="4" y="167.0" font-size="12" font-weight="700" fill="#16201c">사용성 12명</text>
+<a href="#fn9"><rect x="113.0" y="132" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="172.85714285714286" y="150" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn9"><rect x="238.71428571428572" y="132" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="298.57142857142856" y="150" font-size="11" text-anchor="middle" fill="#16201c">카드·검색·표지</text>
+<text x="298.57142857142856" y="165" font-size="11" text-anchor="middle" fill="#16201c">혼동 4/12</text>
+</a>
+<a href="#fn5"><rect x="364.42857142857144" y="132" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="424.2857142857143" y="150" font-size="11" text-anchor="middle" fill="#16201c">카드·과금 시점</text>
+<text x="424.2857142857143" y="165" font-size="11" text-anchor="middle" fill="#16201c">모름 3/12</text>
+</a>
+<a href="#fn3"><rect x="490.1428571428571" y="132" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="550.0" y="150" font-size="11" text-anchor="middle" fill="#16201c">종료일 못 찾음</text>
+<text x="550.0" y="165" font-size="11" text-anchor="middle" fill="#16201c">3/12</text>
+</a>
+<a href="#fn6"><rect x="615.8571428571429" y="132" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="675.7142857142858" y="150" font-size="11" text-anchor="middle" fill="#16201c">종료 후 서재 상태</text>
+<text x="675.7142857142858" y="165" font-size="11" text-anchor="middle" fill="#16201c">모름 2/3</text>
+</a>
+<a href="#fn4"><rect x="741.5714285714286" y="132" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="801.4285714285714" y="150" font-size="11" text-anchor="middle" fill="#16201c">월 기준 비교 못</text>
+<text x="801.4285714285714" y="165" font-size="11" text-anchor="middle" fill="#16201c">함 5/12</text>
+</a>
+<a href="#fn8"><rect x="867.2857142857142" y="132" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="927.1428571428571" y="150" font-size="11" text-anchor="middle" fill="#16201c">동기화·결제수단</text>
+<text x="927.1428571428571" y="165" font-size="11" text-anchor="middle" fill="#16201c">3/3(구독자)</text>
+</a>
+<text x="4" y="245.0" font-size="12" font-weight="700" fill="#16201c">티켓 표본 40</text>
+<a href="#fn13"><rect x="113.0" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="172.85714285714286" y="228" font-size="11" text-anchor="middle" fill="#16201c">로그인 방식 2</text>
+<text x="172.85714285714286" y="243" font-size="11" text-anchor="middle" fill="#16201c">(단계 미상)</text>
+</a>
+<a href="#fn13"><rect x="238.71428571428572" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="298.57142857142856" y="228" font-size="11" text-anchor="middle" fill="#16201c">검색 8 (단계</text>
+<text x="298.57142857142856" y="243" font-size="11" text-anchor="middle" fill="#16201c">미상)</text>
+</a>
+<a href="#fn11"><rect x="364.42857142857144" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="424.2857142857143" y="228" font-size="11" text-anchor="middle" fill="#16201c">카드 등록 화면</text>
+<text x="424.2857142857143" y="243" font-size="11" text-anchor="middle" fill="#16201c">막힘 3</text>
+</a>
+<a href="#fn11"><rect x="490.1428571428571" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="550.0" y="228" font-size="11" text-anchor="middle" fill="#16201c">기간 7/14일</text>
+<text x="550.0" y="243" font-size="11" text-anchor="middle" fill="#16201c">표기 불일치 2</text>
+</a>
+<a href="#fn11"><rect x="615.8571428571429" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="675.7142857142858" y="228" font-size="11" text-anchor="middle" fill="#16201c">종료 알림 못 받음</text>
+<text x="675.7142857142858" y="243" font-size="11" text-anchor="middle" fill="#16201c">3</text>
+</a>
+<a href="#fn12"><rect x="741.5714285714286" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="801.4285714285714" y="228" font-size="11" text-anchor="middle" fill="#16201c">월/연 차이 문의</text>
+<text x="801.4285714285714" y="243" font-size="11" text-anchor="middle" fill="#16201c">3</text>
+</a>
+<a href="#fn12"><rect x="867.2857142857142" y="210" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="927.1428571428571" y="228" font-size="11" text-anchor="middle" fill="#16201c">해지 후 결제</text>
+<text x="927.1428571428571" y="243" font-size="11" text-anchor="middle" fill="#16201c">3·동기화 8</text>
+</a>
+<text x="4" y="323.0" font-size="12" font-weight="700" fill="#16201c">설문 표본 32</text>
+<a href="#fn16"><rect x="113.0" y="288" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="172.85714285714286" y="306" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn16"><rect x="238.71428571428572" y="288" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="298.57142857142856" y="306" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn16"><rect x="364.42857142857144" y="288" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="424.2857142857143" y="306" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn16"><rect x="490.1428571428571" y="288" width="119.71428571428571" height="70" rx="6" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/>
+<text x="550.0" y="306" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+</a>
+<a href="#fn16"><rect x="615.8571428571429" y="288" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="675.7142857142858" y="306" font-size="11" text-anchor="middle" fill="#16201c">Q3 체험 충분</text>
+<text x="675.7142857142858" y="321" font-size="11" text-anchor="middle" fill="#16201c">평균 3.44</text>
+<text x="675.7142857142858" y="336" font-size="11" text-anchor="middle" fill="#16201c">(7일 시절)</text>
+</a>
+<a href="#fn16"><rect x="741.5714285714286" y="288" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="801.4285714285714" y="306" font-size="11" text-anchor="middle" fill="#16201c">Q4 가격 적정</text>
+<text x="801.4285714285714" y="321" font-size="11" text-anchor="middle" fill="#16201c">평균 2.44 ·</text>
+<text x="801.4285714285714" y="336" font-size="11" text-anchor="middle" fill="#16201c">Q6 분산</text>
+</a>
+<a href="#fn16"><rect x="867.2857142857142" y="288" width="119.71428571428571" height="70" rx="6" fill="#e6f0ec" stroke="#165855"/>
+<text x="927.1428571428571" y="306" font-size="11" text-anchor="middle" fill="#16201c">Q6 동기화 불안</text>
+<text x="927.1428571428571" y="321" font-size="11" text-anchor="middle" fill="#16201c">4</text>
+</a>
+<rect x="110" y="382" width="16" height="12" fill="#e6f0ec" stroke="#165855"/><text x="132" y="393" font-size="11.5">대상 집단 기록이 있는 칸 (칸을 누르면 각주)</text>
+<rect x="410" y="382" width="16" height="12" fill="#f1f1ee" stroke="#cfd6d2" stroke-dasharray="4 3"/><text x="432" y="393" font-size="11.5">근거 없음 — 지침이나 일반 지식으로 채우지 않음</text>
+<text x="110" y="416" font-size="11" fill="#7a8984">행끼리 분모가 다르다(로그 사용자 수 / 참가자 12명 / 티켓 40건 / 응답 32건). 칸 사이 크기를 맞비교하지 않는다.</text>
+</svg>
+</figure>
+<p class="reads"><b>이 그림이 말하는 것</b> 사용성·티켓 두 독립 자료가 모두 기록을 가진 칸은 체험 시작, 체험 중, 체험 종료, 구독 결정이다 <span class="badge b-int">[추론]</span> EV-03~EV-06, EV-11, EV-12. 그런데 로그에는 체험 시작 이벤트가 없어, 가장 근거가 몰린 구간의 규모를 지금은 잴 수 없다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">삼각검증</span>
+<h3>독립 자료 두 종 이상이 수렴하는 주장은 세 가지다</h3>
+<p class="why">녹취(A)·티켓(B)·설문(B)·로그(B)는 대상·시점·측정 방식이 달라, 주장마다 각 자료가 실제로 기록한 범위만 대조했다. 수렴은 제한된 범위의 지지이며 원인을 증명하지 않는다.</p>
+<div class="table-wrap"><table>
+<tr><th>주장</th><th>사용성 녹취(A)</th><th>티켓 표본(B)</th><th>설문 표본(B)</th><th>로그(B)</th><th>판정</th></tr>
+<tr><td>체험 종료일·종료 후 상태를 모른다</td><td>3/12 + 종료 후 상태 2/3<sup><a href="#fn3">3</a>,<a href="#fn6">6</a></sup></td><td>알림 3 · 기간 표기 2<sup><a href="#fn11">11</a></sup></td><td>Q8 '체험 길이' 4(뜻 불명)<sup><a href="#fn16">16</a></sup></td><td>위치 특정 불가</td><td>수렴(A+B)</td></tr>
+<tr><td>요금제를 한 달 기준으로 비교하지 못한다</td><td>5/12<sup><a href="#fn4">4</a></sup></td><td>월/연 차이 3<sup><a href="#fn12">12</a></sup></td><td>Q4 평균 2.44 / Q6 가격 4<sup><a href="#fn16">16</a></sup></td><td>해당 없음</td><td>수렴(A+B), 설문과 부분 상충</td></tr>
+<tr><td>체험 시작의 카드 등록·과금 시점이 불투명하다</td><td>3/12<sup><a href="#fn5">5</a></sup></td><td>카드 등록 막힘 3<sup><a href="#fn11">11</a></sup></td><td>Q6 결제 수단 4<sup><a href="#fn16">16</a></sup></td><td>이벤트 없음</td><td>수렴(A+B)</td></tr>
+<tr><td>동기화 불안이 구독을 막는다</td><td>구독자 3/3만(전환 후)<sup><a href="#fn8">8</a></sup></td><td>동기화 8(단계 미상)<sup><a href="#fn13">13</a></sup></td><td>Q6 동기화 불안 4<sup><a href="#fn16">16</a></sup></td><td>해당 없음</td><td>불일치: 전환 전 근거는 설문뿐</td></tr>
+<tr><td>paid_social 유입이 약하다</td><td>채널 정보 없음</td><td>채널 정보 없음</td><td>Q2 사용 불가<sup><a href="#fn17">17</a></sup></td><td>도달 수 비 최저<sup><a href="#fn1">1</a></sup></td><td>단일 자료, 이유 미확인</td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 체험의 끝·요금제 비교·체험 시작 세 주장은 녹취와 티켓이 독립적으로 같은 곳을 가리킨다 <span class="badge b-int">[추론]</span> EV-03~EV-06, EV-11, EV-12. 동기화와 채널 문제는 근거가 한 종류이거나 전환 후 문제라 우선순위 근거로는 약하다.</p>
+</div>
+</section>
+<section class="part" id="insights" aria-labelledby="p3"><div class="part-head"><span class="num">03</span><h2 id="p3">핵심 인사이트</h2></div>
+<div class="insights">
+<div class="insight"><span class="i">1</span><div><h3>체험 종료는 사용자에게 '보이지 않는 마감'이다</h3>
+<p>사용성 참가자 12명 중 3명이 종료일·종료 알림을 찾지 못했고(P03은 설정을 네 번 오감, P09는 종료일을 캘린더에 직접 적겠다고 함), 체험 종료 후 미구독 3명 중 2명은 종료 뒤 서재가 남는지 몰랐다(P06은 앱을 닫음) <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a>,<a href="#fn6">6</a></sup>. 티켓 표본 40건 중 3건은 종료 알림을 못 받았다고, 2건은 체험 기간 표기가 화면마다 다르다고 했다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn11">11</a></sup>. 구독 판단이 일어나야 할 순간에 판단 재료가 보이지 않는다 <span class="badge b-int">[추론]</span> EV-03, EV-06, EV-11.</p>
+<p class="but">단, 참가자 10명 미만 하위집단(체험 종료 후 미구독 3명)에 기대며 관찰자 1명 기록이다. 티켓 본문 중복(EV-14)으로 3건이 독립 문의 3건인지 확인되지 않았다. 녹취(2025-11)는 14일 체험 이후 시점이다.</p></div></div>
+<div class="insight"><span class="i">2</span><div><h3>요금제가 '한 달에 얼마'로 비교되지 않는다</h3>
+<p>12명 중 5명이 월/연 요금을 한 달 기준으로 바로 환산하지 못하거나 화면마다 가격이 다르게 보인다고 했다(P12는 가격 화면을 세 번 되돌아감) <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn4">4</a></sup>. 티켓 표본에도 "화면에는 할인율만 보여요"라는 월/연 차이 문의가 3건 있다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn12">12</a></sup>.</p>
+<p class="but">단, 설문에서 '가격'을 가장 큰 망설임으로 고른 응답은 32건 중 4건으로 우세하지 않다(EV-16). 설문은 '비싸다'를, 녹취는 '비교할 수 없다'를 잰 것이라 서로 다른 구성이다. P09는 가격보다 "몇 권 읽을지 몰라서"라고 했다(반례). 실제 가격 화면 캡처가 없어 어느 화면의 표기인지 특정하지 못했다.</p></div></div>
+<div class="insight"><span class="i">3</span><div><h3>체험 시작 버튼 뒤의 카드 등록이 '언제 돈이 나가는가'라는 질문을 만든다</h3>
+<p>무료 사용자 6명 중 3명이 체험 시작 시 카드 등록, 과금 시점, 체험 중 해지 시 과금 여부를 물었다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn5">5</a></sup>. 티켓 표본 3건은 "체험 시작 버튼을 눌렀는데 카드 등록 화면에서 막혔다"고 했다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn11">11</a></sup>.</p>
+<p class="but">단, 로그에 체험 시작·카드 등록 이벤트가 없어 여기서 얼마나 빠지는지 잴 수 없다(EV-02). 카드 등록 자체를 없앨지는 사업 결정이며 이 자료의 범위 밖이다.</p></div></div>
+<div class="insight"><span class="i">4</span><div><h3>지금의 로그로는 '어느 단계부터'를 숫자로 정할 수 없고, 목표 지표의 정의부터 맞지 않는다</h3>
+<p>추출본은 사용자 ID 없는 월별 도달 수 집계이고, 가입→구독 도달 수 비는 17.2%로 말씀하신 2.4%와 맞지 않는다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 월별 도달 수 비는 6개월 내내 ±0.1%p 안에서 같아 체험 기간 변경(08-01)과 수집 장애(07-15~18)가 보이지 않는다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a>,<a href="#fn2">2</a></sup>.</p>
+<p class="but">단, 2.4%가 방문자·설치 등 이 추출본에 없는 분모를 쓴 값이라면 두 수치는 모순이 아니라 다른 지표다. 정의를 확인하기 전에는 '어느 단계가 가장 새는가'와 '4% 달성 가능성'을 판정할 수 없다.</p></div></div>
+<div class="insight"><span class="i">5</span><div><h3>동기화·검색 불만은 많지만, 전환 전 막힘으로서의 근거는 약하다</h3>
+<p>티켓 표본 40건 중 동기화 8건·검색 8건으로 가장 많은 범주에 속하지만 단계 정보가 없고 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn13">13</a></sup>, 녹취의 동기화 막힘은 월 구독 3명에게서만 나왔다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn8">8</a></sup>. 전환 전 근거는 설문 Q6 '동기화 불안' 4/32뿐이다<sup><a href="#fn16">16</a></sup>.</p>
+<p class="but">단, 동기화가 전환에 영향을 주지 않는다고 배제할 수는 없다(체험 중 다기기 사용자의 기록이 없음). 유지·해지 관점에서는 별도 과제로 볼 근거가 충분하다.</p></div></div>
+</div>
+</section>
+
+<section class="part" id="reframe" aria-labelledby="p4"><div class="part-head"><span class="num">04</span><h2 id="p4">문제 재정의와 디자인 기회</h2></div>
+<div class="method"><span class="tag">근거 기반 문제 재정의</span>
+<h3>'약한 퍼널 단계 고치기'보다 '체험 판단 시점의 정보 공백 메우기'가 근거와 맞는다</h3>
+<div class="table-wrap"><table>
+<tr><th>렌즈</th><th>문제를 이렇게 읽는다</th><th>지지·상충 근거</th><th>달라지는 결정</th></tr>
+<tr><td><b>처음 의뢰</b></td><td>퍼널에서 전환율이 낮은 단계를 찾아 고친다</td><td>상충: 로그로 단계 순위를 매길 수 없음, 2.4% 재현 불가(EV-01, EV-02)</td><td>단계 선택을 로그만으로 할 수 없음</td></tr>
+<tr><td>체험의 끝</td><td>종료일·종료 후 상태를 모른 채 체험이 끝난다</td><td>지지: EV-03, EV-06, EV-11 / 상충: 설문 Q3 체험 충분 3.44(7일 시절, EV-16)</td><td>종료 전후 안내와 상태 표시를 먼저 다룸</td></tr>
+<tr><td>요금제 비교</td><td>가격이 비싸서보다 비교할 수 없어서 망설인다</td><td>지지: EV-04, EV-12 / 상충: Q6 가격 4/32, P09 가치 불확실(EV-16, EV-04)</td><td>가격 인하가 아니라 가격 정보의 단위·순서를 다룸</td></tr>
+<tr><td>체험 시작 장벽</td><td>카드 등록 앞에서 과금 조건을 모른다</td><td>지지: EV-05, EV-11 / 공백: 이벤트 없음(EV-02)</td><td>카드 입력 전 정보 순서를 다룸</td></tr>
+<tr><td>채널 구성</td><td>paid_social 유입이 퍼널 전체를 끌어내린다</td><td>지지: EV-01 / 공백: 채널별 정성 근거 없음, Q2 사용 불가(EV-17)</td><td>디자인보다 획득·광고 소재 쪽 결정. 우선 대상 선택에 영향</td></tr>
+<tr><td>측정</td><td>목표 지표와 로그의 정의가 맞지 않는다</td><td>지지: EV-01, EV-02</td><td>개선 효과를 잴 지표·이벤트를 먼저 맞춰야 함</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 처음 의뢰의 전제(로그로 약한 단계를 고른다)는 현재 자료로 성립하지 않고, A·B 근거가 겹치는 렌즈는 체험의 끝·요금제 비교·체험 시작이다 <span class="badge b-int">[추론]</span> EV-01, EV-03~EV-06, EV-11, EV-12.</p>
+</div>
+<div class="reframe"><div class="box from"><small>처음 의뢰</small>전환율 2.4%를 4%로 올리기 위해 퍼널의 약한 단계를 고친다</div><span class="arrow">→</span><div class="box to"><small>재정의</small>무료 체험을 시작·진행·종료하는 사용자가 판단 시점마다 과금 시점·종료일·종료 후 상태·월 기준 가격을 알 수 있게 하고, 그 효과를 잴 수 있게 전환 지표의 정의를 맞춘다</div></div>
+<ul class="hmw">
+<li>어떻게 하면 체험 중인 사용자가 설정을 찾아가지 않고도 체험이 언제 끝나고 그 뒤 무엇이 남는지 알 수 있을까?<span>인사이트 1에서</span></li>
+<li>어떻게 하면 구독을 고민하는 사용자가 요금제를 같은 단위로 나란히 놓고 자기 사용량에 비춰 판단할 수 있을까?<span>인사이트 2에서</span></li>
+<li>어떻게 하면 체험을 시작하려는 무료 사용자가 카드를 넣기 전에 언제 과금되고 어떻게 멈출 수 있는지 알 수 있을까?<span>인사이트 3에서</span></li>
+<li>어떻게 하면 팀이 체험 시작부터 구독까지 같은 사람의 흐름을 같은 분모로 볼 수 있을까?<span>인사이트 4에서</span></li>
+<li>어떻게 하면 체험 중 여러 기기로 읽는 사용자가 읽던 위치가 이어지는지 스스로 확인할 수 있을까?<span>인사이트 5에서 · 근거 약함, 보류 후보</span></li>
+</ul>
+</section>
+
+<section class="part" id="directions" aria-labelledby="p5"><div class="part-head"><span class="num">05</span><h2 id="p5">디자인 방향</h2></div>
+<div class="method"><span class="tag">디자인 원칙 생성</span>
+<h3>원칙은 녹취와 티켓이 함께 가리킨 막힘에서만 세웠다</h3>
+<div class="table-wrap"><table>
+<tr><th>원칙</th><th>조건과 행동</th><th>근거</th><th>예외·충돌</th></tr>
+<tr><td>P1 체험 상태는 찾으러 가지 않아도 보인다</td><td>체험 중이면 남은 기간·종료일·종료 시 과금 여부를 사용자가 자주 머무는 화면에서 설정 진입 없이 확인할 수 있게 한다</td><td>EV-03, EV-11</td><td>구독자에게는 체험 표시를 보이지 않는다(P04 구독 중 체험 배너, EV-08). 노출 빈도는 운영·마케팅과 조율</td></tr>
+<tr><td>P2 체험 기간은 어디서나 같은 값</td><td>체험 기간·종료일 표기는 모든 화면·알림에서 하나의 값으로 맞춘다</td><td>EV-11(7/14일 불일치 2건), EV-02</td><td>변경 전 가입자(7일)와 이후(14일)가 섞이는 기간이 있었음 → 사용자별 실제 값을 따라야 함</td></tr>
+<tr><td>P3 요금제는 같은 단위로 나란히</td><td>월·연 요금을 같은 기간 단위로 환산해 나란히 보여 주고, 할인율만 단독으로 두지 않는다</td><td>EV-04, EV-12</td><td>연 구독을 앞세우려는 프로모션과 충돌 가능. 월만 쓰려는 사용자(P06)도 고려</td></tr>
+<tr><td>P4 카드 입력 전에 과금 조건 먼저</td><td>체험 시작에서 카드 등록 화면보다 앞에 과금 시점과 체험 중 해지 시 과금 여부를 보여 준다</td><td>EV-05, EV-11</td><td>단계가 하나 늘어 시작 이탈이 늘 수 있음. 결제·법무 고지 요건과 맞출 것</td></tr>
+<tr><td>P5 종료 안내와 '남는 것'을 함께</td><td>체험 종료 안내에 종료 뒤 서재·저장한 책의 상태를 함께 둔다</td><td>EV-06(n=2)</td><td>근거 2명 — 가설 수준. 무료 상태에서 결제 화면을 읽기보다 먼저 띄우는 흐름(P03, n=1)은 확인 필요</td></tr>
+</table></div>
+</div>
+<div class="directions">
+<div class="direction"><span class="dn">DIR-01 · <span class="status">미채택</span></span><h3>체험의 끝을 먼저: 종료 판단 구간</h3>
+<p class="concept">체험 중·종료 직후 사용자를 우선 대상으로, 종료일 → 종료 후 남는 것 → 월 기준 요금 비교 → 계속·해지 방법의 순서로 판단 정보를 모으면 구독 판단의 막힘이 줄 것이다 <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>인사이트 1·2, HMW 1·2. 체험 종료 후 미구독 3명 전원이 이 구간에서 막혔고(EV-03, EV-06), 티켓에서도 종료 알림·기간 표기·월/연 문의가 이어진다(EV-11, EV-12)</dd><dt>설계 원칙</dt><dd><ul class="principles"><li>P1</li><li>P2</li><li>P3</li><li>P5</li></ul></dd><dt>바뀌는 접점</dt><dd>체험 중 주요 화면의 상태 표시, 종료 전 알림, 종료 안내, 가격 안내·결제 화면</dd><dt>잃는 것</dt><dd>체험 시작 장벽(인사이트 3)과 첫 책 발견은 뒤로 밀림. 알림 증가에 따른 피로 위험</dd><dt>검증할 것</dt><dd>기존 기록으로: 티켓 중 '체험 종료 안내'·'가격 안내' 화면 문의 비율(현재 표본 8/40, EV-11·EV-12), trial_end 대비 subscribe 도달 수 비(현재 64.5%, 비코호트, EV-01). 코호트 전환율과 사용성 재검증은 이벤트 추가·새 조사가 필요해 레벨 1 밖</dd></dl>
+<p class="trace">근거 추적 · 각주 3·4·6·11·12 → 원격 조사 기록 검토·내용 분석·삼각검증 → 인사이트 1·2 → P1·P2·P3·P5</p></div>
+<div class="direction"><span class="dn">DIR-02 · <span class="status">미채택</span></span><h3>체험의 시작을 먼저: 카드 등록 전 조건 공개</h3>
+<p class="concept">체험을 시작하려는 무료 사용자를 우선 대상으로, 무료 범위 → 과금 시점 → 해지 방법 → 카드 등록 순서로 정보를 배치하면 체험 시작에서의 망설임이 줄 것이다 <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>인사이트 3, HMW 3. 무료 사용자 6명 중 3명(EV-05), 티켓 카드 등록 막힘 3건(EV-11), 무료 범위 모름 2명(EV-07)</dd><dt>설계 원칙</dt><dd><ul class="principles"><li>P4</li><li>P2</li><li>P3</li></ul></dd><dt>바뀌는 접점</dt><dd>체험 시작 화면, 카드 등록 화면 앞 안내, 무료 범위 안내</dd><dt>잃는 것</dt><dd>체험 종료 구간(근거가 더 많은 쪽)이 뒤로 밀림. 체험 시작 이벤트가 없어 효과를 바로 잴 수 없음</dd><dt>검증할 것</dt><dd>기존 기록으로: 티켓 중 '체험 시작' 화면 문의 수(현재 표본 3/40, EV-11). 체험 시작·카드 등록 단계 이탈률은 이벤트 추가가 필요해 레벨 1 밖</dd></dl>
+<p class="trace">근거 추적 · 각주 5·7·11 → 원격 조사 기록 검토·내용 분석·삼각검증 → 인사이트 3 → P4</p></div>
+</div>
+<p class="lead" style="margin-top:18px">두 방향은 서로 배타적이지 않다. 근거의 양은 DIR-01이 더 많고(녹취 하위집단 3/3 + 티켓 두 범주), P2·P3은 두 방향에 공통이다 <span class="badge b-int">[추론]</span> EV-03~EV-06, EV-11, EV-12. 채널(paid_social)과 동기화는 근거가 한 종류뿐이라 방향 후보로 세우지 않았다.</p>
+</section>
+
+<section class="part" id="next" aria-labelledby="p6"><div class="part-head"><span class="num">06</span><h2 id="p6">다음 단계</h2></div>
+<ul class="next">
+<li><b>결정</b>2.4%의 분모와 산식(가입자·설치·방문 중 무엇, 어느 기간·코호트인지). 이것이 '전환'의 구간과 4% 목표의 검증 지표를 정한다 — 먼저 여쭙는 한 가지</li>
+<li><b>결정</b>DIR-01·DIR-02 가운데 채택할 방향과 순서(둘 다 미채택). 우선 대상을 전체로 둘지 paid_social 유입처럼 좁힐지</li>
+<li><b>확인</b>Amplitude: 사용자 단위 코호트 추출, 체험 시작·카드 등록 이벤트 존재 여부, 월별 비율이 고정된 이유(집계 방식) — 데이터 담당</li>
+<li><b>확인</b>티켓 240건 전수의 범주 분포와 표본 추출 스크립트, 본문 중복 원인 — 고객지원 담당</li>
+<li><b>확인</b>설문 원자료의 날짜·Q2–plan–Q7 정렬 이상, Q8 자유응답 원문 — 조사 담당</li>
+<li><b>확인</b>현재 체험 시작·체험 종료 안내·가격 안내 화면의 캡처(어느 화면에서 7/14일·가격이 다르게 보이는지) — 제품 담당</li>
+<li><b>이어서</b>방향을 채택하시면 이 보고서에 채택 절(필요 결과물 목록 포함)을 붙여 레벨 2(visual-design-drafting)로 넘긴다. 레벨 1에서는 화면 시안·문구를 만들지 않는다</li>
+</ul>
+</section>
+<section class="appendix" id="appendix" aria-labelledby="ap"><h2 id="ap">APPENDIX</h2>
+<details><summary>각주 · 원문 위치</summary><div><ol class="fn">
+<li id="fn1">Amplitude 이벤트 추출본(사용자 제공), materials/amplitude_funnel_2025-05_2025-10.csv 전 96행, 2025-05~10, 추출 2026-02-18. 합계·비율은 work/analyze.py로 계산(예: 3,308 ÷ 19,266 = 17.2%). EV-01, 등급 B</li>
+<li id="fn2">추출본 설정·정의, materials/amplitude_export_notes.md '단계 정의'·'알려진 결측·변경'(2025-08-01 체험 7→14일, 2025-07-15~18 과소 집계, 체험 시작 이벤트 없음). EV-02, 등급 B</li>
+<li id="fn3">사용성 테스트 녹취 요약, materials/usability_sessions_2025-11.md US-02 [09:18], US-03 관찰·[04:02], US-09 관찰·[03:35]·[11:12], 2025-11-04~07. EV-03, 등급 A</li>
+<li id="fn4">같은 파일 US-02 [15:44], US-03 [13:20], US-05 [17:33], US-06 [16:50], US-12 관찰·[05:37]; 반례 US-09 [18:47]. EV-04, 등급 A</li>
+<li id="fn5">같은 파일 US-01 [12:05], US-08 [12:58], US-12 [10:02]. EV-05, 등급 A</li>
+<li id="fn6">같은 파일 US-06 관찰·[04:19], US-03 [19:11]·[08:37]. EV-06, 등급 A</li>
+<li id="fn7">같은 파일 US-01 [07:40], US-05 [11:26]. EV-07, 등급 A</li>
+<li id="fn8">같은 파일 US-04 [05:55]·[06:40]·[14:02], US-07 [06:12]·[09:44], US-11 [07:18]·[15:09]. EV-08, 등급 A</li>
+<li id="fn9">같은 파일 US-01 관찰·[03:12], US-02 관찰·[02:31], US-05 [03:48], US-10 관찰·[02:52]·[09:30]. EV-09, 등급 A</li>
+<li id="fn10">같은 파일 머리말·'세션 진행 메모'(과업 ①~④, 3분 뒤 중립 힌트 1회, 관찰자 1명). EV-10, 등급 A</li>
+<li id="fn11">고객지원 티켓 표본, materials/support_tickets_sample.csv category='무료 체험' T-1003·T-1019·T-1035, T-1004·T-1020·T-1036, T-1014(2025-07-02)·T-1030(2025-09-03). EV-11, 등급 B</li>
+<li id="fn12">같은 파일 category='결제·가격' T-1002·T-1018·T-1034(월/연), T-1001·T-1017·T-1033(해지 후 결제), T-1012·T-1028(결제 수단). EV-12, 등급 B</li>
+<li id="fn13">같은 파일 category='동기화'·'검색'·'UI 혼동'·'계정'·'기타' 24행. EV-13, 등급 B</li>
+<li id="fn14">같은 파일 body_excerpt 40행 — 고유 본문 16종, 각 2~3회 반복. EV-14, 등급 B</li>
+<li id="fn15">설문 문항지·코드북, materials/survey_questionnaire_codebook.md(실시 2025-03-02~20, 앱 내 배너, 응답 512). EV-15, 등급 B</li>
+<li id="fn16">설문 응답 표본, materials/survey_responses_sample.csv 32행 Q3·Q4·Q6·Q8(평균·빈도는 work/analyze.py로 계산). EV-16, 등급 B</li>
+<li id="fn17">같은 파일 submitted_at(10건이 실시 기간 밖: S-201·S-221~S-229), Q2·plan·Q7 1:1 일치. EV-17, 등급 B</li>
+<li id="fn18">제공 자료 설명, materials/README.md '자료별 한계'. EV-18, 등급 B</li>
+</ol></div></details>
+<details><summary>방법별 상세 표</summary><div>
+<h3>월별 합계 도달 수와 도달 수 비(EV-01)</h3>
+<div class="table-wrap"><table>
+<tr><th>월</th><th>signup</th><th>first_book</th><th>trial_end</th><th>subscribe</th><th>도달 수 비(①→②/②→③/③→④)</th><th>subscribe÷signup</th></tr>
+<tr><td>2025-05</td><td>3,190</td><td>1,929</td><td>849</td><td>548</td><td>60.5 / 44.0 / 64.5%</td><td>17.2%</td></tr>
+<tr><td>2025-06</td><td>3,063</td><td>1,851</td><td>815</td><td>526</td><td>60.4 / 44.0 / 64.5%</td><td>17.2%</td></tr>
+<tr><td>2025-07</td><td>3,317</td><td>2,005</td><td>883</td><td>569</td><td>60.4 / 44.0 / 64.4%</td><td>17.2%</td></tr>
+<tr><td>2025-08</td><td>3,476</td><td>2,101</td><td>926</td><td>597</td><td>60.4 / 44.1 / 64.5%</td><td>17.2%</td></tr>
+<tr><td>2025-09</td><td>3,254</td><td>1,967</td><td>866</td><td>559</td><td>60.4 / 44.0 / 64.5%</td><td>17.2%</td></tr>
+<tr><td>2025-10</td><td>2,966</td><td>1,793</td><td>790</td><td>509</td><td>60.5 / 44.1 / 64.4%</td><td>17.2%</td></tr>
+</table></div>
+<h3>렌즈별 반증 질문</h3>
+<ul><li>체험의 끝: 14일 체험 이후 종료 안내가 이미 바뀌었는가(녹취 시점 화면 캡처로 확인)</li><li>요금제 비교: 전수 설문 512건에서도 Q6 '가격'이 우세하지 않은가</li><li>체험 시작: 카드 등록 단계 이탈이 실제로 큰가(이벤트 필요)</li><li>채널: paid_social의 낮은 비율이 집계 방식의 산물이 아닌가</li></ul>
+</div></details>
+<details><summary>완료 기준 대조</summary><div><div class="table-wrap"><table>
+<tr><th>과제</th><th>완료 기준</th><th>충족</th><th>빠진 것·상충·공백</th></tr>
+<tr><td>T-01</td><td>단계×채널 표, 월별 변동, 2.4% 재현, 추적 공백</td><td>부분</td><td>2.4% 재현 불가, 코호트 전환율 산출 불가, 체험 시작 이벤트 없음</td></tr>
+<tr><td>T-02</td><td>참가자×막힘 표(타임코드), 유형별 수, 진행자·관찰자 한계</td><td>부분</td><td>과업별 성공·실패·힌트 사용 수 미기록, 녹화·화면 없음</td></tr>
+<tr><td>T-03</td><td>범주·본문 코드별 건수, 대표 원문, 중복·미분류</td><td>충족(표본 한정)</td><td>전수 240건 분포·추출 방식 미확인, 본문 중복</td></tr>
+<tr><td>T-04</td><td>문항 정렬, 분포·무응답, 무결성 점검</td><td>부분</td><td>표본 날짜·교차 구조 이상으로 교차 분석 제외</td></tr>
+<tr><td>T-05</td><td>단계별 근거 유무, 빈칸 표시, 가정 구조 표시</td><td>부분</td><td>단계 순서는 가정, 사용자 단위 경로 없음</td></tr>
+<tr><td>T-06</td><td>주장×자료 수렴표, 불일치·추가 확인</td><td>충족</td><td>설문 가격 문항과 녹취의 부분 상충은 남은 쟁점</td></tr>
+<tr><td>T-07</td><td>HMW, 원칙, DIR 카드(미채택)</td><td>충족</td><td>—</td></tr>
+<tr><td>T-08</td><td>공개 1차 연구 근거표</td><td>미충족</td><td>사용자가 새 조사 제외를 지시해 미수행</td></tr>
+</table></div></div></details>
+<details><summary>검증과 남은 한계</summary><div><ul>
+<li>공개 연구·업계 자료는 사용자 지시("새로 조사하지 말고")에 따라 찾지 않았다. 대상 집단 1차 근거는 제공된 사용성 녹취(A)뿐이다.</li>
+<li>사용성 녹취는 요약·발화 발췌만 있고 관찰자 1명 기록이다. 하위집단이 3명 단위라 비율로 일반화하지 않는다.</li>
+<li>티켓·설문은 표본이며 추출 방식(무작위·층화)을 확인하지 못했다. 표본 수치를 전수 비율로 쓰지 않았다.</li>
+<li>네 자료의 시점이 다르다(설문 2025-03, 로그·티켓 2025-05~10, 녹취 2025-11). 같은 사용자 집단인지 확인되지 않았다.</li>
+<li>상충: 설문 Q6 '가격' 4/32 vs 녹취 요금제 비교 5/12 — 측정 구성(망설임 이유 vs 비교 가능성)이 달라 생긴 차이로 보이나 확인되지 않음 <span class="badge b-int">[추론]</span> EV-04, EV-16.</li>
+<li>동기화·검색이 전환에 영향을 주지 않는다는 결론은 내리지 않았다(교란 요인 확인 불가 — 배제할 수 없음).</li>
+<li>자기 점검: 문제 정의·인사이트별 A·B 근거 있음 / 맞비교 수치 분모 동일 여부 확인 / 여정 빈칸 유지 / 재인용 없음 / 원인 배제 없음 / 상충은 남은 쟁점으로 / 새 조사 필요 지표는 레벨 1 밖으로 표시.</li>
+<li>보고서 검사: scripts/check_report.py 실행, 결과는 lead-state.md에 기록.</li>
+</ul></div></details>
+<details><summary>적용한 방법</summary><div><ul>
+<li>기존 웹 행동 데이터 분석 → 퍼널 규모·채널 차이 → 단계×채널 도달 수 표 → 총괄 직접 수행(스크립트 계산) → 부분 완료</li>
+<li>진행자 동반 원격 조사 기록 검토 → 대상 집단 직접 관찰 → 참가자×막힘 코드 표 → 총괄 직접 수행 → 부분 완료</li>
+<li>내용 분석 → 독립된 자연 발생 기록으로 교차 확인 → 범주·본문 코드 빈도 → 총괄 직접 수행 → 완료(표본)</li>
+<li>기존 설문 자료 검토·기존 설문 응답 조사 → 망설임 이유 직접 문항 → 문항 정렬·분포·무결성 표 → 총괄 직접 수행 → 부분 완료</li>
+<li>여정 지도 → 근거가 몰리고 비는 구간 확인 → 단계×자료 근거 유무 SVG → 총괄 직접 수행 → 부분 완료</li>
+<li>삼각검증 → 주장별 수렴 판정 → 수렴표 → 총괄 직접 수행 → 완료</li>
+<li>어떻게 하면 질문·디자인 원칙 생성 → 재정의와 방향 → HMW 5개·원칙 5개·DIR 2개 → 총괄 직접 수행 → 완료</li>
+<li>문헌·기존자료 조사 → 미수행(사용자 지시)</li>
+<li>실행 방식: 하위 에이전트를 호출할 수 없는 환경이라 총괄이 같은 입출력 계약으로 순차 수행</li>
+</ul></div></details>
+<details><summary>과제 상태</summary><div><p>T-01 부분 완료 · T-02 부분 완료 · T-03 완료 · T-04 부분 완료 · T-05 부분 완료 · T-06 완료 · T-07 완료 · T-08 미수행(사용자가 새 조사 제외)</p></div></details>
+</section>
+
+</main></body></html>

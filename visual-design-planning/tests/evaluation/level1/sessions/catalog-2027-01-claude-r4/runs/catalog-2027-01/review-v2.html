@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>서울사진미술관 2027 기획전 도록 지면 구조·도판 위계 · 디자인 기획 보고서</title>
+<style>
+:root{color-scheme:light;--ink:#16201c;--sub:#4a5a54;--muted:#7a8984;--line:#dfe6e2;--paper:#fbfbf8;--card:#fff;--accent:#165855;--accent-soft:#e6f0ec;--warn:#b0632b;--warn-soft:#f8ece2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+main{max-width:980px;margin:auto;padding:0 24px 80px}
+a{color:var(--accent);text-underline-offset:.15em}
+h1,h2,h3,h4{letter-spacing:-.025em;line-height:1.25;margin:0}
+p{margin:0 0 .9em}
+/* 표지 */
+.cover{padding:72px 0 40px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.cover h1{font-size:clamp(2.1rem,5.4vw,3.6rem);margin:.35em 0 .5em;font-weight:800}
+.problem{font-size:clamp(1.2rem,2.6vw,1.55rem);font-weight:700;line-height:1.45;padding:22px 26px;background:var(--accent);color:#fff;border-radius:14px;margin:0 0 22px}
+.problem small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.12em;opacity:.75;margin-bottom:6px}
+.summary{font-size:1.08rem;color:var(--sub);max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);margin-top:18px}
+.meta b{color:var(--sub);font-weight:600}
+/* 섹션 */
+section.part{padding:56px 0 8px}
+.part-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.num{font-size:2.4rem;font-weight:800;color:var(--accent);opacity:.25;line-height:1}
+.part-head h2{font-size:1.6rem}
+.lead{font-size:1.06rem;color:var(--sub);max-width:68ch;margin-bottom:22px}
+/* 수치 카드 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.stat .v{font-size:2rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1.1}
+.stat .l{font-size:.9rem;color:var(--sub);margin-top:6px}
+/* 방법 블록 */
+.method{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:0 0 22px}
+.method .tag{display:inline-block;font-size:.75rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.method h3{font-size:1.25rem;margin-bottom:6px}
+.method .why{color:var(--sub);margin-bottom:16px}
+figure{margin:0;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:720px;height:auto}
+figure svg a{cursor:pointer}
+.method .table-wrap+.reads,.method figure+.reads{margin-top:14px}
+.reads{margin-top:14px;padding:14px 18px;background:var(--accent-soft);border-radius:10px;font-size:.98rem}
+.reads b{color:var(--accent)}
+/* 인사이트 */
+.insights{display:grid;gap:14px}
+.insight{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.insight .i{font-size:1.5rem;font-weight:800;color:var(--accent)}
+.insight h3{font-size:1.15rem;margin-bottom:6px}
+.insight p{color:var(--sub);margin:0}
+.insight .but{margin-top:8px;padding-left:10px;border-left:3px solid var(--warn);color:var(--sub)}
+/* 재정의·기회 */
+.reframe{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:22px}
+.reframe .box{border-radius:12px;padding:18px 20px}
+.reframe .from{background:#eef0ee;color:var(--sub)}
+.reframe .to{background:var(--accent);color:#fff;font-weight:700}
+.reframe .box small{display:block;font-size:.72rem;letter-spacing:.1em;opacity:.75;margin-bottom:6px}
+.reframe .arrow{align-self:center;font-size:1.6rem;color:var(--accent)}
+.hmw{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.hmw li{background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:14px 18px;font-weight:600}
+.hmw li span{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:4px}
+/* 방향 카드 */
+.directions{display:grid;gap:18px}
+.method+.directions{margin-top:4px}
+.direction{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:14px;padding:24px 26px}
+.direction .dn{font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.direction h3{font-size:1.35rem;margin:.2em 0 .4em}
+.direction .concept{font-size:1.06rem;margin-bottom:14px}
+.direction dl{display:grid;grid-template-columns:120px 1fr;gap:8px 16px;margin:0}
+.direction dt{font-size:.85rem;font-weight:700;color:var(--muted)}
+.direction dd{margin:0}
+.principles{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.principles li{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-size:.9rem;font-weight:600}
+.trace{margin-top:16px;font-size:.84rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+/* 다음 단계 */
+.next{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.next li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.next li b{color:var(--accent);margin-right:6px}
+/* 배지·각주 */
+.badge{display:inline-block;font-size:.68rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:.12em}
+.b-rec{background:#e3ece8;color:#165855}.b-int{background:#eae6f4;color:#4b3f7a}.b-hyp{background:var(--warn-soft);color:var(--warn)}.b-user{background:#eef0ee;color:var(--sub)}
+sup a{text-decoration:none;font-size:.72rem;font-weight:700;padding:0 1px}
+/* 표 */
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:.93rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.8rem;color:var(--muted);font-weight:700;background:#f4f6f4}
+/* 채택 */
+.adoption{background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:26px;margin-top:8px}
+.adoption .basis{font-weight:700;color:var(--accent)}
+.adoption h3{font-size:1.1rem;margin:22px 0 10px}
+.status{display:inline-block;font-size:.75rem;font-weight:700;border-radius:4px;padding:1px 7px;background:#eef0ee;color:var(--sub)}
+.status.on{background:var(--accent);color:#fff}
+/* 부록 */
+.appendix{margin-top:64px;border-top:2px solid var(--ink);padding-top:18px}
+.appendix h2{font-size:1rem;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details>div{padding:12px 0;font-size:.93rem}
+details h3{font-size:.95rem;margin:18px 0 8px}
+details h3:first-child{margin-top:0}
+details ul{margin:0;padding-left:1.2em}
+details li{margin-bottom:4px}
+ol.fn{padding-left:1.4em;font-size:.88rem;color:var(--sub)}
+ol.fn li{margin-bottom:6px}
+@media (max-width:640px){.reframe{grid-template-columns:1fr}.reframe .arrow{transform:rotate(90deg);justify-self:center}.direction dl{grid-template-columns:1fr}.insight{grid-template-columns:1fr}}
+@media print{body{background:#fff}.method,.direction,.insight,.stat{break-inside:avoid}}
+</style>
+</head>
+<body><main>
+<header class="cover" id="cover">
+<p class="kicker">Design Planning Report · visual-design-planning Level 1</p>
+<h1>서울사진미술관 2027 기획전 도록 — 다시 찾을 수 있는 지면 구조와 도판 위계의 근거</h1>
+<p class="problem"><small>PROBLEM STATEMENT</small>전시장에서 도록을 쓰는 관람객은 도판이 어느 방의 어떤 작품인지, 도록의 순서가 무엇을 기준으로 하는지 알 수 없을 때 막히고, 인쇄된 위치·재질 정보가 현장과 다를 때 또 막힌다.</p>
+<p class="summary">지면 구조는 근거가 지지하는 공통 원칙, 곧 "도판·캡션·작품 목록(가능하면 벽 캡션까지)이 같은 작품 번호로 이어지고 지면 순서의 기준이 하나로 밝혀진다"는 원칙 위에서 순서 기준(전시 동선·작가·기획 서사) 셋 가운데 하나를 고르는 문제입니다 <span class="badge b-int">[추론]</span>. 도판 크기 위계는 지금 자료로는 정할 수 없습니다. 위계의 기준(대표작 지정·작가 간 균형·전시장 비중)과 68점 파일 조건이 먼저 필요합니다 <span class="badge b-int">[추론]</span>. 이 판단을 바꿀 수 있는 한계는 세 가지입니다. 문의 근거는 1,140건 가운데 표본 40건(고유 문장 8개)이고 어느 도록에 대한 문의인지 알 수 없습니다. 이번 전시의 배치와 벽 캡션 번호 체계는 아직 없습니다. 관람객을 직접 관찰한 A급 연구도 찾지 못했습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup><sup><a href="#fn6">6</a></sup>.</p>
+<div class="meta"><span><b>의뢰</b> 기획전 도록 지면 구조·도판 크기 위계의 근거</span><span><b>대상</b> 전시장에서 도록으로 도판·캡션을 찾는 관람객</span><span><b>조사</b> 2026-11-27</span><span><b>자료</b> 제공 5종(도록 요약 3, 문의 표본 40, 메타데이터 표본 30) + 공개 3건</span><span><b>방법</b> 내용 분석·과업 분석·사례 연구·콘텐츠 감사·문헌 조사·삼각검증</span><span><b>기준 브리프</b> brief-v2.md (v1 검토 본문 + 채택 절)</span><span><b>실행 경로</b> runs/catalog-2027-01/</span></div>
+</header>
+
+<section class="part" id="situation" aria-labelledby="p1"><div class="part-head"><span class="num">01</span><h2 id="p1">상황 한눈에</h2></div>
+<p class="lead">기록된 막힘은 대부분 '도판에서 전시장 작품으로 건너가는' 지점에 있습니다. 다만 수치마다 분모가 달라 서로 맞비교하지 않습니다.</p>
+<div class="stats">
+<div class="stat"><div class="v">25/40</div><div class="l">문의 표본 40건 중 찾기 흐름(도판 위치·작품 위치·관람 동선) 문의, 2026-01~10, B. 고유 문장은 5개이며 전수 1,140건의 비율이 아님 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">10/40</div><div class="l">같은 표본 중 캡션 내용(재질 표기·영문 오타) 문의, B <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">1/3</div><div class="l">지난 도록 3종 가운데 전시장 위치 표기·평면도가 있는 도록. 그 1종(2025)은 A5이고, A4인 2023·2024에는 없음, B <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup><sup><a href="#fn3">3</a></sup><sup><a href="#fn4">4</a></sup></div></div>
+<div class="stat"><div class="v">10/30</div><div class="l">아카이브 메타데이터 표본 30점 중 누락 필드가 있는 작품(이미지 파일 없음 5점 포함). 표본에 작품명·규격 열이 없음, B <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn5">5</a></sup></div></div>
+<div class="stat"><div class="v">32일</div><div class="l">인쇄 입고(2027-02-10)에서 개막(2027-03-14)까지. 사용자 확정 일정으로 계산 <span class="badge b-user">사용자 확정</span><sup><a href="#fn10">10</a></sup></div></div>
+</div>
+</section>
+
+<section class="part" id="methods" aria-labelledby="p2"><div class="part-head"><span class="num">02</span><h2 id="p2">문제 들여다보기</h2></div>
+
+<div class="method"><span class="tag">내용 분석 + 과업 분석</span>
+<h3>문의 기록은 '도록 → 전시장' 방향에서만 막힘을 보여 주고, 의뢰문이 말한 '전시장 → 도록' 방향은 기록이 0건이다</h3>
+<p class="why">문의는 관람객이 남긴 원자료(B)라서 찾기 흐름의 막힘을 단계별로 놓는 데 썼습니다. 한계: 표본 40건이 고유 문장 8개의 5회 반복이고, 범주·월·채널 분포가 완전히 균등합니다. 답변 기록이 없고, 2026년 문의라 지난 도록 3종의 전시 기간과 겹치지 않습니다. 그래서 어느 도록에 대한 문의인지 알 수 없습니다<sup><a href="#fn1">1</a></sup><sup><a href="#fn6">6</a></sup>.</p>
+<figure><svg viewBox="0 0 980 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="찾기 흐름 단계별 문의 기록"><text x="10" y="22" font-size="13" font-weight="700" fill="#165855">방향 1 · 도록 → 전시장 (가정한 구조, 칸 안 숫자는 문의 표본 40건 중 건수)</text><rect x="10" y="36" width="148" height="92" rx="8" fill="#f4f6f4" stroke="#b8c2be" stroke-dasharray="5 4"/><text x="20" y="58" font-size="13" font-weight="700" fill="#16201c">F1 도판 보기</text><text x="20" y="80" font-size="11.5" fill="#4a5a54"><tspan x="20" dy="0">근거 없음</tspan></text><text x="160" y="88" font-size="14" fill="#7a8984">›</text><rect x="170" y="36" width="148" height="92" rx="8" fill="#e6f0ec" stroke="#165855"/><text x="180" y="58" font-size="13" font-weight="700" fill="#16201c">F2 순서 기준 이해</text><text x="180" y="80" font-size="11.5" fill="#4a5a54"><tspan x="180" dy="0">5/40 같은 작가 두 곳,</tspan><tspan x="180" dy="16">순서 기준?</tspan></text><text x="320" y="88" font-size="14" fill="#7a8984">›</text><rect x="330" y="36" width="148" height="92" rx="8" fill="#e6f0ec" stroke="#165855"/><text x="340" y="58" font-size="13" font-weight="700" fill="#16201c">F3 작품의 방 알기</text><text x="340" y="80" font-size="11.5" fill="#4a5a54"><tspan x="340" dy="0">5/40 12쪽 도판이</tspan><tspan x="340" dy="16">어느 방?</tspan></text><text x="480" y="88" font-size="14" fill="#7a8984">›</text><rect x="490" y="36" width="148" height="92" rx="8" fill="#e6f0ec" stroke="#165855"/><text x="500" y="58" font-size="13" font-weight="700" fill="#16201c">F4 방 순서·동선</text><text x="500" y="80" font-size="11.5" fill="#4a5a54"><tspan x="500" dy="0">5/40 도록 순서대로</tspan><tspan x="500" dy="16">어느 방부터?</tspan></text><text x="640" y="88" font-size="14" fill="#7a8984">›</text><rect x="650" y="36" width="148" height="92" rx="8" fill="#e6f0ec" stroke="#165855"/><text x="660" y="58" font-size="13" font-weight="700" fill="#16201c">F5 현장 작품 대조</text><text x="660" y="80" font-size="11.5" fill="#4a5a54"><tspan x="660" dy="0">10/40 적힌 방과 다름,</tspan><tspan x="660" dy="16">평면도에 없음</tspan></text><text x="800" y="88" font-size="14" fill="#7a8984">›</text><rect x="810" y="36" width="148" height="92" rx="8" fill="#e6f0ec" stroke="#165855"/><text x="820" y="58" font-size="13" font-weight="700" fill="#16201c">F6 캡션 내용 대조</text><text x="820" y="80" font-size="11.5" fill="#4a5a54"><tspan x="820" dy="0">10/40 재질 표기 다름,</tspan><tspan x="820" dy="16">영문 오타</tspan></text><text x="10" y="168" font-size="13" font-weight="700" fill="#165855">방향 2 · 전시장 → 도록 (의뢰문이 말한 방향)</text><rect x="10" y="182" width="148" height="70" rx="8" fill="#f4f6f4" stroke="#b8c2be" stroke-dasharray="5 4"/><text x="20" y="204" font-size="13" font-weight="700" fill="#16201c">R1 벽의 작품 보기</text><text x="20" y="226" font-size="11.5" fill="#4a5a54"><tspan x="20" dy="0">근거 없음 0/40</tspan></text><rect x="170" y="182" width="148" height="70" rx="8" fill="#f4f6f4" stroke="#b8c2be" stroke-dasharray="5 4"/><text x="180" y="204" font-size="13" font-weight="700" fill="#16201c">R2 도록의 쪽 찾기</text><text x="180" y="226" font-size="11.5" fill="#4a5a54"><tspan x="180" dy="0">근거 없음 0/40</tspan></text><rect x="330" y="182" width="148" height="70" rx="8" fill="#f4f6f4" stroke="#b8c2be" stroke-dasharray="5 4"/><text x="340" y="204" font-size="13" font-weight="700" fill="#16201c">R3 도판·캡션 확인</text><text x="340" y="226" font-size="11.5" fill="#4a5a54"><tspan x="340" dy="0">근거 없음 0/40</tspan></text><rect x="510" y="182" width="148" height="70" rx="8" fill="#e6f0ec" stroke="#165855"/><text x="520" y="204" font-size="13" font-weight="700" fill="#16201c">흐름 밖</text><text x="520" y="226" font-size="11.5" fill="#4a5a54"><tspan x="520" dy="0">5/40 운영 시간</tspan><tspan x="520" dy="16">(도록 판매처)</tspan></text><rect x="10" y="280" width="18" height="12" fill="#e6f0ec" stroke="#165855"/><text x="34" y="291" font-size="11.5" fill="#4a5a54">문의 원문 있음(EV-01)</text><rect x="190" y="280" width="18" height="12" fill="#f4f6f4" stroke="#b8c2be" stroke-dasharray="5 4"/><text x="214" y="291" font-size="11.5" fill="#4a5a54">기록 없음 — 비워 둠</text><text x="10" y="316" font-size="11.5" fill="#7a8984">단계 순서는 문의 문장에서 재구성한 가정이며 관찰된 순서가 아니다. 40건은 고유 문장 8개가 각 5회 반복된 표본이다.</text></svg></figure>
+<p class="reads"><b>이 그림이 말하는 것</b> 기록이 있는 칸은 F2~F6입니다. 도판의 순서 기준, 작품이 있는 방, 방 순서, 현장과의 대조, 캡션 내용에서 막힙니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 벽의 작품에서 도록의 쪽으로 찾아가는 흐름(R1~R3)은 문의에 나타나지 않습니다. 그 흐름에 문제가 없다는 뜻인지, 문의로 이어지지 않았을 뿐인지는 이 자료로 가를 수 없습니다 <span class="badge b-int">[추론]</span>.</p>
+</div>
+
+<div class="method"><span class="tag">사례 연구</span>
+<h3>지난 도록 3종은 모두 도판을 3단계로 나눴지만, 찾기 장치를 둔 도록은 판형이 다른 2025년 한 종뿐이다</h3>
+<p class="why">같은 미술관이 만든 선례라 이번 조건으로 무엇을 옮길 수 있는지 판정하려고 골랐습니다. 한계: PDF를 훑어 적은 요약이고 인쇄물을 실측한 값이 아닙니다. 어느 구조가 나은지에 대한 평가는 자료에 없습니다. 2025년 도록의 mm 값은 A5 기준이라 A4와 맞비교하지 않습니다<sup><a href="#fn2">2</a></sup><sup><a href="#fn3">3</a></sup><sup><a href="#fn4">4</a></sup><sup><a href="#fn6">6</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>항목</th><th>2023 《도시의 표면》</th><th>2024 《겨울 정원》</th><th>2025 《푸른 시간》</th><th>이번(2027)</th></tr>
+<tr><td>판형·면수</td><td>A4·88면</td><td>A4·96면</td><td>A5·120면</td><td>A4·96면 <span class="badge b-user">사용자 확정</span></td></tr>
+<tr><td>작가·작품</td><td>8명·52점(작가당 6.5)</td><td>5명·61점(12.2)</td><td>11명·74점(6.7)</td><td>12명·68점(5.7) <span class="badge b-user">사용자 확정</span></td></tr>
+<tr><td>본문 순서 기준</td><td>연대별 4장 + 도판 위주 지면</td><td>작가별 5장(작가당 12~15면)</td><td>주제별 3장</td><td>미정</td></tr>
+<tr><td>도판 단계(점, 자기 도판 합 대비)</td><td>전면 8(11%) / 1/2 22 / 1/4 40(57%), 합 70</td><td>전면 12(20%) / 2/3 18 / 1/2 30(50%), 합 60</td><td>전면 6(7%) / 1/2 24 / 1/4 52(63%), 합 82</td><td>근거로 정하지 않음</td></tr>
+<tr><td>캡션 위치·항목</td><td>도판 아래 왼쪽, 작가·제목·연도·재질·소장처</td><td>도판 오른쪽 아래, 원제·촬영자 추가</td><td>지면 하단 블록, 도판 번호·작가·제목·연도</td><td>—</td></tr>
+<tr><td>찾기 장치</td><td>작품 번호, 가나다순 목록. 색인·평면도 없음</td><td>도판 번호 P-01~, 작가 색인. 평면도 없음</td><td>룸 번호(본문·목록), 작가 색인, 평면도</td><td>—</td></tr>
+<tr><td>기록된 결함</td><td>캡션 누락 2곳(46·61쪽)</td><td>2점은 목록에만 실림</td><td>블록 캡션과 도판의 대응 규칙이 번호 말고는 없음</td><td>—</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 같은 A4·96면 선례(2024)는 작가 5명을 작가당 12~15면으로 다뤘습니다. 같은 본문 66면에 12명을 넣으면 작가당 약 5.5면입니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a></sup>. 찾기 장치는 2025년 A5 도록에서만 확인되므로, A4에 그대로 옮겨 쓸 수 있는지는 근거가 없습니다 <span class="badge b-int">[추론]</span>. 세 도록 모두 도판 수와 작품 수가 맞지 않는데(70/52, 60/59, 82/74) 그 이유는 요약에 없습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup><sup><a href="#fn3">3</a></sup><sup><a href="#fn4">4</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">콘텐츠 목록·감사</span>
+<h3>아카이브 메타데이터만으로는 캡션을 완결할 수 없다. 작품명·규격 열이 없고, 재질 표기 한 종은 프린트 종류를 가리지 않는다</h3>
+<p class="why">캡션과 도판 위계가 기대는 원천 데이터가 준비되어 있는지 보려고 골랐습니다. 한계: 68점 중 표본 30점만 있어 나머지 38점은 판정하지 않았습니다. 대조 기준은 다른 기관(국립현대미술관)의 출판 지침(D)입니다<sup><a href="#fn5">5</a></sup><sup><a href="#fn6">6</a></sup><sup><a href="#fn7">7</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>점검 항목</th><th>표본 30점 결과</th><th>대조 기준</th><th>영향</th></tr>
+<tr><td>작품명</td><td>열 없음</td><td>캡션 순서 "작가명, 작품명, 제작 연도, 매체 및 기법, 규격"<sup><a href="#fn7">7</a></sup></td><td>캡션을 쓸 수 없음 <span class="badge b-rec">[측정/기록]</span></td></tr>
+<tr><td>규격(크기)</td><td>열 없음</td><td>같은 지침 3.76(cm, 세로×가로)</td><td>캡션 미완결 <span class="badge b-rec">[측정/기록]</span></td></tr>
+<tr><td>이미지 파일</td><td>없음 5/30(W-101·108·115·122·129)</td><td>—</td><td>도판 없이 목록에만 싣는 경우가 생길 수 있음 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td>소장처</td><td>없음 4/30</td><td>3.79 소장처·저작권·출처</td><td>캡션 미완결 <span class="badge b-rec">[측정/기록]</span></td></tr>
+<tr><td>도판 번호</td><td>없음 3/30</td><td>—</td><td>찾기 번호를 이 열로 쓰면 빈칸이 생김 <span class="badge b-rec">[측정/기록]</span></td></tr>
+<tr><td>재질 표기</td><td>젤라틴 실버 프린트 8, 디지털 C 프린트 8, 피그먼트 프린트 7, 흑백 인화 7</td><td>3.75 "인화 방식 및 인화 재료에 따른 프린트 종류를 구별"</td><td>'흑백 인화'는 프린트 종류를 가리지 않음 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td>해상도·가로세로·전시실</td><td>열 없음</td><td>—</td><td>도판 단계와 위치 표기를 판정할 수 없음 <span class="badge b-rec">[측정/기록]</span></td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 원천 데이터를 정리하지 않으면 교정 단계에서 캡션 결함이 나옵니다. 2023 도록의 캡션 누락, 문의의 재질 표기 지적과 같은 종류의 결함입니다 <span class="badge b-int">[추론]</span><sup><a href="#fn2">2</a></sup><sup><a href="#fn1">1</a></sup><sup><a href="#fn5">5</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">문헌·기존자료 조사</span>
+<h3>공개 자료가 받쳐 주는 것은 캡션 항목 순서와 무선철 책등 손실 두 가지이고, 도록 사용을 관찰한 1차 연구는 찾지 못했다</h3>
+<p class="why">캡션·제본처럼 확인할 수 있는 정량 조건을 보려고 골랐습니다. 검색은 7회, 원문 열기는 5회 시도했습니다. 레이블 열람 연구 1편은 접근 승인을 받지 못해 열지 못했고, KCI 검색 결과 제목에서도 도록 사용을 관찰한 연구는 보이지 않았습니다.</p>
+<div class="table-wrap"><table>
+<tr><th>출처</th><th>확인한 내용</th><th>등급</th><th>이번 과제에서 쓰는 곳</th></tr>
+<tr><td>국립현대미술관 출판 지침(2019)<sup><a href="#fn7">7</a></sup></td><td>캡션 순서, 사진 재질 표기 규칙, 도판 목록이 캡션 일관성을 돕는다는 권고</td><td>D</td><td>캡션 항목과 재질 용어 정리</td></tr>
+<tr><td>Printivity 무선철 지침<sup><a href="#fn8">8</a></sup></td><td>책등 쪽 1/4~1/2인치가 가려질 수 있음. 두 쪽에 걸친 이미지는 연속성이 끊김</td><td>D</td><td>최상위 도판 단계를 둘 위치의 제약</td></tr>
+<tr><td>내 손안에 서울 기사(2025-07-18)<sup><a href="#fn9">9</a></sup></td><td>서울시립 사진미술관은 4개 전시실, 2·3층에 전시관이 이어짐</td><td>C</td><td>참고만 함. 문의의 1관~3관과 대응하지 않고, 같은 기관인지 확인되지 않음</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 공개 자료는 지침(D)과 보도(C)뿐이라 문제 정의에는 쓰지 않았고, 원칙의 제약 조건으로만 씁니다 <span class="badge b-rec">[측정/기록]</span>.</p>
+</div>
+</section>
+
+<section class="part" id="insights" aria-labelledby="p3"><div class="part-head"><span class="num">03</span><h2 id="p3">핵심 인사이트</h2></div>
+<div class="insights">
+<div class="insight"><span class="i">1</span><div><h3>관람객이 막히는 곳은 도판 자체가 아니라 도판과 전시장 작품을 잇는 연결 정보다</h3>
+<p>찾기 흐름 문의 25/40건은 "어느 방 작품인지", "어느 방부터", "순서 기준이 뭔지", "적힌 방과 다르다"처럼 도판과 공간·순서를 잇는 정보를 묻습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 도판 크기나 보기 어려움을 지적한 문의는 표본에 없습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>.</p>
+<p class="but">단, 고유 문장은 5개뿐이고 표본 분포가 인위적으로 균등해서 빈도로 중요도를 매길 수 없습니다. 대상 도록도 모릅니다. 근거는 원자료 1종에 기대고 있습니다.</p></div></div>
+<div class="insight"><span class="i">2</span><div><h3>지면에 위치를 인쇄하면 현장과 어긋날 수 있다. 위치 표기는 배치가 확정되는 시점에 묶인다</h3>
+<p>"3관에 있다고 적힌 작품을 2관에서 봤습니다", "전시장 평면도에 없는 작품이 도록에 있습니다"(합 10/40)는, 위치와 평면도를 인쇄한 도록에서도 어긋남이 생겼다는 기록입니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 이번 일정은 입고 뒤 개막까지 32일이라, 그 사이 배치가 바뀌면 같은 일이 생길 수 있습니다 <span class="badge b-int">[추론]</span><sup><a href="#fn10">10</a></sup>.</p>
+<p class="but">단, 이번 전시의 배치 확정 시점은 모릅니다. 어긋남의 원인(배치 변경, 인쇄 오류, 표기 혼동)도 기록에 없어 어느 것도 배제할 수 없습니다.</p></div></div>
+<div class="insight"><span class="i">3</span><div><h3>같은 판형(A4·96면)의 선례에는 찾기 장치가 없고, 작가 수는 그 선례의 두 배를 넘는다</h3>
+<p>2024 도록(A4·96면)은 작가 5명을 작가별 장으로 나눴고 위치 표기·평면도가 없었습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a></sup>. 찾기 장치(룸 번호·평면도·번호를 병기한 목록)는 2025 A5 도록에만 있습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn4">4</a></sup>. 이번 도록은 12명이라, 작가별 장을 그대로 따르면 장 표지·간지 몫이 늘어 찾기 장치에 쓸 면이 줄어듭니다 <span class="badge b-int">[추론]</span><sup><a href="#fn3">3</a></sup><sup><a href="#fn10">10</a></sup>.</p>
+<p class="but">단, 장 표지를 장마다 넣을지는 정해지지 않았고, 면 배분은 레벨 2에서 정합니다. 2025 찾기 장치의 효과를 보여 주는 기록은 없습니다.</p></div></div>
+<div class="insight"><span class="i">4</span><div><h3>캡션의 정확성은 조판보다 원천 데이터에서 먼저 결정된다</h3>
+<p>표본 30점 중 10점에 누락 필드가 있고, 작품명·규격 열은 아예 없습니다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn5">5</a></sup>. '흑백 인화'(7/30)는 지침이 요구하는 프린트 종류 구분을 하지 않습니다 <span class="badge b-int">[추론]</span><sup><a href="#fn5">5</a></sup><sup><a href="#fn7">7</a></sup>. 문의에도 "캡션의 재질 표기가 실제 작품과 달라 보입니다"가 있습니다(5/40) <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>.</p>
+<p class="but">단, 재질 문의와 이 아카이브 표기는 서로 다른 전시에서 나왔을 수 있어 직접 이어지지 않습니다. 원인이 같다는 것은 [추론]입니다. 나머지 38점의 상태는 확인하지 않았습니다.</p></div></div>
+</div>
+</section>
+
+<section class="part" id="reframe" aria-labelledby="p4"><div class="part-head"><span class="num">04</span><h2 id="p4">문제 재정의와 디자인 기회</h2></div>
+<div class="method"><span class="tag">근거 기반 문제 재정의</span>
+<h3>'구조와 위계'를 정하기 전에 연결 키, 정보의 유효 시점, 원천 데이터, 위계 기준 네 가지를 먼저 정해야 한다</h3>
+<div class="table-wrap"><table>
+<tr><th>렌즈</th><th>문제를 이렇게 읽는다</th><th>지지·상충 근거</th><th>달라지는 결정</th></tr>
+<tr><td><b>처음 의뢰</b></td><td>지면 구조와 도판 크기 위계를 정하면 관람객이 다시 찾을 수 있다</td><td>지지: 찾기 문의 25/40<sup><a href="#fn1">1</a></sup>. 상충: 도판 크기를 지적한 문의 0건<sup><a href="#fn1">1</a></sup></td><td>크기 위계만 손보면 연결 정보 문제는 남음 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td><b>연결 키</b></td><td>도판과 현장 작품을 잇는 공통 식별자가 없거나 보이지 않는다</td><td>지지: F2·F3 문의<sup><a href="#fn1">1</a></sup>, 2024·2025 도판 번호 선례<sup><a href="#fn3">3</a></sup><sup><a href="#fn4">4</a></sup>. 상충: 벽 캡션 번호 체계 미확인</td><td>번호 체계를 전시팀과 함께 정해야 함</td></tr>
+<tr><td><b>유효 시점</b></td><td>인쇄한 위치 정보가 현장과 어긋난다</td><td>지지: F5 문의 10/40<sup><a href="#fn1">1</a></sup>, 입고 뒤 32일<sup><a href="#fn10">10</a></sup>. 상충: 이번 배치 확정 시점 미확인</td><td>위치를 본문에 넣을지, 한곳에 모을지, 표기를 빼고 현장 안내에 맡길지</td></tr>
+<tr><td><b>원천 데이터</b></td><td>캡션 결함은 원천 데이터의 빈칸과 용어 혼재에서 나온다</td><td>지지: 누락 10/30, 작품명·규격 열 없음<sup><a href="#fn5">5</a></sup>, 지침 3.75<sup><a href="#fn7">7</a></sup>, 재질 문의 5/40<sup><a href="#fn1">1</a></sup></td><td>교정 1회차 전에 데이터를 확정하는 일정이 필요</td></tr>
+<tr><td><b>위계 기준</b></td><td>크기 위계를 정할 기준이 자료에 없다</td><td>지난 3종 모두 3단계였지만 선정 이유는 기록되지 않음<sup><a href="#fn2">2</a></sup><sup><a href="#fn3">3</a></sup><sup><a href="#fn4">4</a></sup>. 해상도·가로세로 정보 없음<sup><a href="#fn5">5</a></sup></td><td>기준은 사람이 정하고, 파일 조건이 상한을 정함</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 근거가 가장 직접 받치는 렌즈는 연결 키와 유효 시점입니다. 도판 크기 위계는 근거가 정할 수 없는 기획 판단으로 남습니다 <span class="badge b-int">[추론]</span>.</p>
+</div>
+<div class="reframe"><div class="box from"><small>처음 의뢰</small>관람객이 도판과 캡션을 다시 찾을 수 있는 지면 구조와 도판 크기 위계를 정할 근거</div><span class="arrow">→</span><div class="box to"><small>재정의</small>도판·캡션·목록·전시장을 하나의 작품 번호와 '확정된 시점이 밝혀진' 위치 정보로 잇는 구조를 먼저 정하고, 크기 위계는 그 구조 안에서 기획 기준과 파일 조건으로 정한다</div></div>
+<ul class="hmw">
+<li>어떻게 하면 관람객이 도록의 도판에서 전시장의 그 작품까지 한 번에 이어 갈 수 있을까?<span>인사이트 1에서</span></li>
+<li>어떻게 하면 입고 뒤 위치가 바뀌어도 관람객의 찾기가 끊기지 않을까?<span>인사이트 2에서</span></li>
+<li>어떻게 하면 A4·96면에 12명을 담으면서 찾기 장치에 쓸 지면을 남길 수 있을까?<span>인사이트 3에서</span></li>
+<li>어떻게 하면 교정 3회 안에서 캡션 원천 데이터를 완결된 상태로 만들 수 있을까?<span>인사이트 4에서</span></li>
+</ul>
+</section>
+
+<section class="part" id="directions" aria-labelledby="p5"><div class="part-head"><span class="num">05</span><h2 id="p5">디자인 방향</h2></div>
+<div class="method"><span class="tag">디자인 원칙 생성</span>
+<h3>원칙은 세 방향 모두에 공통으로 적용되고, 방향은 지면 순서의 기준만 다르다</h3>
+<div class="table-wrap"><table>
+<tr><th>원칙</th><th>조건과 행동</th><th>근거</th><th>예외·충돌</th></tr>
+<tr><td>P1 하나의 작품 번호</td><td>같은 작품은 도판·캡션·작품 목록에서 같은 식별 번호로 이어진다. 전시팀이 벽 캡션에 번호를 쓰면 같은 번호를 쓴다</td><td>F2·F3 문의<sup><a href="#fn1">1</a></sup>, 2024·2025 선례<sup><a href="#fn3">3</a></sup><sup><a href="#fn4">4</a></sup>, 지침 2.16<sup><a href="#fn7">7</a></sup></td><td>벽 캡션에 번호가 없으면 도록 안에서만 이어짐. 아카이브 도판 번호는 3/30이 비어 있어 그대로 쓸 수 없음<sup><a href="#fn5">5</a></sup></td></tr>
+<tr><td>P2 순서 기준 하나</td><td>지면 순서의 기준(동선·작가·주제 가운데 하나)을 정하고 장 시작과 목록에서 밝힌다. 같은 작가가 여러 곳에 나오면 그 이유가 기준으로 설명되어야 한다</td><td>F2 "순서 기준이 뭔가요", F4 "어느 방부터"<sup><a href="#fn1">1</a></sup></td><td>기획 서사와 전시 동선이 다르면 한쪽 질문은 남음</td></tr>
+<tr><td>P3 바뀔 수 있는 정보는 한곳에</td><td>전시실 위치처럼 입고 뒤 바뀔 수 있는 정보는 본문 여러 곳에 흩지 않고 한곳(목록·평면도)에 모은다. 기준 시점도 함께 적는다</td><td>F5 10/40<sup><a href="#fn1">1</a></sup>, 입고~개막 32일<sup><a href="#fn10">10</a></sup></td><td>현장에서 한 번에 보는 편의와 부딪침. 배치가 입고 전에 확정되면 약해짐 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td>P4 캡션과 도판의 대응</td><td>도판 크기 단계와 관계없이 모든 도판에 같은 캡션 항목과 번호를 붙이고, 어느 캡션이 어느 도판인지 번호에 기대지 않고도 알 수 있게 둔다</td><td>2025 블록 캡션의 대응 규칙 부재<sup><a href="#fn4">4</a></sup>, 2023 캡션 누락<sup><a href="#fn2">2</a></sup></td><td>A4 판면에서 블록형이 필요한지는 레벨 2 판단</td></tr>
+<tr><td>P5 파일 없는 작품도 목록에</td><td>이미지 파일이 없는 작품도 같은 번호로 작품 목록에 남겨 전시장의 작품과 대응되게 한다</td><td>파일 없음 5/30<sup><a href="#fn5">5</a></sup>, 2024 목록 전용 2점<sup><a href="#fn3">3</a></sup>, F5 "평면도에 없는 작품"<sup><a href="#fn1">1</a></sup></td><td>소장처의 이미지 허가 범위 미확인</td></tr>
+<tr><td>P6 최상위 도판은 한 쪽 안에</td><td>가장 큰 도판 단계는 책등을 가로지르지 않게 한 쪽 안에 둔다. 두 쪽에 걸치는 배치는 기획상 꼭 필요할 때만 예외로 하고 인쇄소 확인을 거친다</td><td>무선철 지침(D)<sup><a href="#fn8">8</a></sup></td><td>지침 근거(D)뿐이라 가설에 가까움. 실제 손실 값은 인쇄소 확인</td></tr>
+<tr><td>P7 원천 데이터 먼저</td><td>캡션 항목과 재질 용어를 원천 데이터에서 하나의 체계로 정리하고 교정 1회차 전에 확정한다</td><td>누락 10/30·용어 4종<sup><a href="#fn5">5</a></sup>, 지침 3.70·3.75<sup><a href="#fn7">7</a></sup>, 재질·영문 문의 10/40<sup><a href="#fn1">1</a></sup></td><td>작가가 정한 표기와 미술관 표기가 다를 수 있음(지침 3.73)</td></tr>
+</table></div>
+</div>
+<div class="directions">
+<div class="direction"><span class="dn">DIR-01 · <span class="status">반려 — 사용자가 DIR-02 선택</span></span><h3>전시 동선 순서</h3>
+<p class="concept">본문 순서를 전시실·동선 순서에 맞추고, 장 = 전시실로 둔다. 도판 크기 위계는 각 장 안에서 정한다. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>F3·F4 문의(어느 방, 어느 방부터)에 가장 직접 답함. 인사이트 1, HMW 1</dd><dt>설계 원칙</dt><dd><ul class="principles"><li>P1</li><li>P2</li><li>P4</li><li>P5</li><li>P6</li><li>P7</li></ul></dd><dt>바뀌는 접점</dt><dd>장 구성, 장 시작 지면, 작품 목록, 벽 캡션 번호</dd><dt>검증할 것</dt><dd>전시 중 '도판 위치·작품 위치·관람 동선' 문의 건수와 같은 기간 전체 문의 대비 비율. 비교 기준은 2026년 1,140건 전수의 같은 범주(전수 확인 필요)</dd><dt>잃는 것</dt><dd>배치가 입고 뒤 바뀌면 본문 순서 전체가 어긋남(P3과 충돌). 같은 작가가 여러 장에 흩어질 수 있음(F2). 기획 서사가 공간 순서에 묶임</dd></dl>
+<p class="trace">근거 추적 · fn1(F3·F4) → 내용 분석·과업 분석 → 인사이트 1·2 → P1·P2</p></div>
+<div class="direction"><span class="dn">DIR-02 · <span class="status on">채택 · 2026-11-27 사용자</span></span><h3>작가별 장 + 위치 대조 목록</h3>
+<p class="concept">2024년처럼 작가별 장으로 묶고, 작품 목록에 번호·전시실·쪽을 병기해 위치 정보를 한곳에 모은다. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>F2(같은 작가 두 곳) 문제를 구조로 없앰. 같은 판형의 선례(2024)가 있음. 인사이트 1·3, HMW 1·3</dd><dt>설계 원칙</dt><dd><ul class="principles"><li>P1</li><li>P2</li><li>P3</li><li>P4</li><li>P5</li><li>P6</li><li>P7</li></ul></dd><dt>바뀌는 접점</dt><dd>장 구성(12장), 작가 색인, 위치 대조 목록, 벽 캡션 번호</dd><dt>검증할 것</dt><dd>DIR-01과 같은 문의 지표. 추가로 '순서 기준' 문의 건수</dd><dt>잃는 것</dt><dd>12장이라 장 표지·간지 몫이 2024(5장)보다 커짐. 관람객이 방 순서대로 볼 때 앞뒤로 넘겨야 함(F4는 대조 목록에만 기댐)</dd></dl>
+<p class="trace">근거 추적 · fn1(F2)·fn3 → 사례 연구 → 인사이트 1·3 → P2·P3</p></div>
+<div class="direction"><span class="dn">DIR-03 · <span class="status">반려 — 사용자가 DIR-02 선택</span></span><h3>기획 서사 순서 + 뒷부분 찾기 장치</h3>
+<p class="concept">본문은 주제·연대 같은 기획 서사로 두고, 찾기는 뒷부분의 번호-전시실-쪽 대조표와 평면도로 분리한다(2025형을 A4에 맞춤). <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>입고 뒤 배치 변경의 영향을 뒷부분 한곳으로 줄임. 인사이트 2, HMW 2</dd><dt>설계 원칙</dt><dd><ul class="principles"><li>P1</li><li>P2</li><li>P3</li><li>P4</li><li>P5</li><li>P6</li><li>P7</li></ul></dd><dt>바뀌는 접점</dt><dd>장 구성, 뒷부분(대조표·평면도), 작품 목록</dd><dt>검증할 것</dt><dd>같은 문의 지표. 특히 '평면도에 없는 작품' 류의 대조 오류 건수</dd><dt>잃는 것</dt><dd>평면도를 넣은 도록에서도 어긋남이 기록됨(F5). 찾을 때 본문과 뒷부분을 오가야 함. 2025 장치는 A5 선례라 효과 근거가 없음</dd></dl>
+<p class="trace">근거 추적 · fn1(F5)·fn4 → 사례 연구 → 인사이트 2 → P3</p></div>
+</div>
+<p class="lead" style="margin-top:18px">도판 크기 위계는 방향을 만들지 않았습니다. 근거가 받치는 것은 P4~P6의 규칙(모든 단계에 같은 캡션·번호, 파일 없는 작품의 처리, 최상위 단계의 제본 제약)까지입니다. 위계의 기준과 단계 수, 작품별 배정은 사람의 판단과 68점 파일 조건(T07)이 필요합니다 <span class="badge b-int">[추론]</span>.</p>
+</section>
+
+<section class="part" id="next" aria-labelledby="p6"><div class="part-head"><span class="num">06</span><h2 id="p6">다음 단계</h2></div>
+<ul class="next">
+<li><b>결정</b>도판 크기 위계의 1차 기준: 큐레이터 대표작 지정 / 작가 간 균형 / 전시장에서의 비중(벽 위치·작품 크기)</li>
+<li><b>결정</b>지면 순서 기준: DIR-01·02·03 가운데 채택·보완·반려</li>
+<li><b>결정</b>전시실 위치를 도록에 인쇄할지 여부. 인쇄한다면 기준 시점을 언제로 할지</li>
+<li><b>확인</b>이번 전시의 전시실·작품 배치안, 벽 캡션 번호 체계, 배치 확정 예정일(전시팀). 확정일이 2027-02-10 입고보다 늦은지(T06)</li>
+<li><b>확인</b>문의 1,140건 전수, 각 문의가 가리키는 전시·도록, location 열의 정의, 표본 추출 방식(미술관). 지금 표본은 고유 문장 8개의 반복이라 빈도를 판단할 수 없음</li>
+<li><b>확인</b>68점 전수 메타데이터: 작품명(국·영), 규격, 이미지 파일 픽셀 크기·가로세로, 사용 허가(아카이브)(T07)</li>
+<li><b>확인</b>인쇄소의 무선철 책등 손실 값과 대수 구성(인쇄소)</li>
+<li><b>확인</b>'서울사진미술관'의 전시실 명칭(문의의 1관~3관과 공개 기사의 4개 전시실이 맞지 않음)</li>
+<li><b>이어서</b>채택하시면 이 보고서에 채택 절(필요 결과물 DEL 목록 포함)을 쓰고 레벨 2(visual-design-drafting) 시안 단계로 넘깁니다. 입고까지 75일, 교정 3회이므로 원천 데이터 확정(P7)이 교정 1회차보다 앞서야 합니다</li>
+</ul>
+</section>
+
+<section class="part" id="adoption" aria-labelledby="p7"><div class="part-head"><span class="num">07</span><h2 id="p7">채택</h2></div>
+<div class="adoption">
+<p class="basis">기준 브리프: brief-v2.md</p>
+<p>채택: 2026-11-27, 사용자(사용자 발화 2: "지면 구조는 B안(작가별 묶음 + 도판 크기 3단)으로 확정"). 'B안'이라는 이름은 review-v1에 없습니다. 작가별 묶음 후보가 DIR-02 하나뿐이어서 DIR-02로 읽었습니다 <span class="badge b-int">[추론]</span>. 다르면 U-01로 바로잡습니다.</p>
+<h3>채택 방향</h3><div class="table-wrap"><table><tr><th>ID</th><th>이름·요약</th><th>상태</th><th>사유·근거</th></tr><tr><td>DIR-02</td><td>작가별 장 + 위치 대조 목록. 본문을 작가 12명별 장으로 묶고, 작품 목록에 번호·전시실·쪽을 병기해 위치 정보를 한곳에 모은다. 도판 크기는 3단계 {U}</td><td>채택</td><td>사용자 선택. 근거: '같은 작가 두 곳' 문의 5/40(EV-01), 같은 판형 선례 2024 작가별 5장(EV-03), 지난 3종 모두 도판 3단계(EV-02·03·04)</td></tr><tr><td>DIR-01</td><td>전시 동선 순서(장 = 전시실)</td><td>반려</td><td>사용자가 DIR-02를 선택함. 사유는 진술되지 않음. 근거상 약점: 입고 뒤 배치가 바뀌면 본문 순서가 어긋남(EV-01 F5)</td></tr><tr><td>DIR-03</td><td>기획 서사 순서 + 뒷부분 대조표·평면도</td><td>반려</td><td>사용자가 DIR-02를 선택함. 사유는 진술되지 않음. 뒷부분 대조 장치는 DIR-02의 위치 대조 목록(DEL-02)으로 일부 이어짐</td></tr></table></div>
+<h3>필요 결과물</h3><div class="table-wrap"><table><tr><th>ID</th><th>품목</th><th>매체</th><th>목적</th><th>우선순위</th><th>근거 ID</th><th>시안 트랙</th></tr><tr><td>DEL-01</td><td>도록 본문 지면 구조: 작가별 12장과 도판 3단계 체계(단계별 배치 규칙 포함)</td><td>인쇄 도록 A4 96면, 본문</td><td>작가 단위로 도판을 묶어 순서 기준을 하나로 함(P2)</td><td>1</td><td>DIR-02, EV-01, EV-03</td><td>draft-a/</td></tr><tr><td>DEL-02</td><td>작품 목록 겸 위치 대조 목록(작품 번호·작가·전시실·쪽)</td><td>인쇄 도록, 뒷부분</td><td>도판에서 전시실로 건너가는 연결 정보를 한곳에 둠(P1·P3)</td><td>1</td><td>DIR-02, EV-01, EV-04</td><td>draft-a/</td></tr><tr><td>DEL-03</td><td>캡션 체계(항목·순서·번호·재질 용어, 국영문 범위)</td><td>인쇄 도록, 본문·목록 공통</td><td>캡션과 도판의 대응, 원천 데이터 정리(P4·P7)</td><td>1</td><td>EV-05, EV-07, EV-01, EV-02</td><td>draft-a/</td></tr><tr><td>DEL-04</td><td>작가 장 시작 지면(12개)</td><td>인쇄 도록, 본문</td><td>장마다 작가와 그 장의 작품 번호 범위를 밝힘(P2)</td><td>2</td><td>DIR-02, EV-01, EV-03</td><td>draft-a/</td></tr><tr><td>DEL-05</td><td>작가 색인</td><td>인쇄 도록, 뒷부분</td><td>작가 이름으로 쪽을 찾음</td><td>2</td><td>EV-03, EV-04</td><td>draft-a/</td></tr><tr><td>DEL-06</td><td>전시장 평면도 지면</td><td>인쇄 도록, 뒷부분 또는 표지 안쪽</td><td>DEL-02의 전시실 정보 보조. 배치가 입고 전에 확정될 때만 만듦(U-04)</td><td>3</td><td>EV-04, EV-01</td><td>draft-a/</td></tr><tr><td>DEL-07</td><td>벽 캡션 번호 표기</td><td>전시장 벽 캡션</td><td>도록 번호와 현장 번호 일치(P1)</td><td>제외</td><td>EV-01</td><td>— (도록 범위 밖, 전시팀 제작. 번호 체계만 U-04에서 맞춤)</td></tr></table></div>
+<h3>근거 ID</h3><div class="table-wrap"><table><tr><th>ID</th><th>원문 위치</th><th>뒷받침하는 것</th></tr><tr><td>EV-01</td><td>materials/inquiries_sample.csv 전 40행</td><td>찾기 막힘(F2~F6), DEL-02·03·04, C-09~C-13. 표본 40건, 고유 문장 8개, 대응 도록 불명(B)</td></tr><tr><td>EV-02</td><td>materials/past_catalog_2023.md 도판 크기 단계·캡션·확인 한계</td><td>3단계 선례, 캡션 누락 결함(DEL-03)</td></tr><tr><td>EV-03</td><td>materials/past_catalog_2024.md 지면 구성·도판 크기 단계·색인</td><td>작가별 장 선례(같은 A4·96면), 3단계, 작가 색인, 목록 전용 2점(DIR-02, DEL-01·04·05)</td></tr><tr><td>EV-04</td><td>materials/past_catalog_2025.md 캡션·색인·찾기</td><td>룸 번호·목록 병기·평면도 선례(A5), 블록 캡션 대응 규칙 부재(DEL-02·06)</td></tr><tr><td>EV-05</td><td>materials/archive_metadata_sample.csv 전 30행</td><td>누락 10/30, 작품명·규격 열 없음, 재질 용어 4종(DEL-03, C-15)</td></tr><tr><td>EV-07</td><td>MMCA Guide to Publication 3.70·3.75·3.76·3.79, 2.16</td><td>캡션 항목 순서, 사진 재질 표기, 도판 목록 권고(D)</td></tr><tr><td>EV-08</td><td>Printivity, Designing Perfect Bound Books, gutter 절</td><td>무선철 책등 손실, 두 쪽에 걸친 이미지 주의(D, C-14)</td></tr></table></div>
+<h3>제작 제약</h3><div class="table-wrap"><table><tr><th>ID</th><th>값</th><th>출처</th></tr><tr><td>C-01</td><td>판형 A4(210×297mm), 96면</td><td>사용자 확정(발화 1)</td></tr><tr><td>C-02</td><td>오프셋 4도, 무광 코팅, 무선철</td><td>사용자 확정(발화 1)</td></tr><tr><td>C-03</td><td>한글 중심</td><td>사용자 확정(발화 1)</td></tr><tr><td>C-04</td><td>사진 68점, 작가 12명. 도판 파일은 미술관 아카이브에서 제공</td><td>사용자 확정(발화 1)</td></tr><tr><td>C-05</td><td>인쇄 입고 2027-02-10, 교정 3회, 전시 2027-03-14~05-30(입고~개막 32일)</td><td>사용자 확정(발화 1), 일수는 계산</td></tr><tr><td>C-06</td><td>지면 구조: 작가별 묶음(DIR-02)</td><td>사용자 확정(발화 2)</td></tr><tr><td>C-07</td><td>도판 크기: 3단계. 단계별 크기·쪽당 점수는 정하지 않았음(레벨 2)</td><td>사용자 확정(발화 2)</td></tr><tr><td>C-08</td><td>시안·조판에서 색·서체·구체 치수는 레벨 1이 정하지 않음</td><td>skill 범위</td></tr><tr><td>C-09</td><td>원칙 P1: 같은 작품은 도판·캡션·목록(가능하면 벽 캡션)에서 하나의 번호로 이어진다. 아카이브 도판 번호는 3/30이 비어 그대로 쓰지 않는다</td><td>EV-01, EV-03, EV-04, EV-05, EV-07 [추론]</td></tr><tr><td>C-10</td><td>원칙 P2: 장 순서(작가 배열)의 기준을 하나로 정하고 장 시작과 목록에 밝힌다</td><td>EV-01 F2·F4 [추론]</td></tr><tr><td>C-11</td><td>원칙 P3: 전시실 위치는 본문에 흩지 않고 DEL-02 한곳에 모으며 기준 시점을 적는다</td><td>EV-01 F5, C-05 [추론]</td></tr><tr><td>C-12</td><td>원칙 P4: 3단계 어느 단계든 같은 캡션 항목과 번호를 붙이고, 캡션과 도판이 번호 없이도 대응되게 둔다</td><td>EV-02, EV-04 [추론]</td></tr><tr><td>C-13</td><td>원칙 P5: 이미지 파일이 없는 작품도 같은 번호로 DEL-02에 남긴다</td><td>EV-03, EV-05 [추론]</td></tr><tr><td>C-14</td><td>원칙 P6: 가장 큰 단계는 책등을 가로지르지 않게 한 쪽 안에 둔다. 예외는 기획상 필요할 때 인쇄소 확인 후</td><td>EV-08(D만) [추측]</td></tr><tr><td>C-15</td><td>원칙 P7: 캡션 항목·재질 용어는 교정 1회차 전에 원천 데이터에서 확정한다</td><td>EV-05, EV-07 [추론]</td></tr></table></div>
+<h3>남은 쟁점</h3><div class="table-wrap"><table><tr><th>ID</th><th>쟁점</th><th>결정 주체</th><th>다음 단계 영향</th></tr><tr><td>U-01</td><td>'B안'을 DIR-02로 읽은 해석이 맞는지</td><td>사용자</td><td>다르면 채택 절 전체를 다시 씀</td></tr><tr><td>U-02</td><td>3단계에 작품을 배정할 기준(대표작 지정 / 작가 간 균형 / 전시장 비중)</td><td>사용자·큐레이터</td><td>정해지기 전에는 레벨 2가 작품별 단계를 배정할 수 없고 체계만 그림</td></tr><tr><td>U-03</td><td>작가 12명의 배열 순서 기준과 장 표지를 장마다 둘지 여부(12장이라 2024의 5장보다 면 몫이 큼)</td><td>사용자·큐레이터(순서), 레벨 2(면 배분)</td><td>DEL-01·04의 면 배분</td></tr><tr><td>U-04</td><td>이번 전시의 배치안, 벽 캡션 번호 체계, 배치 확정일이 입고(2027-02-10)보다 앞서는지</td><td>전시팀</td><td>DEL-02의 전시실 칸, DEL-06을 만들지 여부, DEL-07 번호 맞춤</td></tr><tr><td>U-05</td><td>68점 전수 메타데이터: 작품명(국·영), 규격, 이미지 픽셀 크기·가로세로, 사용 허가</td><td>아카이브</td><td>작품별 최대 단계 상한, DEL-03 완결</td></tr><tr><td>U-06</td><td>파일 없는 작품(표본 5/30)의 수록 방식과 소장처 허가</td><td>아카이브·소장처</td><td>DEL-01·02</td></tr><tr><td>U-07</td><td>무선철 책등 손실 값과 대수 구성</td><td>인쇄소</td><td>C-14 적용 범위, 면 배분</td></tr><tr><td>U-08</td><td>문의 1,140건 전수와 대응 도록, location 열 정의</td><td>미술관</td><td>근거 강도. 지금은 표본 40건(고유 8문장)</td></tr><tr><td>U-09</td><td>전시실 명칭(문의의 1관~3관 vs 공개 기사의 4개 전시실, EV-09)</td><td>전시팀</td><td>DEL-02·06의 전시실 표기</td></tr></table></div>
+</div>
+</section>
+
+<section class="appendix" id="appendix" aria-labelledby="ap"><h2 id="ap">APPENDIX</h2>
+<details><summary>각주 · 원문 위치</summary><div><ol class="fn">
+<li id="fn1">EV-01 · 제공 materials/inquiries_sample.csv, 전 40행(Q-20260001~0040), 접수 2026-01-01~10-24. 범주 집계는 직접 계산. B</li>
+<li id="fn2">EV-02 · 제공 materials/past_catalog_2023.md, 지면 구성·도판 크기 단계·캡션·확인 한계. B</li>
+<li id="fn3">EV-03 · 제공 materials/past_catalog_2024.md, 같은 절. 작가당 면수는 66면÷12명으로 계산. B</li>
+<li id="fn4">EV-04 · 제공 materials/past_catalog_2025.md, 같은 절. B</li>
+<li id="fn5">EV-05 · 제공 materials/archive_metadata_sample.csv, 전 30행(W-101~130), 열 구성과 missing_fields 집계는 직접 계산. B</li>
+<li id="fn6">EV-06 · 제공 materials/README.md, 자료별 한계. B(자료 설명)</li>
+<li id="fn7">EV-07 · 국립현대미술관, MMCA Guide to Publication(2019-08 갱신), 3.70·3.73·3.75·3.76·3.79, 2.15~2.16(55쪽). https://www.mmca.go.kr/upload/research/MMCA%20Guide%20to%20Publication_last%20update%20August%202019.pdf, 확인 2026-11-27. 앞 100,000자만 확인. D</li>
+<li id="fn8">EV-08 · Printivity, Natalie Wiley, "Designing Perfect Bound Books", 날짜 미표기. https://www.printivity.com/insights/designing-perfect-bound-books, 확인 2026-11-27. D</li>
+<li id="fn9">EV-09 · 내 손안에 서울, 「서울시립 사진미술관 관람팁」, 2025-07-18. https://mediahub.seoul.go.kr/archives/2015075. 보도. C</li>
+<li id="fn10">사용자 확정 · 사용자 발화 1(의뢰문): 판형·면수·인쇄·제본, 전시 기간, 68점·12명, 입고 2027-02-10, 교정 3회. 32일·75일은 이 값으로 계산</li>
+</ol></div></details>
+<details><summary>방법별 상세 표</summary><div>
+<h3>문의 표본 코딩(분모 40)</h3>
+<div class="table-wrap"><table><tr><th>단계</th><th>원문(각 5회)</th><th>범주</th><th>채널</th><th>location</th></tr>
+<tr><td>F2</td><td>같은 작가 도판이 두 곳에 나오는데 순서 기준이 뭔가요?</td><td>도판 위치</td><td>이메일</td><td>2관</td></tr>
+<tr><td>F3</td><td>도록 12쪽 도판이 전시장 어느 방 작품인지 모르겠습니다.</td><td>도판 위치</td><td>현장</td><td>1관</td></tr>
+<tr><td>F4</td><td>도록 순서대로 보려면 어느 방부터 가야 하나요?</td><td>관람 동선</td><td>SNS</td><td>미지정</td></tr>
+<tr><td>F5</td><td>3관에 있다고 적힌 작품을 2관에서 봤습니다.</td><td>작품 위치</td><td>전화</td><td>3관</td></tr>
+<tr><td>F5</td><td>전시장 평면도에 없는 작품이 도록에 있습니다.</td><td>작품 위치</td><td>SNS</td><td>미지정</td></tr>
+<tr><td>F6</td><td>캡션의 재질 표기가 실제 작품과 달라 보입니다.</td><td>캡션 내용</td><td>이메일</td><td>2관</td></tr>
+<tr><td>F6</td><td>영문 캡션에 오타가 있습니다.</td><td>캡션 내용</td><td>전화</td><td>3관</td></tr>
+<tr><td>흐름 밖</td><td>야간 개장일에 도록 판매처도 여나요?</td><td>운영 시간</td><td>현장</td><td>1관</td></tr>
+</table></div>
+<h3>삼각검증(주장별)</h3>
+<div class="table-wrap"><table><tr><th>주장</th><th>근거</th><th>판정</th></tr>
+<tr><td>연결 정보가 막힘의 중심이다</td><td>EV-01(문의), EV-02~04(찾기 장치 유무)</td><td>부분 수렴. 장치 유무와 문의를 이을 수 없음(대응 도록 불명)</td></tr>
+<tr><td>인쇄 위치는 현장과 어긋날 수 있다</td><td>EV-01 F5, 일정(사용자 확정)</td><td>부분 수렴. 원인은 미확인</td></tr>
+<tr><td>캡션 결함은 원천 데이터에서 시작된다</td><td>EV-05, EV-07, EV-01 F6, EV-02 캡션 누락</td><td>부분 수렴. 서로 다른 전시의 자료</td></tr>
+<tr><td>최상위 도판은 책등을 피해야 한다</td><td>EV-08만</td><td>단일 지침(D). 가설로 유지</td></tr>
+</table></div></div></details>
+<details><summary>검증과 남은 한계</summary><div><ul>
+<li>A급 근거 없음: 관람객이 도록으로 작품을 찾는 행동을 직접 관찰한 연구를 찾지 못함(KCI·교보스콜라 2회, 영문 1회). "Looking to Read"(레이블 열람 연구)는 bohrium 접근 승인 미응답, aminer는 홈만 반환해 열지 못함</li>
+<li>문의 표본: 고유 문장 8개×5회. 범주·월(각 4건)·채널(각 10건)이 완전히 균등하고 ID가 1~40 연번이라, 무작위 표본으로 보기 어렵고 전수 비율로 옮길 수 없음</li>
+<li>문의 시점(2026-01~10)이 지난 도록 3종의 전시 기간과 겹치지 않아 대응 도록 불명. "3관에 있다고 적힌" 문장으로 보아 위치를 표기한 도록이었을 가능성 <span class="badge b-hyp">[추측]</span></li>
+<li>도록 요약은 PDF 기준이며 인쇄물 실측이 아님. 도판 합계와 작품 수가 맞지 않는 이유 미확인</li>
+<li>메타데이터 38점 미확인. 해상도·가로세로 정보가 없어 도판 단계 판정(T07) 불가</li>
+<li>공개 자료 충돌: 문의의 1관~3관 vs 기사의 4개 전시실, 같은 기관 여부 미확인</li>
+<li>자기 점검: 문제 정의·인사이트 모두 B 근거 있음(A 없음 명시). 분모가 다른 수치는 맞비교하지 않음. 과업 그림의 칸은 원문이 있는 칸만 채움. 원인 배제 결론 없음. 충돌은 남은 쟁점에 올림</li>
+</ul></div></details>
+<details><summary>적용한 방법</summary><div><ul>
+<li>내용 분석 + 과업 분석 → 문의를 찾기 단계에 배치 → 단계별 건수·원문 → 총괄 순차 수행 → 부분 완료</li>
+<li>사례 연구 → 같은 기관 선례의 전이 판정 → 3종 비교표 → 총괄 순차 수행 → 완료</li>
+<li>콘텐츠 목록·감사 → 캡션 원천 데이터 준비 상태 → 필드 점검표 → 총괄 순차 수행 → 부분 완료(30/68)</li>
+<li>문헌·기존자료 조사 → 정량 조건(캡션·제본) 확인 → 출처별 근거표 → 검색 7회·열기 5회 → 부분 완료</li>
+<li>삼각검증·디자인 원칙 생성·어떻게 하면 질문 → 취합 → 수렴표·원칙·HMW·DIR → 완료</li>
+<li>여정 지도: 이번 전시 배치 기록이 없어 쓰지 않음(T06 대기)</li>
+</ul></div></details>
+<details><summary>과제 상태</summary><div><p>채택: DIR-02(2026-11-27, 사용자). 반려: DIR-01·DIR-03. T01 부분 완료 · T02 완료 · T03 부분 완료 · T04 부분 완료 · T05 완료 · T06 대기(전시 배치안·벽 캡션 체계) · T07 대기(68점 파일 속성)</p></div></details>
+</section>
+
+</main></body></html>
