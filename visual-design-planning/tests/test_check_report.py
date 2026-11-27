@@ -101,6 +101,10 @@ class CheckReportTest(unittest.TestCase):
         self.assertTrue(any("채택 절 필드" in p for p in self.problems(hidden_broken)))
         no_basis = single.replace("기준 브리프: brief-v2.md", "")
         self.assertTrue(any("기준 브리프" in p for p in self.problems(no_basis)))
+        for external in ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=X">',
+                         "<style>@import url('https://example.com/a.css');</style>",
+                         '<p style="background:url(//example.com/a.png)">x</p>'):
+            self.assertTrue(any("외부 자원" in p for p in self.problems(page(external))), external)
         quoted_badge = page("<p>단계 <span class='badge b-int'>해석</span></p>")
         self.assertTrue(any("배지 이름" in p for p in self.problems(quoted_badge)))
 

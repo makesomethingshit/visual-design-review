@@ -28,7 +28,11 @@ NONE_VALUES = ("없음", "해당 없음")
 
 
 def cells(line: str) -> list[str]:
-    return [c.strip() for c in line.strip().strip("|").split("|")]
+    """Split a Markdown table row on unescaped pipes; `\\|` stays in the cell."""
+    line = line.strip()
+    line = line[1:] if line.startswith("|") else line
+    line = line[:-1] if line.endswith("|") and not line.endswith("\\|") else line
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", line)]
 
 
 def table(text: str) -> tuple[list[str], list[list[str]]]:

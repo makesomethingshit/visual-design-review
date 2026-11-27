@@ -53,6 +53,10 @@ class CheckBriefTest(unittest.TestCase):
                                 for l in brief(MIXED).splitlines())
         self.assertTrue(any("칸 수" in p for p in self.problems(no_evidence)))
 
+    def test_escaped_pipe_stays_in_cell(self) -> None:
+        piped = {**MIXED, "메시지": ("사용자 확정: 행사명은 A \\| B", "사용자 확정")}
+        self.assertEqual(self.problems(brief(piped)), [])
+
     def test_status_must_be_weakest(self) -> None:
         strong = {"예산": ("사용자 확정: 30만 원 / 미확인: 인쇄비 포함 여부", "사용자 확정")}
         self.assertTrue(any("가장 약한" in p for p in self.problems(brief(strong))))

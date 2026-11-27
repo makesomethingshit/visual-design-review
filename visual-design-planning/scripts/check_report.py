@@ -32,6 +32,10 @@ TEMPLATE_COMMENT = re.compile(
 # Matched against decoded text, so the template's &lt;run-id&gt; appears as <run-id>.
 PLACEHOLDER = re.compile(r"\{[A-Za-z가-힣_]{1,20}\}|<run-id>|brief-vN\.md|DIR-xx|EV-xx")
 EV = re.compile(r"\bEV-\d{2,}\b")
+# Anything the page would fetch over the network: src, stylesheet or other <link>
+# hrefs, CSS url() and @import.
+EXTERNAL = re.compile(r"""\bsrc\s*=\s*["']?(?:https?:)?//|<link\b[^>]*\bhref\s*=\s*["']?(?:https?:)?//"""
+                      r"""|url\(\s*["']?(?:https?:)?//|@import\s+(?:url\()?\s*["']?(?:https?:)?//""", re.I)
 FN_REF = re.compile(r"""\bhref\s*=\s*["']?#(fn\d+)\b""")
 WINDOW = 240
 BLOCK = re.compile(r"<(p|li|tr|figcaption|dd|blockquote|h[1-6])\b")
@@ -83,7 +87,7 @@ def check(page: str, evidence: str | None = None) -> dict:
         label = visible_text(badge).strip()
         if label not in TAGS:
             problems.append(f"배지 이름이 태그와 다름: {label}")
-    if re.search(r"<script\b", body) or re.search(r"""\bsrc\s*=\s*["']?https?://""", page):
+    if re.search(r"<script\b", body) or EXTERNAL.search(page):
         problems.append("스크립트나 외부 자원이 있음")
 
     refs = sorted(set(re.findall(FN_REF, body)), key=lambda x: int(x[2:]))
