@@ -33,13 +33,39 @@ def _path_component(value: Any, label: str) -> str:
     return value
 
 
+def _object(value: Any, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be a JSON object")
+    return value
+
+
+def _list(value: Any, label: str) -> list[Any]:
+    if not isinstance(value, list):
+        raise ValueError(f"{label} must be a JSON list")
+    return value
+
+
+def _string(value: Any, label: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{label} must be a non-empty string")
+    return value
+
+
+def _integer(value: Any, label: str, minimum: int = 1) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
+        kind = "a positive integer" if minimum == 1 else f"an integer >= {minimum}"
+        raise ValueError(f"{label} must be {kind}")
+    return value
+
+
 def _task_names(task: dict[str, Any]) -> tuple[str, list[str]]:
+    task = _object(task, "pair_tasks item")
     task_id = _path_component(task.get("id"), "task id")
-    variants = task.get("variants", [])
+    variants = _list(task.get("variants"), f"{task_id}: variants")
     if len(variants) != 2:
         raise ValueError(f"{task_id}: exactly two variants are required")
-    labels = [_path_component(variant.get("label"), "variant label")
-              for variant in variants]
+    labels = [_path_component(_object(variant, f"{task_id}: variant").get("label"),
+                              "variant label") for variant in variants]
     if len({label.casefold() for label in labels}) != len(labels):
         raise ValueError(f"{task_id}: duplicate variant labels")
     return task_id, labels
@@ -47,26 +73,59 @@ def _task_names(task: dict[str, Any]) -> tuple[str, list[str]]:
 
 def load_fixture(path: Path) -> dict[str, Any]:
     fixture = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(fixture, dict):
-        raise ValueError("fixture must be a JSON object")
+    fixture = _object(fixture, "fixture")
     if fixture.get("schema_version") != "1.0":
         raise ValueError("unsupported fixture schema")
-    tasks = fixture.get("pair_tasks")
-    if not isinstance(tasks, list) or not tasks:
+    contract = _object(fixture.get("render_contract"), "render_contract")
+    for field in ("platform", "renderer", "pillow_layout_engine",
+                  "font_version_identifier", "anchor", "background",
+                  "foreground", "output"):
+        _string(contract.get(field), f"render_contract.{field}")
+    if not isinstance(contract.get("raqm_or_harfbuzz"), bool):
+        raise ValueError("render_contract.raqm_or_harfbuzz must be a boolean")
+    canvas = _list(contract.get("canvas"), "render_contract.canvas")
+    if len(canvas) != 2:
+        raise ValueError("render_contract.canvas must contain width and height")
+    for index, value in enumerate(canvas):
+        _integer(value, f"render_contract.canvas[{index}]")
+
+    tasks = _list(fixture.get("pair_tasks"), "pair_tasks")
+    if not tasks:
         raise ValueError("pair_tasks must be a non-empty list")
     task_ids: set[str] = set()
-    for task in tasks:
+    for task_index, raw_task in enumerate(tasks):
+        task = _object(raw_task, f"pair_tasks[{task_index}]")
         task_id, _ = _task_names(task)
         if task_id.casefold() in task_ids:
             raise ValueError(f"duplicate task id: {task_id}")
         task_ids.add(task_id.casefold())
-        if task.get("blind_ratings") != []:
+        _string(task.get("context"), f"{task_id}: context")
+        _string(task.get("controlled_variable"), f"{task_id}: controlled_variable")
+        blind_ratings = _list(task.get("blind_ratings"), f"{task_id}: blind_ratings")
+        if blind_ratings:
             raise ValueError(f"{task.get('id')}: ratings must remain empty before human review")
-        if not task.get("fixed", {}).get("korean_font"):
-            raise ValueError(f"{task.get('id')}: korean_font is required")
-        for variant in task["variants"]:
-            if not variant.get("latin_font"):
-                raise ValueError(f"{task.get('id')}: latin_font is required")
+        fixed = _object(task.get("fixed"), f"{task_id}: fixed")
+        _string(fixed.get("korean_font"), f"{task_id}: korean_font")
+        _integer(fixed.get("font_size_px"), f"{task_id}: font_size_px")
+        _integer(fixed.get("line_spacing_px"), f"{task_id}: line_spacing_px")
+        padding = _list(fixed.get("padding_px"), f"{task_id}: padding_px")
+        if len(padding) != 2:
+            raise ValueError(f"{task_id}: padding_px must contain x and y")
+        for index, value in enumerate(padding):
+            _integer(value, f"{task_id}: padding_px[{index}]", minimum=0)
+        text_lines = _list(task.get("text_lines"), f"{task_id}: text_lines")
+        for line_index, raw_line in enumerate(text_lines):
+            line = _list(raw_line, f"{task_id}: text_lines[{line_index}]")
+            for segment_index, raw_segment in enumerate(line):
+                segment = _object(raw_segment,
+                                  f"{task_id}: text_lines[{line_index}][{segment_index}]")
+                role = _string(segment.get("role"), f"{task_id}: segment role")
+                if role not in ("korean", "latin"):
+                    raise ValueError(f"{task_id}: segment role must be korean or latin")
+                _string(segment.get("text"), f"{task_id}: segment text")
+        for variant_index, raw_variant in enumerate(task["variants"]):
+            variant = _object(raw_variant, f"{task_id}: variants[{variant_index}]")
+            _string(variant.get("latin_font"), f"{task_id}: latin_font")
     return fixture
 
 
@@ -194,6 +253,8 @@ def main(argv: list[str] | None = None) -> int:
         for task in fixture["pair_tasks"]:
             records.extend(render_task(task, fixture, args.output_dir))
         write_manifests(fixture, args.fixture, args.output_dir, records)
+    # load_fixture validates every field the renderer reads, so any other
+    # exception is a bug in this script and should surface as a traceback.
     except (OSError, ValueError) as exc:
         print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
               file=sys.stderr)

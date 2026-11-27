@@ -9,9 +9,13 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shutil
+import sys
+import tempfile
 import unittest
 from datetime import datetime
 from pathlib import Path
+from unittest.mock import patch
 
 TESTS = Path(__file__).resolve().parent
 PLANNING = TESTS.parent
@@ -731,6 +735,14 @@ class RunRecordTest(unittest.TestCase):
 
             self.assertIsInstance(record["run_id"], str)
             self.assertTrue(record["run_id"].strip(), f"{number}행 run_id가 비었다")
+            self.assertNotIn("/", record["run_id"],
+                             f"{number}행 run_id에 경로 구분자가 있다")
+            self.assertNotIn("\\", record["run_id"],
+                             f"{number}행 run_id에 경로 구분자가 있다")
+            self.assertEqual(Path(record["run_id"]).name, record["run_id"],
+                             f"{number}행 run_id가 실행 폴더 이름이 아니다")
+            self.assertNotIn(record["run_id"], (".", ".."),
+                             f"{number}행 run_id가 실행 폴더 이름이 아니다")
             self.assertIn(record["case_id"], cases, f"{number}행의 케이스 ID가 픽스처에 없다")
             case = cases[record["case_id"]]
             turn = [turn for turn in case["turns"] if turn["id"] == record["turn_id"]]
@@ -759,18 +771,31 @@ class RunRecordTest(unittest.TestCase):
             artifacts = record["artifacts"]
             self.assertIsInstance(artifacts, list, f"{number}행 artifacts가 목록이 아니다")
             self.assertTrue(artifacts, f"{number}행 artifacts가 비었다")
+            for artifact in artifacts:
+                self.assertIsInstance(artifact, str,
+                                      f"{number}행 artifact가 문자열이 아니다")
             self.assertEqual(len(artifacts), len(set(artifacts)),
                              f"{number}행 artifacts에 중복 경로가 있다")
             for artifact in artifacts:
+                self.assertFalse(artifact.startswith(("http://", "https://")),
+                                 f"{number}행 artifact는 외부 URL이 될 수 없다: {artifact}")
                 problem = self._path_problem(artifact)
                 self.assertIsNone(problem, f"{number}행 artifact 경로: {problem}")
                 parts = Path(artifact).parts
-                if parts and parts[0] == "runs":
-                    self.assertGreaterEqual(len(parts), 3,
-                                            f"{number}행 artifact가 runs/<run-id>/ 파일이 아니다")
-                    self.assertTrue(record["run_id"].startswith(parts[1]),
-                                    f"{number}행 artifact의 실행 폴더({parts[1]})가 "
-                                    f"run_id({record['run_id']})와 맞지 않는다")
+                self.assertGreaterEqual(len(parts), 3,
+                                        f"{number}행 artifact가 runs/<run-id>/ 파일이 아니다")
+                self.assertEqual(parts[0], "runs",
+                                 f"{number}행 artifact가 runs/<run-id>/ 파일이 아니다")
+                self.assertTrue(record["run_id"].startswith(parts[1]),
+                                f"{number}행 artifact의 실행 폴더({parts[1]})가 "
+                                f"run_id({record['run_id']})와 맞지 않는다")
+                session_root = (EVAL / "sessions" / record["run_id"]).resolve()
+                artifact_path = (session_root / Path(artifact)).resolve()
+                self.assertTrue(artifact_path.is_relative_to(session_root),
+                                f"{number}행 artifact가 세션 폴더 밖을 가리킨다: {artifact}")
+                self.assertTrue(artifact_path.is_file(),
+                                f"{number}행 artifact 파일이 없다: {artifact} "
+                                f"(실제 확인 경로: {artifact_path})")
 
             if "materials" in record:
                 materials = record["materials"]
@@ -796,6 +821,30 @@ class RunRecordTest(unittest.TestCase):
                                             f"{verdict['rubric_id']}: 근거가 너무 짧다")
                     self.assertNotIn(evidence.strip().lower(), self.PLACEHOLDERS,
                                      f"{verdict['rubric_id']}: 자리표시자 근거")
+
+    def test_missing_artifact_file_is_rejected(self) -> None:
+        source_eval = EVAL
+        line = (source_eval / "runs.jsonl").read_text(encoding="utf-8").splitlines()[0]
+        record = json.loads(line)
+        target = record["artifacts"][0]
+        with tempfile.TemporaryDirectory() as directory:
+            temporary_eval = Path(directory)
+            for name in ("cases.json", "prompt-template.json"):
+                (temporary_eval / name).write_text(
+                    (source_eval / name).read_text(encoding="utf-8"), encoding="utf-8")
+            shutil.copytree(source_eval / "sessions" / record["run_id"],
+                            temporary_eval / "sessions" / record["run_id"])
+            runs = temporary_eval / "runs.jsonl"
+            with patch.object(sys.modules[__name__], "EVAL", temporary_eval):
+                # Control: the unchanged record passes with its session copied.
+                runs.write_text(line, encoding="utf-8")
+                self.test_run_records_if_present()
+                # Only the artifact path changes, so only that file can be missing.
+                missing = target.rsplit("/", 1)[0] + "/missing.md"
+                record["artifacts"][0] = missing
+                runs.write_text(json.dumps(record, ensure_ascii=False), encoding="utf-8")
+                with self.assertRaisesRegex(AssertionError, f"artifact 파일이 없다: {re.escape(missing)}"):
+                    self.test_run_records_if_present()
 
 
 if __name__ == "__main__":

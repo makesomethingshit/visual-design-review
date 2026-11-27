@@ -20,6 +20,65 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FontPairingFixtureTest(unittest.TestCase):
+    def test_cli_blocks_malformed_nested_json_as_json_without_traceback(self):
+        mutations = []
+
+        def mutate(path, value):
+            fixture = MODULE.load_fixture(MODULE.FIXTURE)
+            target = fixture
+            for key in path[:-1]:
+                target = target[key]
+            target[path[-1]] = value
+            return fixture
+
+        mutations.extend([
+            (("pair_tasks",), None),
+            (("pair_tasks",), {}),
+            (("pair_tasks",), [None]),
+            (("pair_tasks",), [[]]),
+            (("pair_tasks", 0, "variants"), None),
+            (("pair_tasks", 0, "variants"), {}),
+            (("pair_tasks", 0, "variants"), [
+                None,
+                copy.deepcopy(MODULE.load_fixture(MODULE.FIXTURE)["pair_tasks"][0]["variants"][1]),
+            ]),
+            (("pair_tasks", 0, "fixed"), None),
+            (("pair_tasks", 0, "blind_ratings"), None),
+            (("pair_tasks", 0, "text_lines"), None),
+            (("pair_tasks", 0, "text_lines"), [None]),
+            (("pair_tasks", 0, "text_lines"), [[None]]),
+            (("pair_tasks", 0, "text_lines"), [[{}]]),
+            (("render_contract",), None),
+            (("render_contract", "canvas"), None),
+        ])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for index, (path, value) in enumerate(mutations):
+                with self.subTest(index=index, path=path, value=value):
+                    fixture = mutate(path, value)
+                    input_path = root / f"malformed-{index}.json"
+                    input_path.write_text(json.dumps(fixture), encoding="utf-8")
+                    result = subprocess.run(
+                        [sys.executable, str(SCRIPT), "--fixture", str(input_path),
+                         "--validate-only"], capture_output=True, text=True)
+                    self.assertEqual(result.returncode, 2, result.stderr)
+                    self.assertNotIn("Traceback", result.stderr)
+                    blocked = json.loads(result.stderr)
+                    self.assertEqual(blocked["status"], "BLOCKED")
+                    self.assertTrue(blocked["error"])
+
+    def test_zero_padding_is_allowed_but_negative_is_not(self):
+        fixture = MODULE.load_fixture(MODULE.FIXTURE)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "padding.json"
+            fixture["pair_tasks"][0]["fixed"]["padding_px"] = [0, 0]
+            path.write_text(json.dumps(fixture), encoding="utf-8")
+            MODULE.load_fixture(path)
+            fixture["pair_tasks"][0]["fixed"]["padding_px"] = [-1, 0]
+            path.write_text(json.dumps(fixture), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "padding_px"):
+                MODULE.load_fixture(path)
+
     def test_fixture_rejects_output_path_components_and_duplicate_names(self):
         for field, invalid in (("id", "../outside"), ("id", "/outside"),
                                ("id", "C:\\outside"), ("id", ".."),

@@ -243,6 +243,13 @@
 {"run_id":"level1-e1-01-r1","case_id":"E1","turn_id":"E1-T1","date":"2026-11-23T10:00:00+09:00","model":"gpt-6.1-sol / medium","skill_version":"1.0.1","isolation":"network-off","prompt_sha256":"<sha256>","transcript":"transcripts/level1-e1-01-r1.md","artifacts":["runs/level1-e1-01/lead-state.md"],"materials":"none","verdicts":[{"rubric_id":"E1-4","verdict":"pass","evidence":"lead-state.md: 필요한 맥락 기록 후 별도 승인 없이 진행"}]}
 ```
 
+저장소에 기록을 보관하는 경우 `transcript`의 `sessions/<run-id>/...`는
+`evaluation/level1/` 아래를 기준으로 하고, `artifacts`의
+`runs/<run-id>/...`는 `evaluation/level1/sessions/<run_id>/` 아래를 기준으로
+해석한다. 따라서 기록에 적은 각 artifact는 그 세션 폴더 안의 실제 파일이어야
+하며, 파일이 없거나 디렉터리를 가리키면 계약 위반이다. 저장소 밖 transcript는
+외부 보관 위치로 남길 수 있지만, artifact는 판정에 사용한 파일의 위치를 남긴다.
+
 예시의 `<sha256>`은 `eval_prompt.py`가 표준오류로 내는 값으로 바꿔 넣는다. 해시가 프롬프트와 다르면 계약 테스트가 그 기록을 실패로 본다.
 
 ## 10. 자동 테스트가 확인하는 것

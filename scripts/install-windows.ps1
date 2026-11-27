@@ -112,7 +112,6 @@ function Invoke-Skill([string]$Name) {
     $target = Join-Path $skillsRoot $Name
     $backupsRoot = Join-Path $backupsBase $Name
     if ($Action -ne 'remove') {
-        Assert-SourceOutsideHome $source
         Assert-Layout $source $Name
         Write-Output "Source: $source"
     }
@@ -183,6 +182,10 @@ function Invoke-Skill([string]$Name) {
 }
 
 Assert-NoReparsePointAncestor $codexHome
+
+# Check every source before touching any skill, so a home inside a later
+# skill's source cannot receive moves or installs of the earlier ones.
+foreach ($name in $skills) { Assert-SourceOutsideHome (Join-Path $repoRoot $name) }
 
 # Managed roots must not redirect moves into another tree.
 $managedRoots = @($skillsRoot, $backupsBase)
