@@ -17,6 +17,7 @@
 | 기록 | 범위 |
 | --- | --- |
 | [level1-eval-2026-11-27.md](level1-eval-2026-11-27.md) | E1~E4 실행 평가 3회차 (Claude 실행·판정, 대상 모델 아님) |
+| [level1-html-report-2026-11-27.md](level1-html-report-2026-11-27.md) | HTML 검토 보고서 확인 실행과 샘플 비교 (분식 키오스크) |
 
 ## 설치·배포
 
