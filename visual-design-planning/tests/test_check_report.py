@@ -44,6 +44,8 @@ class CheckReportTest(unittest.TestCase):
     def test_template_leftovers_fail(self) -> None:
         self.assertTrue(any("템플릿 주석" in p for p in self.problems(page("<!-- 제목 -->"))))
         self.assertTrue(any("{U}" in p for p in self.problems(page("<p>3단계 {U}</p>"))))
+        run_path = page("<p>실행 경로: runs/&lt;run-id&gt;/</p>")
+        self.assertTrue(any("<run-id>" in p for p in self.problems(run_path)))
 
     def test_tag_variants_and_badges_fail(self) -> None:
         self.assertTrue(any("(추론)" in p for p in self.problems(page("<p>단계 (추론)</p>"))))
@@ -59,7 +61,13 @@ class CheckReportTest(unittest.TestCase):
 
     def test_measured_tag_needs_source_nearby(self) -> None:
         far = page("<p>" + "가" * 400 + '<span class="badge b-rec">[측정/기록]</span></p>')
-        self.assertTrue(any("주변에 각주" in p for p in self.problems(far)))
+        self.assertTrue(any("같은 문단" in p for p in self.problems(far)))
+        long_claim = page('<p>12명 중 5명 <span class="badge b-rec">[측정/기록]</span>' + "관찰 설명 " * 80 +
+                          '<sup><a href="#fn1">1</a></sup></p>')
+        self.assertEqual(self.problems(long_claim), [])
+        row = page('<table><tr><td>5/12 <span class="badge b-rec">[측정/기록]</span></td>'
+                   '<td>' + "설명 " * 100 + '</td><td>EV-01</td></tr></table>')
+        self.assertEqual(self.problems(row), [])
 
     def test_user_confirmed_calculation_needs_no_evidence_id(self) -> None:
         calc = page("<p>" + "가" * 400 + '마감까지 34일 <span class="badge b-rec">[측정/기록]</span>'

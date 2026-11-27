@@ -29,9 +29,24 @@ TEMPLATE_COMMENT = re.compile(
     r"<!--\s*(?:제목|근거가 지지하는|첫 1~2문장|값|무엇을 몇|방법 카드 이름|이 분석이|"
     r"고른 이유|인라인 SVG|결론|주장|근거와 각주|단, |재정의가|어떻게 하면|원칙이 어디서|"
     r"방향 이름|개념 한 문장|출처, 날짜|방법 → 이유|수치가 말하는|의뢰 대상이)")
-PLACEHOLDER = re.compile(r"\{[A-Za-z가-힣_]{1,20}\}|&lt;run-id&gt;|brief-vN\.md|DIR-xx|EV-xx")
+# Matched against decoded text, so the template's &lt;run-id&gt; appears as <run-id>.
+PLACEHOLDER = re.compile(r"\{[A-Za-z가-힣_]{1,20}\}|<run-id>|brief-vN\.md|DIR-xx|EV-xx")
 EV = re.compile(r"\bEV-\d{2,}\b")
 WINDOW = 240
+BLOCK = re.compile(r"<(p|li|tr|figcaption|dd|blockquote|h[1-6])\b")
+
+
+def claim_block(body: str, start: int, end: int) -> str:
+    """The paragraph, list item or table row that holds a claim tag.
+
+    Falls back to a fixed window only when the tag sits in no such block.
+    """
+    opens = [m for m in BLOCK.finditer(body, 0, start)]
+    for match in reversed(opens):
+        close = body.find(f"</{match.group(1)}>", end)
+        if close != -1 and body.find(f"</{match.group(1)}>", match.end(), start) == -1:
+            return body[match.start():close]
+    return body[max(0, start - WINDOW):end + WINDOW]
 
 
 def visible_text(fragment: str) -> str:
@@ -81,13 +96,13 @@ def check(page: str, evidence: str | None = None) -> dict:
             problems.append(f"각주에 근거 등급이 없음: {note_id}")
 
     for match in re.finditer(re.escape("[측정/기록]"), body):
-        around = body[max(0, match.start() - WINDOW):match.end() + WINDOW]
+        around = claim_block(body, match.start(), match.end())
         # A value computed only from what the user said cites 사용자 확정
         # instead of an evidence entry (report-format.md, computed values).
         if not (re.search(r'href="#fn\d+"', around) or EV.search(around)
                 or "사용자 확정" in visible_text(around)):
             line = visible_text(body[max(0, match.start() - 80):match.end()]).strip()
-            problems.append(f"[측정/기록] 주변에 각주·근거 ID·사용자 확정 출처가 없음: …{line[-60:]}")
+            problems.append(f"[측정/기록]과 같은 문단·항목·행에 각주·근거 ID·사용자 확정 출처가 없음: …{line[-60:]}")
 
     if evidence is not None:
         known = set(EV.findall(evidence))
