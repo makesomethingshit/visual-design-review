@@ -3,7 +3,8 @@
 Checks the fixed 12-row table (item names, order, columns), the status values,
 that each row's status is the weakest status written in its content, that every
 row with an unconfirmed part is listed in row 12 by its item name, and that each
-row 12 entry names a way to check it. It does not judge the content.
+row 12 entry follows `<항목>: <무엇> — <확인 방법>, <필요 여부>`. Row 12 is
+`없음` when nothing is unconfirmed. It does not judge the content.
 
 Prints a JSON result. Exit 0 for PASS, 1 for FAIL, 2 when the input cannot be
 read (BLOCKED).
@@ -23,6 +24,7 @@ STATUSES = ("미확인", "[추측]", "[추론]", "[측정/기록]", "사용자 �
 # Weakest first; a record and a user statement are equally strong.
 RANK = {"미확인": 0, "[추측]": 1, "[추론]": 2, "[측정/기록]": 3, "사용자 확정": 3}
 CHECK_WAYS = ("질문", "조사", "자료", "요청", "레벨 2", "레벨 3")
+NONE_VALUES = ("없음", "해당 없음")
 
 
 def cells(line: str) -> list[str]:
@@ -71,9 +73,26 @@ def check(text: str) -> dict:
             if not re.search(rf"(?<![가-힣]){re.escape(name)}\s*:", open_row):
                 problems.append(f"{name}: 미확인 부분이 12번 미확인 행에 `{name}:`로 올라가 있지 않음")
 
+    any_open = any(r[2] == "미확인" or "미확인" in r[1] for n, r in by_name.items() if n != "미확인")
+    if open_row in NONE_VALUES or not open_row:
+        if any_open:
+            problems.append("다른 행에 미확인이 있는데 12번 미확인 행이 비었거나 '없음'임")
+        elif not open_row:
+            problems.append("12번 미확인 행이 비어 있음: 남은 미확인이 없으면 '없음'으로 적는다")
+        entries = []
     for entry in entries:
-        if not any(way in entry for way in CHECK_WAYS):
-            problems.append(f"미확인 항목에 확인 방법이 없음: {entry[:40]}")
+        head, sep, tail = entry.partition("—")
+        item = head.split(":", 1)[0].strip() if ":" in head else ""
+        if item not in ITEMS[:-1]:
+            problems.append(f"미확인 항목이 `<항목>:`으로 시작하지 않음: {entry[:40]}")
+        if not sep:
+            problems.append(f"미확인 항목에 `—` 뒤 확인 방법이 없음: {entry[:40]}")
+            continue
+        method, _, need = tail.rpartition(",")
+        if not any(way in method for way in CHECK_WAYS):
+            problems.append(f"미확인 항목의 확인 방법이 질문·조사가 아님: {entry[:40]}")
+        if not re.search(r"필요|불필요", need):
+            problems.append(f"미확인 항목에 다음 판단에 필요한지가 없음: {entry[:40]}")
     return {"status": "FAIL" if problems else "PASS", "problems": problems,
             "counts": {"rows": len(rows), "open_entries": len(entries)}}
 

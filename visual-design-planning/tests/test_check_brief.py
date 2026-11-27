@@ -62,6 +62,19 @@ class CheckBriefTest(unittest.TestCase):
     def test_open_entry_needs_a_way_to_check(self) -> None:
         bare = brief(MIXED, "예산: 인쇄비 포함 여부")
         self.assertTrue(any("확인 방법" in p for p in self.problems(bare)))
+        keyword_in_question = {"결과물": ("미확인: 자료집 포함 여부", "미확인")}
+        tricky = brief(keyword_in_question, "결과물: 자료집 포함 여부")
+        self.assertTrue(any("확인 방법" in p for p in self.problems(tricky)))
+        no_need = brief(MIXED, "예산: 인쇄비 포함 여부 — 사람에게 질문")
+        self.assertTrue(any("필요한지" in p for p in self.problems(no_need)))
+        unnamed = brief(MIXED, "① 인쇄비 포함 여부 — 사람에게 질문, 필요")
+        self.assertTrue(any("`<항목>:`" in p for p in self.problems(unnamed)))
+
+    def test_none_left_is_explicit(self) -> None:
+        self.assertEqual(self.problems(brief(open_row="없음")), [])
+        self.assertEqual(self.problems(brief(open_row="해당 없음")), [])
+        self.assertTrue(any("비어 있음" in p for p in self.problems(brief(open_row=""))))
+        self.assertTrue(any("'없음'" in p for p in self.problems(brief(MIXED, "없음"))))
 
     def test_cli_exit_codes(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
