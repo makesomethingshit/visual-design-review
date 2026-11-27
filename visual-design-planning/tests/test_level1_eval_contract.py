@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shutil
 import sys
 import tempfile
 import unittest
@@ -734,6 +735,8 @@ class RunRecordTest(unittest.TestCase):
                              f"{number}행 run_id에 경로 구분자가 있다")
             self.assertEqual(Path(record["run_id"]).name, record["run_id"],
                              f"{number}행 run_id가 실행 폴더 이름이 아니다")
+            self.assertNotIn(record["run_id"], (".", ".."),
+                             f"{number}행 run_id가 실행 폴더 이름이 아니다")
             self.assertIn(record["case_id"], cases, f"{number}행의 케이스 ID가 픽스처에 없다")
             case = cases[record["case_id"]]
             turn = [turn for turn in case["turns"] if turn["id"] == record["turn_id"]]
@@ -815,18 +818,26 @@ class RunRecordTest(unittest.TestCase):
 
     def test_missing_artifact_file_is_rejected(self) -> None:
         source_eval = EVAL
+        line = (source_eval / "runs.jsonl").read_text(encoding="utf-8").splitlines()[0]
+        record = json.loads(line)
+        target = record["artifacts"][0]
         with tempfile.TemporaryDirectory() as directory:
             temporary_eval = Path(directory)
             for name in ("cases.json", "prompt-template.json"):
                 (temporary_eval / name).write_text(
                     (source_eval / name).read_text(encoding="utf-8"), encoding="utf-8")
-            (temporary_eval / "runs.jsonl").write_text(
-                (source_eval / "runs.jsonl").read_text(encoding="utf-8").splitlines()[0]
-                .replace("runs/ohuui-ppang-01/brief-v1.md",
-                         "runs/ohuui-ppang-01/missing.md"),
-                encoding="utf-8")
+            shutil.copytree(source_eval / "sessions" / record["run_id"],
+                            temporary_eval / "sessions" / record["run_id"])
+            runs = temporary_eval / "runs.jsonl"
             with patch.object(sys.modules[__name__], "EVAL", temporary_eval):
-                with self.assertRaisesRegex(AssertionError, "artifact 파일이 없다"):
+                # Control: the unchanged record passes with its session copied.
+                runs.write_text(line, encoding="utf-8")
+                self.test_run_records_if_present()
+                # Only the artifact path changes, so only that file can be missing.
+                missing = target.rsplit("/", 1)[0] + "/missing.md"
+                record["artifacts"][0] = missing
+                runs.write_text(json.dumps(record, ensure_ascii=False), encoding="utf-8")
+                with self.assertRaisesRegex(AssertionError, f"artifact 파일이 없다: {re.escape(missing)}"):
                     self.test_run_records_if_present()
 
 
