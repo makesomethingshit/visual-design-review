@@ -6,7 +6,7 @@ description: >
   existing evidence, and prepare findings for the designer's decision.
   시각디자인 기획, 디자인 의뢰 정리, 기존 자료 조사·분석, 디자인 방향 검토 자료 작성에 사용한다.
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
 # 시각디자인 기획 · 레벨 1

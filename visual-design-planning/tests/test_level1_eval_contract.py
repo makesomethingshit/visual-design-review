@@ -290,6 +290,24 @@ class WorkflowContractTest(unittest.TestCase):
         self.assertIn("brief-vN.md", drafting, "레벨 2가 브리프 파일을 읽지 않는다")
         self.assertIn("| `brief` |", intake, "레벨 2 인계 기록에 brief 필드가 없다")
 
+    def test_round_one_findings_are_ruled(self) -> None:
+        """1차 실행 판정에서 드러난 지시 공백이 문서에 규칙으로 남아 있는지."""
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        brief = self.section(lifecycle, "## 브리프 기록 — `brief-vN.md`")
+        self.assertIn("이 12행만 둔다", brief, "브리프 표에 행을 더하지 않는 규칙이 없다")
+        self.assertIn("가장 약한 상태", brief, "섞인 상태를 적는 규칙이 없다")
+        exchange = read(WORKFLOW / "task-exchange.md")
+        self.assertIn("대화 답변의 주장에도 같은 태그", exchange,
+                      "사람에게 보내는 답변에 태그 규칙이 걸리지 않는다")
+        self.assertIn("줄이거나 바꾸지 않는다", exchange, "태그 이름 고정 규칙이 없다")
+        step6 = next(line for line in self.level1.splitlines() if line.startswith("6. "))
+        self.assertIn("중간 검토 결과", step6, "대기 과제만 남았을 때의 취합 규칙이 없다")
+        self.assertIn("답을 기다리는 동안에는 과제를 나누지도", step6,
+                      "맥락 질문 대기 중 과제 분할·검토 작성을 막는 규칙이 없다")
+        self.assertIn("`사용자 확정`으로 표시", exchange, "사용자 발화의 표기 규칙이 없다")
+        step7 = next(line for line in self.level1.splitlines() if line.startswith("7. "))
+        self.assertIn("절차 보고", step7, "답변 첫머리 규칙이 대화 답변에 걸리지 않는다")
+
     def test_forbidden_scope(self) -> None:
         self.assertIn("새 인터뷰·설문·현장조사", self.skill)
         self.assertIn("시제품·실험", self.skill)

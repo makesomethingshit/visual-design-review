@@ -12,6 +12,12 @@
 
 평가 입력·원문·해시는 [리뷰 평가 기록](../../visual-design-review/tests/evaluation/README.md)에 있다.
 
+## 레벨 1 기획 스킬
+
+| 기록 | 범위 |
+| --- | --- |
+| [level1-eval-2026-11-27.md](level1-eval-2026-11-27.md) | E1~E4 실행 평가 3회차 (Claude 실행·판정, 대상 모델 아님) |
+
 ## 설치·배포
 
 | 기록 | 범위 |
