@@ -11,6 +11,7 @@
 | `handoff_status` | `READY` / `PARTIAL` / `DIRECT` / `BLOCKED`와 이유 한 줄 | 필수 |
 | `level1_run` | 레벨 1 실행 폴더와 `source_review` 파일명·버전 | `READY`·`PARTIAL`에서 필수 |
 | `id_origin` | 인계 ID의 부여 주체: `LEVEL1`(채택 절) / `LEVEL2_NORMALIZED`(레벨 2가 로드 시 부여) / `DIRECT` | 필수 |
+| `brief` | 기준 브리프 파일·버전과, 시안에 쓰는 브리프 항목(목표·대상·메시지·환경·필수조건·판단기준)의 값·상태. `미확인` 항목은 `gaps`로 옮긴다 | 레벨 1 브리프가 있으면 필수 |
 | `decision` | 사람이 채택한 시점, 채택자, 반려된 안과 사유 | 필수 |
 | `question` | 시안이 답해야 할 질문(리뷰 첫 문단에서 옮김) | 필수 |
 | `scope_limit` | 판단을 바꿀 한계, 시안이 다루지 않는 범위 | 필수 |
@@ -74,6 +75,13 @@ level1_run: /work/exhibition-01/runs/exhibition-01
 source_review: review-v2.md
 id_origin: LEVEL1
 decision: {adopted_at: "2026-11-20", by: USER, rejected: [DIR-02 "정보 과밀, 1차 대상 아님"]}
+brief:
+  file: brief-v2.md
+  items:
+    - {item: 목표, value: "입구에서 열린 전시와 관람 시간을 먼저 찾게 한다", status: 사용자 확정}
+    - {item: 대상, value: "첫 방문 관람객", status: "[측정/기록]", evidence: [EV-04]}
+    - {item: 판단기준, value: "입구에서 시간을 묻는 문의가 줄어드는지", status: 사용자 확정}
+    - {item: 환경, value: "입구 벽면 부착, 2~3m 거리", status: "[추론]"}
 question: 관람객이 입구에서 열린 전시와 시간을 먼저 찾게 할 것
 scope_limit: 야외 사이니지·디지털 화면은 범위 밖
 adopted:
@@ -86,7 +94,7 @@ deliverables:
   - {id: DEL-02, item: 3단 리플릿, medium: "A4 3단 접지", purpose: 관람 동선과 작품 위치 안내, priority: 2, evidence: [EV-07], draft_track: [draft-a, draft-b]}
 constraints:
   - {id: C-01, item: 포스터 판형, value: "420x594", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
-  - {id: C-02, item: 필수 문구, value: "기관명·후원 로고·접근성 안내", origin: USER, source: "brief"}
+  - {id: C-02, item: 필수 문구, value: "기관명·후원 로고·접근성 안내", origin: USER, source: "brief-v2.md#필수조건"}
   - {id: C-03, item: 리플릿 판형·단 수, value: "148x210, 3단", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
   - {id: C-04, item: 리플릿 여백·거터, value: "12/12/5", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
 evidence:
@@ -97,7 +105,7 @@ unresolved:
   - {id: U-02, issue: 후원 로고 사용 범위, decider: USER, effect_on_draft: 하단 띠 배치 후보만 가능}
 gaps:
   - {missing: 실제 원고, handling: "ASSUMED(예시 원고)", basis: "U-01 결정 전 비교용"}
-  - {missing: 인쇄 후 관람 거리, handling: DEFERRED, basis: "설치 위치 미확정"}
+  - {missing: 인쇄 후 관람 거리, handling: DEFERRED, basis: "brief-v2.md 환경 항목이 [추론], 설치 위치 미확정"}
 assumptions:
   - {what: 본문 320자 내외, basis: 예시 원고, if_changed: 단 수·줄 수 재계산}
 checks:
@@ -109,7 +117,7 @@ checks:
 
 ## 직접 브리프로 시작한 경우
 
-레벨 1 인계가 없으면 같은 파일을 `handoff_status: DIRECT`로 쓰고 다음만 채운다.
+레벨 1 인계가 없으면 같은 파일을 `handoff_status: DIRECT`로 쓰고 다음만 채운다. 레벨 1이 브리프만 남긴 경우(`brief-vN.md`만 있고 채택 절이 없는 경우)도 `DIRECT`이며, 그 파일을 `brief` 필드에 적고 아래 값의 출처로 쓴다.
 
 - `question`: 이 시안이 답해야 할 질문 한 문장. 브리프에 없으면 사람에게 묻는다.
 - `deliverables`: 브리프가 요구한 매체·품목을 읽은 순서대로 `DEL-01`부터 부여해 적는다(품목·매체·목적·우선순위, 연결 근거는 `NO-EVIDENCE`). 브리프에 없는 품목을 만들지 않고, `id_origin`은 `DIRECT`다.

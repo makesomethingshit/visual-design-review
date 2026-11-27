@@ -39,6 +39,12 @@ HANDOFF_FIELDS = ("채택 방향", "필요 결과물", "근거 ID", "제작 제�
 HANDOFF_ID_PREFIXES = {"채택 방향": "DIR-01", "필요 결과물": "DEL-01",
                        "근거 ID": "EV-01", "제작 제약": "C-01",
                        "남은 쟁점": "U-01"}
+# 브리프 12항목과 상태 어휘. lead-state-lifecycle.md의 '브리프 기록' 절이 유일한 기준이다.
+BRIEF_ITEMS = ("목표", "배경", "대상", "메시지", "결과물", "환경", "필수조건",
+               "제약", "일정", "예산", "판단기준", "미확인")
+BRIEF_STATUSES = ("사용자 확정", "[측정/기록]", "[추론]", "[추측]", "미확인")
+# 과제 방향(DIR)에 넣지 않는 시각·표현 결정.
+VISUAL_DECISIONS = ("문구", "톤", "이미지", "색", "서체", "그리드", "판면 배치", "크기", "스타일")
 # 통일 전 표기. 필드 이름으로 다시 쓰지 않는다.
 OLD_FIELD_LABELS = ("채택한 방향", "채택된 방향", "미결 쟁점")
 # cases.json의 status 허용값. 실행 후 상태를 갱신해도 계약 검사가 깨지지 않아야 한다.
@@ -230,6 +236,78 @@ class WorkflowContractTest(unittest.TestCase):
         self.assertIn("visual-design-drafting", self.skill,
                       "planning SKILL.md가 레벨 2 다음 단계를 밝히지 않는다")
 
+    def section(self, text: str, heading: str) -> str:
+        self.assertIn(heading, text, f"'{heading}' 절이 없다")
+        body = text.split(heading, 1)[1]
+        return body.split("\n## ", 1)[0]
+
+    def test_brief_record_contract(self) -> None:
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        brief = self.section(lifecycle, "## 브리프 기록 — `brief-vN.md`")
+        rows = [cells for cells in (
+            [cell.strip() for cell in line.strip().strip("|").split("|")]
+            for line in brief.splitlines() if re.match(r"^\| \d+ \|", line))]
+        self.assertEqual(tuple(row[1] for row in rows), BRIEF_ITEMS,
+                         "브리프 12항목의 이름·순서가 기준과 다르다")
+        self.assertEqual([int(row[0]) for row in rows], list(range(1, 13)))
+        for status in BRIEF_STATUSES:
+            self.assertIn(f"`{status}`", brief, f"브리프 상태 어휘 {status}가 없다")
+        self.assertIn("brief-v2.md", brief, "브리프 버전 규칙이 없다")
+        self.assertIn("## 변경", brief, "브리프 변경 기록 규칙이 없다")
+        self.assertIn("brief-v1.md", lifecycle.split("## ", 1)[0],
+                      "실행 폴더 파일 목록에 브리프가 없다")
+
+    def test_brief_is_saved_where_it_is_written(self) -> None:
+        context = read(WORKFLOW / "context-align.md")
+        self.assertIn("`brief-v1.md`", context, "맥락 확인이 브리프 저장 위치를 말하지 않는다")
+        self.assertIn("(lead-state-lifecycle.md)", context)
+        step2 = next(line for line in self.level1.splitlines() if line.startswith("2. "))
+        self.assertIn("brief-v1.md", step2, "레벨 1 2단계가 브리프를 저장하지 않는다")
+        self.assertIn("brief-vN.md", self.skill)
+        self.assertIn("기준 브리프", read(WORKFLOW / "lead-state-lifecycle.md"),
+                      "채택 절이 기준 브리프를 가리키지 않는다")
+
+    def test_dir_is_a_task_direction(self) -> None:
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        boundary = self.section(lifecycle, "## 과제 방향(`DIR`)과 시각·표현 방향의 경계")
+        for scope in ("무엇을", "누구에게", "어떤 순서로", "어떤 정보를"):
+            self.assertIn(scope, boundary, f"과제 방향 범위 '{scope}'가 없다")
+        for decision in VISUAL_DECISIONS:
+            self.assertIn(decision, boundary, f"DIR에서 제외할 '{decision}'이 없다")
+        self.assertIn("지어내지 않는다", boundary, "후보를 지어내지 않는 규칙이 없다")
+        self.assertIn("과제 방향", self.skill)
+        self.assertIn("과제 방향", self.level1)
+
+    def test_brief_only_path(self) -> None:
+        path = self.section(self.level1, "## 브리프만 요청한 경우")
+        for token in ("1·2단계", "brief-v1.md", "review-vN.md", "멈춘다", "DIRECT",
+                      "visual-design-drafting"):
+            self.assertIn(token, path, f"브리프 전용 경로에 '{token}'이 없다")
+        self.assertIn("브리프만 요청한 경우", read(WORKFLOW / "context-align.md"),
+                      "맥락 확인이 브리프 전용 경로로 이어지지 않는다")
+        drafting = read(ROOT / "visual-design-drafting/references/workflow/level-2.md")
+        intake = read(ROOT / "visual-design-drafting/references/contracts/draft-intake.md")
+        self.assertIn("brief-vN.md", drafting, "레벨 2가 브리프 파일을 읽지 않는다")
+        self.assertIn("| `brief` |", intake, "레벨 2 인계 기록에 brief 필드가 없다")
+
+    def test_round_one_findings_are_ruled(self) -> None:
+        """1차 실행 판정에서 드러난 지시 공백이 문서에 규칙으로 남아 있는지."""
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        brief = self.section(lifecycle, "## 브리프 기록 — `brief-vN.md`")
+        self.assertIn("이 12행만 둔다", brief, "브리프 표에 행을 더하지 않는 규칙이 없다")
+        self.assertIn("가장 약한 상태", brief, "섞인 상태를 적는 규칙이 없다")
+        exchange = read(WORKFLOW / "task-exchange.md")
+        self.assertIn("대화 답변의 주장에도 같은 태그", exchange,
+                      "사람에게 보내는 답변에 태그 규칙이 걸리지 않는다")
+        self.assertIn("줄이거나 바꾸지 않는다", exchange, "태그 이름 고정 규칙이 없다")
+        step6 = next(line for line in self.level1.splitlines() if line.startswith("6. "))
+        self.assertIn("중간 검토 결과", step6, "대기 과제만 남았을 때의 취합 규칙이 없다")
+        self.assertIn("답을 기다리는 동안에는 과제를 나누지도", step6,
+                      "맥락 질문 대기 중 과제 분할·검토 작성을 막는 규칙이 없다")
+        self.assertIn("`사용자 확정`으로 표시", exchange, "사용자 발화의 표기 규칙이 없다")
+        step7 = next(line for line in self.level1.splitlines() if line.startswith("7. "))
+        self.assertIn("절차 보고", step7, "답변 첫머리 규칙이 대화 답변에 걸리지 않는다")
+
     def test_forbidden_scope(self) -> None:
         self.assertIn("새 인터뷰·설문·현장조사", self.skill)
         self.assertIn("시제품·실험", self.skill)
@@ -283,8 +361,8 @@ class FixtureContractTest(unittest.TestCase):
         self.cases = {case["id"]: case for case in self.data["cases"]}
         self.scope = self.data["scope"]
 
-    def test_three_cases(self) -> None:
-        self.assertEqual(list(self.cases), ["E1", "E2", "E3"])
+    def test_four_cases(self) -> None:
+        self.assertEqual(list(self.cases), ["E1", "E2", "E3", "E4"])
         self.assertEqual(len(self.scope["task_states"]), 6)
 
     def test_status_is_a_known_execution_state(self) -> None:
@@ -422,6 +500,26 @@ class FixtureContractTest(unittest.TestCase):
         self.assertIn("확정", case["turns"][1]["text"])
         rubric_ids = {row["id"] for row in case["rubric"]}
         self.assertIn("E3-7", rubric_ids)
+
+    def test_brief_only_case(self) -> None:
+        case = self.cases["E4"]
+        self.assertEqual([turn["kind"] for turn in case["turns"]], ["initial"])
+        self.assertEqual(case["turns"][0]["expected_steps"], [1, 2])
+        self.assertEqual(case["tasks_after_agreement"], [])
+        self.assertIn("runs/<run-id>/brief-v1.md", case["expected"]["deliverables"])
+        self.assertIn("runs/<run-id>/review-v1.md", case["expected"]["must_not_create"])
+        self.assertTrue(case["expected"]["unknown_items"])
+        self.assertIn("브리프만", case["turns"][0]["text"])
+
+    def test_brief_scope_matches_documents(self) -> None:
+        self.assertEqual(tuple(self.scope["brief_items"]), BRIEF_ITEMS)
+        self.assertEqual(tuple(self.scope["brief_statuses"]), BRIEF_STATUSES)
+        for case in self.data["cases"]:
+            self.assertIn("runs/<run-id>/brief-v1.md", case["expected"]["deliverables"],
+                          f"{case['id']} 산출물에 브리프가 없다")
+            self.assertTrue(any(row["check"] in ("브리프 기록", "브리프 파일", "기준 브리프")
+                                for row in case["rubric"]),
+                            f"{case['id']}에 브리프 판정 항목이 없다")
 
     def test_rubric_rows_are_complete(self) -> None:
         for case in self.data["cases"]:
