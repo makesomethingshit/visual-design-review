@@ -110,9 +110,9 @@ function Assert-SourceOutsideHome([string]$Source) {
 function Invoke-Skill([string]$Name) {
     $source = Join-Path $repoRoot $Name
     $target = Join-Path $skillsRoot $Name
+    Assert-SourceOutsideHome $source
     $backupsRoot = Join-Path $backupsBase $Name
     if ($Action -ne 'remove') {
-        Assert-SourceOutsideHome $source
         Assert-Layout $source $Name
         Write-Output "Source: $source"
     }

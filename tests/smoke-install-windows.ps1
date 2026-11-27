@@ -138,6 +138,30 @@ try {
     Assert-True (-not (Test-Path -LiteralPath $nestedHome)) 'nested CODEX_HOME was created'
     $env:CODEX_HOME = $validHome
 
+    # Remove must also reject an existing installation whose home is inside source.
+    $nestedRemoveRepo = Join-Path $work 'nested-remove-repo'
+    New-Item -ItemType Directory -Path (Join-Path $nestedRemoveRepo 'scripts') -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $repo 'scripts/install-windows.ps1') -Destination (Join-Path $nestedRemoveRepo 'scripts/install-windows.ps1')
+    Copy-Item -LiteralPath (Join-Path $repo 'visual-design-review') -Destination $nestedRemoveRepo -Recurse
+    $nestedRemoveInstaller = Join-Path $nestedRemoveRepo 'scripts/install-windows.ps1'
+    $nestedRemoveHome = Join-Path $nestedRemoveRepo 'visual-design-review/.nested-remove-home'
+    New-Item -ItemType Directory -Path (Join-Path $nestedRemoveHome 'skills/visual-design-review') -Force | Out-Null
+    [IO.File]::WriteAllText((Join-Path $nestedRemoveHome 'skills/visual-design-review/SKILL.md'), "sentinel`n")
+    $env:CODEX_HOME = $nestedRemoveHome
+    $nestedRemoveFailed = $false
+    $nestedRemoveMessage = ''
+    try {
+        & $nestedRemoveInstaller -Action remove | Out-Null
+    } catch {
+        $nestedRemoveFailed = $true
+        $nestedRemoveMessage = $_.Exception.Message
+    }
+    Assert-True $nestedRemoveFailed 'remove accepted CODEX_HOME inside source'
+    Assert-True ($nestedRemoveMessage -match 'must not be inside the source directory') 'wrong nested remove failure'
+    Assert-True (Test-Path -LiteralPath (Join-Path $nestedRemoveHome 'skills/visual-design-review/SKILL.md')) 'nested remove moved the existing installation'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $nestedRemoveHome 'skill-backups'))) 'nested remove created a backup inside source'
+    $env:CODEX_HOME = $validHome
+
     # An ancestor junction can make a lexical CODEX_HOME path resolve inside the source.
     $junctionRepo = Join-Path $work 'junction-repo'
     New-Item -ItemType Directory -Path (Join-Path $junctionRepo 'scripts') -Force | Out-Null

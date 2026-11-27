@@ -157,6 +157,26 @@ for name in "${SKILLS[@]}"; do
   fi
   [[ ! -e "$nested_home" ]] || fail 'nested CODEX_HOME was created'
 done
+
+# Remove must also reject an existing installation whose home is inside source.
+nested_remove_repo="$sandbox/nested-remove-repo"
+mkdir -p "$nested_remove_repo/scripts"
+cp "$root/scripts/install-linux.sh" "$nested_remove_repo/scripts/"
+cp -a "$root/visual-design-review" "$nested_remove_repo/"
+nested_remove_installer="$nested_remove_repo/scripts/install-linux.sh"
+nested_remove_home="$nested_remove_repo/visual-design-review/.nested-remove-home"
+mkdir -p "$nested_remove_home/skills/visual-design-review"
+printf 'sentinel\n' > "$nested_remove_home/skills/visual-design-review/SKILL.md"
+if output="$(CODEX_HOME="$nested_remove_home" bash "$nested_remove_installer" remove 2>&1)"; then
+  fail 'remove accepted CODEX_HOME inside source'
+else status=$?; fi
+[[ "$status" -eq 2 && "$output" == *'must not be inside the source'* ]] ||
+  fail "wrong nested remove rejection: $output"
+[[ -f "$nested_remove_home/skills/visual-design-review/SKILL.md" ]] ||
+  fail 'nested remove moved the existing installation'
+[[ ! -e "$nested_remove_home/skill-backups" ]] ||
+  fail 'nested remove created a backup inside source'
+
 # Parent links must not redirect install/remove into the source or backups elsewhere.
 link_home="$sandbox/link-home"
 mkdir -p "$link_home"

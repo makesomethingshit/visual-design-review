@@ -136,10 +136,11 @@ for name in "${SKILLS[@]}"; do
   fi
 done
 
+codex_home_real="$(resolve_future_directory "$codex_home")" || {
+  echo 'Cannot resolve CODEX_HOME or its existing ancestor.' >&2; exit 2;
+}
+
 if [[ "$action" != remove ]]; then
-  codex_home_real="$(resolve_future_directory "$codex_home")" || {
-    echo 'Cannot resolve CODEX_HOME or its existing ancestor.' >&2; exit 2;
-  }
   if [[ -d "$skills_dir" ]]; then
     skills_real="$(cd -- "$skills_dir" && pwd -P)" || { echo 'Cannot resolve skills directory.' >&2; exit 2; }
   else
@@ -159,6 +160,17 @@ if [[ "$action" != remove ]]; then
     fi
     check_layout "$name" "$source_dir" || { echo "Source package structure is invalid: $name" >&2; exit 1; }
     echo "Source: $source_dir"
+  done
+else
+  # Remove normally works without the source package, but it must still
+  # reject a home that resolves inside any source tree before moving files.
+  for name in "${SKILLS[@]}"; do
+    if source_dir="$(source_dir_for "$name")"; then
+      if [[ "$codex_home_real" == "$source_dir" || "$codex_home_real" == "$source_dir"/* ]]; then
+        echo 'CODEX_HOME must not be inside the source directory.' >&2
+        exit 2
+      fi
+    fi
   done
 fi
 
