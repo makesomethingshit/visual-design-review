@@ -67,6 +67,18 @@ class FontPairingFixtureTest(unittest.TestCase):
                     self.assertEqual(blocked["status"], "BLOCKED")
                     self.assertTrue(blocked["error"])
 
+    def test_zero_padding_is_allowed_but_negative_is_not(self):
+        fixture = MODULE.load_fixture(MODULE.FIXTURE)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "padding.json"
+            fixture["pair_tasks"][0]["fixed"]["padding_px"] = [0, 0]
+            path.write_text(json.dumps(fixture), encoding="utf-8")
+            MODULE.load_fixture(path)
+            fixture["pair_tasks"][0]["fixed"]["padding_px"] = [-1, 0]
+            path.write_text(json.dumps(fixture), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "padding_px"):
+                MODULE.load_fixture(path)
+
     def test_fixture_rejects_output_path_components_and_duplicate_names(self):
         for field, invalid in (("id", "../outside"), ("id", "/outside"),
                                ("id", "C:\\outside"), ("id", ".."),

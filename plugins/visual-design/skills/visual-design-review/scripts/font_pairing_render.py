@@ -51,9 +51,10 @@ def _string(value: Any, label: str) -> str:
     return value
 
 
-def _integer(value: Any, label: str) -> int:
-    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
-        raise ValueError(f"{label} must be a positive integer")
+def _integer(value: Any, label: str, minimum: int = 1) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
+        kind = "a positive integer" if minimum == 1 else f"an integer >= {minimum}"
+        raise ValueError(f"{label} must be {kind}")
     return value
 
 
@@ -111,7 +112,7 @@ def load_fixture(path: Path) -> dict[str, Any]:
         if len(padding) != 2:
             raise ValueError(f"{task_id}: padding_px must contain x and y")
         for index, value in enumerate(padding):
-            _integer(value, f"{task_id}: padding_px[{index}]")
+            _integer(value, f"{task_id}: padding_px[{index}]", minimum=0)
         text_lines = _list(task.get("text_lines"), f"{task_id}: text_lines")
         for line_index, raw_line in enumerate(text_lines):
             line = _list(raw_line, f"{task_id}: text_lines[{line_index}]")
@@ -252,7 +253,9 @@ def main(argv: list[str] | None = None) -> int:
         for task in fixture["pair_tasks"]:
             records.extend(render_task(task, fixture, args.output_dir))
         write_manifests(fixture, args.fixture, args.output_dir, records)
-    except (OSError, ValueError, TypeError, KeyError, IndexError, AttributeError) as exc:
+    # load_fixture validates every field the renderer reads, so any other
+    # exception is a bug in this script and should surface as a traceback.
+    except (OSError, ValueError) as exc:
         print(json.dumps({"status": "BLOCKED", "error": str(exc)}, ensure_ascii=False),
               file=sys.stderr)
         return 2
