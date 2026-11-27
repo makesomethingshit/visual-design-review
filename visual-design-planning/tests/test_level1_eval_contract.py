@@ -346,7 +346,9 @@ class WorkflowContractTest(unittest.TestCase):
         self.assertEqual(grades, ["A", "B", "C", "D"], "근거 등급 A~D가 없다")
         for rule in ("A부터 찾는다", "원 조사까지 추적", "독립된 연구·조사·방법의 수",
                      "`A` 또는 `B` 근거를 하나 이상", "맞비교하지 않는다",
-                     "\"근거 없음\"으로 비우고", "몇 명 중 몇 명", "자기 점검"):
+                     "\"근거 없음\"으로 비우고", "몇 명 중 몇 명", "자기 점검",
+                     "대상 조건에 맞는 근거부터", "교란 요인", "출처끼리 결과가 다르면",
+                     "반박하는 근거도 찾고"):
             self.assertIn(rule, std, f"분석 기준에 '{rule}' 규칙이 없다")
         self.assertIn("analysis-standards.md", self.skill)
         for name in ("lead-state-lifecycle.md", "report-format.md"):

@@ -1,0 +1,150 @@
+{
+  "scores": {
+    "A": {
+      "1_evidence_strength": [
+        4,
+        "Anchors on a primary observation study with clear denominators and table-level locations, and marks the one re-cited survey as such; spot-checks matched. But n is tiny and the Table 11 n=11 is inferred, not stated in the paper.",
+        "8명 중 4명이 시작방법을 찾지못했다 ... E1 Table 6 / 한국소비자원 원자료는 열지 못함"
+      ],
+      "2_premise_testing": [
+        4,
+        "Tests 'text too small' against a within-instrument ranking (same respondents, same Likert scale) and the same survey's rank order. It gives text size its due (44.1%, rank 4) and admits the gap is under 0.3 points.",
+        "작은 이미지·글씨는 여섯 불편 중 4위(3.45점) ... 점수 차이는 5점 척도에서 0.3점 안쪽"
+      ],
+      "3_problem_location": [
+        5,
+        "Barriers are pinned to specific steps and elements (start button vs top ad, category navigation, card removal during payment) with observed counts. Steps without observations are explicitly marked as such.",
+        "8명 전원이 결제가되는 중인지몰랐다. 일부는결제 도중 카드를뺐다"
+      ],
+      "4_insight_quality": [
+        3,
+        "Each of the three insights is backed by evidence and caveated for n and domain. They are fairly expected, though, and the time-pressure finding is sidelined into a lens rather than examined.",
+        "두 관찰 연구는 참여자가 4~11명, 햄버거 매장 한두 곳이다"
+      ],
+      "5_reframe_opportunity": [
+        4,
+        "The reframe follows directly from the ranked findings, and each HMW maps one-to-one to an insight and a step. Scope stays mostly within the screen, with store operations and queueing only noted in passing.",
+        "화면마다 다음에 할 일 하나를 알고, 결제가 끝났다고 확신하게 한다"
+      ],
+      "6_principles_directions": [
+        4,
+        "Five principles, each traced to a table or guideline page with an exception. Each direction has measurable verification (start-button success rate, card-removal count). Principle 2 claims no exceptions, and the conflict analysis is thin.",
+        "검증할 것 결제 도중 카드를 빼는 횟수, 결제 후 직원에게 확인을 요청하는 횟수"
+      ],
+      "7_honesty_limits": [
+        4,
+        "Labels observed, interpreted, and hypothesized content; drops unreadable tables and unreliable re-cited passages; states the burger-domain transfer limit up front. One inferred n is presented as fact.",
+        "본문 표는 글자 추출이 깨져 쓰지 않음 / 보도마다 관찰조사 서술이 달라 그 부분은 쓰지 않았다"
+      ]
+    },
+    "B": {
+      "1_evidence_strength": [
+        2,
+        "Sixteen sources, but most are news re-citations or abstracts. It never uses the available primary observation study. Survey identity and denominators are left unresolved ('시점·표본 미상') even though the original sample was traceable. Spot-checks matched.",
+        "한국소비자원 두 건은 원 보도자료를 열지 못한 기사 재인용 ... EV-10·16은 초록만 열어 표본 수와 오류 수를 확인하지 못했고"
+      ],
+      "2_premise_testing": [
+        4,
+        "Gives the premise explicit hypotheses (H1-H5) with support and contradiction, and treats legibility fairly as a necessary condition. However, insight 1 contrasts figures with different or unknown denominators (53% of 60+ vs 20%+ of unknown).",
+        "H1 ... 부분 수렴 — 원인의 하나, 단독 원인 아님 / 글씨가 작다 (분모 불명)20% 초과"
+      ],
+      "3_problem_location": [
+        2,
+        "The 8-step, 6-decision flow is generalized from guidelines, not observed. Step barriers are filled with all-age survey reasons and guideline requirements. Four of the eight steps have no records, and there are no step-level counts for 60+.",
+        "자사 화면이 없어 단계 구조는 공개 지침과 패스트푸드형 키오스크 자료에서 일반화한 것 / 지침이며 막힘 관찰 기록은 아님"
+      ],
+      "4_insight_quality": [
+        4,
+        "Several insights are non-obvious and evidenced: perceived time pressure, not crowding, predicts anxiety (verified betas), and recovery is framed as a safety net with a legal caveat. Caveats are honest. Insights 3 and 5 rest on all-age data or abstracts only.",
+        "뒤의 줄은 '사람 수'가 아니라 '서둘러야 한다는 느낌'으로 작동한다"
+      ],
+      "5_reframe_opportunity": [
+        4,
+        "The four lenses lead to a reframe that changes concrete scope decisions: moving popups out of the flow, store queue operations, and the success metric. Some HMWs (5) rest on weak evidence.",
+        "'혼자 끝냈다'를 무엇으로 셀지 ... '호출 0'은 P8과 충돌"
+      ],
+      "6_principles_directions": [
+        4,
+        "Nine principles cite guideline pages, carry explicit exceptions and inter-principle tensions (P7 vs P1, P8 vs goal), and include falsification questions per lens. Verification metrics are partly undefined ('정의는 본부 결정'), and many principles are guideline-derived rather than tied to observed barriers.",
+        "단계 하나가 추가됨(P1과 긴장) / 압박: 줄이 없는 시간대에도 60대 이상의 호출 비율이 같다면 이 렌즈는 약해진다"
+      ],
+      "7_honesty_limits": [
+        5,
+        "Every cell is tagged as recorded, inferred, or guessed. It states that the flow structure is generalized, declines to draw an emotion curve without data, counts same-survey sources once, and lists unopened sources.",
+        "감정 곡선은 그리지 않았습니다(측정 자료 없음) / EV-01과 EV-02는 같은 조사라 하나로 셉니다"
+      ]
+    }
+  },
+  "overall": "A's analysis is stronger, narrowly, because its core claims rest on direct observation of the target population: counts per step with denominators, precise table locations, and a premise test based on a ranking within one instrument and one respondent pool. B is broader and more methodologically self-aware, with triangulation, a five-whys branch analysis, falsification questions, and the non-obvious time-pressure finding. But most of its evidence is re-cited news, abstracts, all-age surveys, and guideline requirements. Its step map is generalized rather than observed, and its key premise comparison mixes denominators. B's honesty labeling is excellent, but labeling weak evidence honestly does not make it strong evidence. A's main weaknesses are a tiny sample from a burger chain, fewer insights, and under-exploration of time pressure.",
+  "stronger": "A",
+  "gaps_of_weaker": [
+    "Before falling back on news re-citations or abstracts, search for and open the full text of primary observational or experimental studies of the target population. Evidence with a countable denominator (k of n observed) should outrank larger but second-hand survey percentages.",
+    "Test a stakeholder premise with comparisons inside one instrument (same respondents, same question format, ranked). Never contrast percentages whose denominators differ or are unknown, even with a caveat.",
+    "Place a barrier on a flow step only when there is step-level evidence for the target group. Do not fill a step map with guideline requirements or all-population survey reasons; mark those steps as evidence gaps instead of generating a detailed structure from generalization.",
+    "Trace re-cited figures to their original study (year, n, subgroup) before using them. In triangulation, count independent studies and methods, not multiple articles reporting the same survey.",
+    "Keep subgroup fidelity: treat all-age data as weak, down-weighted evidence for a specific age group, and do not let it carry an insight on its own.",
+    "Prefer fewer insights, each with at least one direct observation of the target users, over many insights that each rest on abstracts or guideline text."
+  ],
+  "spot_checks": [
+    {
+      "report": "A",
+      "claim": "Ha & Kim 2021: 4/8 could not find how to start, 5 distracted by top ads, 8/8 failed category navigation, 8/8 unaware payment in progress (Tables 6-8)",
+      "source": "https://koreascience.kr/article/JAKO202125141362176.pdf",
+      "result": "Confirmed"
+    },
+    {
+      "report": "A",
+      "claim": "Table 11 inconvenience scores: button boundary 3.72 (rank 1), next step 3.63 (rank 2), small image/text 3.45 (rank 4), n=11",
+      "source": "https://koreascience.kr/article/JAKO202125141362176.pdf",
+      "result": "Scores and ranks confirmed. The paper does not explicitly state n=11 (it is inferred from the 11 interviewees)."
+    },
+    {
+      "report": "A",
+      "claim": "Seoul 55+ kiosk use experience 45.8%; 'people behind' among non-use reasons",
+      "source": "https://news.seoul.go.kr/gov/archives/540969",
+      "result": "Confirmed"
+    },
+    {
+      "report": "A",
+      "claim": "KCA: complex steps 51.4%, small picture/text 44.1%, pressure 49.0%; next-button 51.0% among 245 kiosk users (Asiae)",
+      "source": "https://www.fnnews.com/news/202304051607089413 (Asiae URL could not be fetched: permission not granted)",
+      "result": "51.4/49/44.1 confirmed via fnnews; 51.0% and n=245 not verified"
+    },
+    {
+      "report": "A",
+      "claim": "Guideline: text height 12mm or more (p.35), no timeout on selection responses (p.40)",
+      "source": "https://designdb.com/usr/upload/board/zboardphotogallery176/20250102020609692_8437.0.pdf",
+      "result": "Confirmed"
+    },
+    {
+      "report": "B",
+      "claim": "Nam et al. 2023: 100 respondents aged 60-70s; time pressure to anxiety β=0.318, to helplessness β=0.447; crowding not significant; anxiety to staff seeking 0.437, observing others 0.457, disengagement 0.448",
+      "source": "https://www.mdpi.com/2076-328X/13/4/284",
+      "result": "Confirmed"
+    },
+    {
+      "report": "B",
+      "claim": "Lotte Members 1,333: 60+ abandoned 37.0%, prefer staff 65.0%; reasons (all ages) 44.9/37.3/32.9/31.0/28.6/27.8/23.0",
+      "source": "https://mobile.newsis.com/view/NISX20230327_0002241558",
+      "result": "Confirmed, including that the reasons are reported for all ages only"
+    },
+    {
+      "report": "B",
+      "claim": "KCA 500 users: 60+ 53% operation difficult; text small over 20% (denominator unclear)",
+      "source": "https://www.ytn.co.kr/_ln/0102_202211241202364528",
+      "result": "Confirmed. The denominator is indeed unstated, so B's 53% vs 20%+ comparison is not like-for-like."
+    },
+    {
+      "report": "B",
+      "claim": "KCA elderly survey 51.4/49/44.1; 2020 elderly survey 64.2% of 10,097",
+      "source": "https://www.fnnews.com/news/202304051607089413",
+      "result": "Confirmed. The sample and year are not given in this article (B's 'unknown' is accurate for this source, but A traced the original sample via another outlet)."
+    },
+    {
+      "report": "B",
+      "claim": "Guideline p.35-36: text 12mm, contrast 4.5:1, control side 12mm, spacing 2.5mm; p.40 no timeout",
+      "source": "https://designdb.com/usr/upload/board/zboardphotogallery176/20250102020609692_8437.0.pdf",
+      "result": "Confirmed"
+    }
+  ]
+}
