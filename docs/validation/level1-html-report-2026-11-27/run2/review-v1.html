@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>분식 매장 키오스크 주문 화면 개편 — 60대 이상 처음 쓰는 손님 · 디자인 기획 보고서</title>
+<style>
+:root{color-scheme:light;--ink:#16201c;--sub:#4a5a54;--muted:#7a8984;--line:#dfe6e2;--paper:#fbfbf8;--card:#fff;--accent:#165855;--accent-soft:#e6f0ec;--warn:#b0632b;--warn-soft:#f8ece2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+main{max-width:980px;margin:auto;padding:0 24px 80px}
+a{color:var(--accent);text-underline-offset:.15em}
+h1,h2,h3,h4{letter-spacing:-.025em;line-height:1.25;margin:0}
+p{margin:0 0 .9em}
+/* 표지 */
+.cover{padding:72px 0 40px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.cover h1{font-size:clamp(2.1rem,5.4vw,3.6rem);margin:.35em 0 .5em;font-weight:800}
+.problem{font-size:clamp(1.2rem,2.6vw,1.55rem);font-weight:700;line-height:1.45;padding:22px 26px;background:var(--accent);color:#fff;border-radius:14px;margin:0 0 22px}
+.problem small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.12em;opacity:.75;margin-bottom:6px}
+.summary{font-size:1.08rem;color:var(--sub);max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);margin-top:18px}
+.meta b{color:var(--sub);font-weight:600}
+/* 섹션 */
+section.part{padding:56px 0 8px}
+.part-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.num{font-size:2.4rem;font-weight:800;color:var(--accent);opacity:.25;line-height:1}
+.part-head h2{font-size:1.6rem}
+.lead{font-size:1.06rem;color:var(--sub);max-width:68ch;margin-bottom:22px}
+/* 수치 카드 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.stat .v{font-size:2rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1.1}
+.stat .l{font-size:.9rem;color:var(--sub);margin-top:6px}
+/* 방법 블록 */
+.method{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:0 0 22px}
+.method .tag{display:inline-block;font-size:.75rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.method h3{font-size:1.25rem;margin-bottom:6px}
+.method .why{color:var(--sub);margin-bottom:16px}
+figure{margin:0;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:720px;height:auto}
+figure svg a{cursor:pointer}
+.method .table-wrap+.reads,.method figure+.reads{margin-top:14px}
+.reads{margin-top:14px;padding:14px 18px;background:var(--accent-soft);border-radius:10px;font-size:.98rem}
+.reads b{color:var(--accent)}
+/* 인사이트 */
+.insights{display:grid;gap:14px}
+.insight{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.insight .i{font-size:1.5rem;font-weight:800;color:var(--accent)}
+.insight h3{font-size:1.15rem;margin-bottom:6px}
+.insight p{color:var(--sub);margin:0}
+.insight .but{margin-top:8px;padding-left:10px;border-left:3px solid var(--warn);color:var(--sub)}
+/* 재정의·기회 */
+.reframe{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:22px}
+.reframe .box{border-radius:12px;padding:18px 20px}
+.reframe .from{background:#eef0ee;color:var(--sub)}
+.reframe .to{background:var(--accent);color:#fff;font-weight:700}
+.reframe .box small{display:block;font-size:.72rem;letter-spacing:.1em;opacity:.75;margin-bottom:6px}
+.reframe .arrow{align-self:center;font-size:1.6rem;color:var(--accent)}
+.hmw{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.hmw li{background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:14px 18px;font-weight:600}
+.hmw li span{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:4px}
+/* 방향 카드 */
+.directions{display:grid;gap:18px}
+.method+.directions{margin-top:4px}
+.direction{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:14px;padding:24px 26px}
+.direction .dn{font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.direction h3{font-size:1.35rem;margin:.2em 0 .4em}
+.direction .concept{font-size:1.06rem;margin-bottom:14px}
+.direction dl{display:grid;grid-template-columns:120px 1fr;gap:8px 16px;margin:0}
+.direction dt{font-size:.85rem;font-weight:700;color:var(--muted)}
+.direction dd{margin:0}
+.principles{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.principles li{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-size:.9rem;font-weight:600}
+.trace{margin-top:16px;font-size:.84rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+/* 다음 단계 */
+.next{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.next li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.next li b{color:var(--accent);margin-right:6px}
+/* 배지·각주 */
+.badge{display:inline-block;font-size:.68rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:.12em}
+.b-rec{background:#e3ece8;color:#165855}.b-int{background:#eae6f4;color:#4b3f7a}.b-hyp{background:var(--warn-soft);color:var(--warn)}.b-user{background:#eef0ee;color:var(--sub)}
+sup a{text-decoration:none;font-size:.72rem;font-weight:700;padding:0 1px}
+/* 표 */
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:.93rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.8rem;color:var(--muted);font-weight:700;background:#f4f6f4}
+/* 채택 */
+.adoption{background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:26px;margin-top:8px}
+.adoption .basis{font-weight:700;color:var(--accent)}
+.adoption h3{font-size:1.1rem;margin:22px 0 10px}
+.status{display:inline-block;font-size:.75rem;font-weight:700;border-radius:4px;padding:1px 7px;background:#eef0ee;color:var(--sub)}
+.status.on{background:var(--accent);color:#fff}
+/* 부록 */
+.appendix{margin-top:64px;border-top:2px solid var(--ink);padding-top:18px}
+.appendix h2{font-size:1rem;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details>div{padding:12px 0;font-size:.93rem}
+details h3{font-size:.95rem;margin:18px 0 8px}
+details h3:first-child{margin-top:0}
+details ul{margin:0;padding-left:1.2em}
+details li{margin-bottom:4px}
+ol.fn{padding-left:1.4em;font-size:.88rem;color:var(--sub)}
+ol.fn li{margin-bottom:6px}
+@media (max-width:640px){.reframe{grid-template-columns:1fr}.reframe .arrow{transform:rotate(90deg);justify-self:center}.direction dl{grid-template-columns:1fr}.insight{grid-template-columns:1fr}}
+@media print{body{background:#fff}.method,.direction,.insight,.stat{break-inside:avoid}}
+</style>
+</head>
+<body><main>
+
+<header class="cover" id="cover">
+<p class="kicker">Design Planning Report · visual-design-planning Level 1</p>
+<h1>키오스크 앞에서 어르신이 멈추는 곳</h1>
+<p class="problem"><small>PROBLEM STATEMENT</small>처음 키오스크를 쓰는 60대 이상 손님은 점심 줄 앞에서 글자를 읽는 단계보다 메뉴 분류를 옮겨 다니고, 옵션을 고르고, 담은 것을 고치는 단계에서 더 많이 막히며, 뒤에 선 사람을 의식하는 압박이 그 막힘을 포기와 직원 호출로 바꾼다. <span class="badge b-int">[추론]</span></p>
+<p class="summary">답: 공개 근거로는 "글씨가 작아서"를 주된 원인으로 정의하기 어렵다. 같은 60대 이상 10명이 같은 화면을 썼을 때 결제는 9명이 해냈지만 추가 옵션은 2명, 주문 목록에서 빼기는 3명만 해냈다. 글씨를 키우는 일은 필요한 조건 하나일 뿐이고, 개편의 중심은 주문 흐름과 줄 압박, 막혔을 때의 도움 경로에 두어야 한다. <span class="badge b-int">[추론]</span> 판단을 바꿀 수 있는 한계가 세 가지 있다. 첫째, 직접 관찰 연구는 7~27명 규모의 카페·버거 키오스크 연구이고 분식 메뉴와 자사 화면은 보지 못했다. 둘째, 위 과업 결과는 키오스크 경험자 연구에서 나왔다. 셋째, 이유를 물은 설문은 원 보고서를 열지 못해 재인용 수준이다.</p>
+<div class="meta"><span><b>의뢰</b> 분식 프랜차이즈 본사 UX — 매장 키오스크 주문 화면 개편</span><span><b>대상</b> 처음 쓰는 60대 이상 손님, 점심시간 줄 있는 매장</span><span><b>조사</b> 2026-11-27</span><span><b>자료</b> 공개 연구·조사·지침·법령 22건(A 3 · B 1 · C 13 · D 5), 자사 자료 없음</span><span><b>방법</b> 문헌·기존자료 조사, 과업 분석, 삼각검증, 다섯 번의 왜, 어떻게 하면 질문, 디자인 원칙 생성</span><span><b>기준 브리프</b> brief-v1.md</span><span><b>실행 경로</b> runs/kiosk-senior-01/</span></div>
+</header>
+
+<section class="part" id="situation" aria-labelledby="p1"><div class="part-head"><span class="num">01</span><h2 id="p1">상황 한눈에</h2></div>
+<p class="lead">나이가 많을수록 식당 기계 주문을 불편하다고 답한 비율이 높다. 다만 실패는 화면의 모든 단계에 고르게 퍼져 있지 않고, 특정 단계에 몰린다. 아래 수치는 서로 분모가 달라 카드끼리 비교하지 않는다. <span class="badge b-int">[추론]</span></p>
+<div class="stats">
+<div class="stat"><div class="v">64.2%</div><div class="l">식당 기계 주문을 써 본 65세 이상 노인 가운데 '불편·매우 불편' 응답 비율. 65~69세 53.6%, 80~84세 79.8%. 2020 노인실태조사, 본인응답자 9,930명 중 이용 경험자 · 등급 B <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn4">4</a></sup></div></div>
+<div class="stat"><div class="v">10명 중 2명</div><div class="l">60세 이상 10명이 카페 키오스크에서 '추가 옵션 넣어 주문'에 성공한 수. 같은 10명이 결제는 9명 성공. 2023 실험, 등급 A <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">51.4 · 49.0 · 44.1%</div><div class="l">65세 이상 키오스크 이용자(약 245명으로 추정)의 불편 이유. 순서대로 복잡한 단계, 뒷사람 눈치, 그림·글씨가 잘 안 보임. 같은 응답자·같은 문항, 2020 소비자원. <b>재인용</b> · 등급 C <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn5">5</a></sup></div></div>
+<div class="stat"><div class="v">5명 중 5명</div><div class="l">키오스크를 처음 쓰는 70세 이상 5명 가운데 패스트푸드 주문에 실패한 수. 65세 이상 10명 중 5명은 메뉴 분류를 이해하기 어려워함. 2020 소비자원 관찰. <b>재인용</b> · 등급 C <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn6">6</a></sup></div></div>
+</div>
+</section>
+
+<section class="part" id="methods" aria-labelledby="p2"><div class="part-head"><span class="num">02</span><h2 id="p2">문제 들여다보기</h2></div>
+
+<div class="method"><span class="tag">문헌·기존자료 조사</span>
+<h3>대상 집단을 직접 본 연구는 3편뿐이고, "왜"를 숫자로 물은 국내 조사는 원문을 열지 못했다</h3>
+<p class="why">먼저 60대 이상이 실제 키오스크로 주문하는 장면을 관찰한 1차 연구를 찾았다. 그 결과 직접 관찰·실험 3편(A), 정부 실태조사 원자료 1건(B)을 확보했다. 이유별 비율은 소비자원 2020 조사가 유일하지만 원 보고서를 찾지 못해 보도로만 확인했다(C).</p>
+<div class="table-wrap"><table>
+<tr><th>근거</th><th>무엇을 봤나</th><th>대상·규모</th><th>등급</th><th>이 보고서에서 쓰는 곳</th></tr>
+<tr><td>EV-01 신원·김현경 외 2023<sup><a href="#fn1">1</a></sup></td><td>카페 키오스크 8개 과업별 성공률·시간·시선</td><td>60세 이상 10명(평균 67.4세), 경험자</td><td>A</td><td>과업 분석, 인사이트 1·3</td></tr>
+<tr><td>EV-02 정민경·유은 2022<sup><a href="#fn2">2</a></sup></td><td>매장·구청 키오스크를 혼자 쓰다 포기·도움 요청까지 관찰 + 인터뷰</td><td>60세 이상 7명(63~77세)</td><td>A</td><td>인사이트 2·3·4</td></tr>
+<tr><td>EV-03 Chung·Park 2021<sup><a href="#fn3">3</a></sup></td><td>칸막이·의자 유무에 따른 버거 주문 시간·작업부하</td><td>55~70세 27명(평균 61.9세), 실험실</td><td>A</td><td>인사이트 2</td></tr>
+<tr><td>EV-04 2020 노인실태조사<sup><a href="#fn4">4</a></sup></td><td>식당 기계 주문 이용률·불편 비율(연령별)</td><td>65세 이상 9,930명</td><td>B</td><td>상황 한눈에</td></tr>
+<tr><td>EV-05·06·07 소비자원 2020<sup><a href="#fn5">5</a>,<a href="#fn6">6</a>,<a href="#fn7">7</a></sup></td><td>불편 이유, 처음 쓰는 고령자 관찰, 미이용 이유</td><td>65세 이상 300명 / 10명 / 미이용자 100명</td><td>C</td><td>삼각검증, 반례</td></tr>
+<tr><td>EV-15~20 지침·법령<sup><a href="#fn15">15</a>–<a href="#fn20">20</a></sup></td><td>시간 제한, 글자 높이, 이전·처음으로, 직원 호출, 편의 조치 의무</td><td>규범</td><td>D (일부 C)</td><td>원칙의 하한, 제작 제약</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 처음 의뢰의 전제를 검증할 1차 관찰은 있지만 규모가 작고, '처음 쓰는' 고령자를 단계별로 센 연구는 재인용(EV-06)뿐이다. 따라서 이 보고서의 문제 정의는 '방향을 정할 만큼의 근거'이며, 자사 화면에서 확인해야 확정할 수 있다. <span class="badge b-int">[추론]</span></p>
+</div>
+
+<div class="method"><span class="tag">과업 분석</span>
+<h3>같은 사람, 같은 글씨인데 결제는 90%가 해내고 추가 옵션은 20%만 해냈다</h3>
+<p class="why">"어디서 막히나"를 단계로 보기 위해 고령자 과업별 결과가 있는 EV-01의 8개 과업을 주문 순서에 놓았다. 다만 이 순서는 카페 키오스크 기준의 <b>가정한 구조</b>이며, 분식 메뉴(맵기·세트·포장 같은 옵션)의 실제 순서는 자사 화면을 봐야 안다. EV-01 참가자는 키오스크 경험자라서, 처음 쓰는 손님은 더 낮을 수 있다. <span class="badge b-hyp">[추측]</span></p>
+<figure>
+<svg viewBox="0 0 960 430" role="img" aria-labelledby="t-fig1 d-fig1" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif">
+<title id="t-fig1">주문 단계별 60세 이상 과업 성공률과 근거 유무</title>
+<desc id="d-fig1">가정한 주문 순서 11단계. 8단계는 EV-01의 60세 이상 10명 성공률 막대, 1단계는 EV-02 정성 관찰, 2단계(시작 화면)와 11단계(번호표·수령)는 대상 집단 근거 없음.</desc>
+<text x="20" y="22" font-size="13" fill="#4a5a54">가정한 주문 순서(카페 키오스크 기준) · 막대 = 60세 이상 10명 중 성공 비율(EV-01)</text>
+<line x1="50" y1="250" x2="930" y2="250" stroke="#16201c" stroke-width="1"/>
+<line x1="50" y1="90" x2="930" y2="90" stroke="#dfe6e2" stroke-dasharray="3 3"/><text x="44" y="94" font-size="10" fill="#7a8984" text-anchor="end">100%</text>
+<line x1="50" y1="170" x2="930" y2="170" stroke="#dfe6e2" stroke-dasharray="3 3"/><text x="44" y="174" font-size="10" fill="#7a8984" text-anchor="end">50%</text>
+<!-- col0 다가가기 -->
+<text x="90" y="52" font-size="11.5" text-anchor="middle" fill="#16201c">다가가기</text><text x="90" y="67" font-size="11.5" text-anchor="middle" fill="#16201c">·시작 결심</text>
+<a href="#fn2"><rect x="58" y="150" width="64" height="100" rx="6" fill="#e6f0ec" stroke="#165855"/><text x="90" y="190" font-size="11" text-anchor="middle" fill="#165855">A 정성</text><text x="90" y="206" font-size="10" text-anchor="middle" fill="#165855">7명 중 4명</text><text x="90" y="220" font-size="10" text-anchor="middle" fill="#165855">처음 거절</text></a>
+<!-- col1 시작 화면 -->
+<text x="170" y="52" font-size="11.5" text-anchor="middle">시작 화면</text><text x="170" y="67" font-size="11.5" text-anchor="middle">(매장/포장·광고)</text>
+<rect x="138" y="150" width="64" height="100" rx="6" fill="#f4f6f4" stroke="#7a8984" stroke-dasharray="4 3"/><text x="170" y="196" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+<!-- col2 분류 이동 60 -->
+<text x="250" y="52" font-size="11.5" text-anchor="middle">메뉴 분류</text><text x="250" y="67" font-size="11.5" text-anchor="middle">옮기기</text>
+<a href="#fn1"><rect x="228" y="154" width="44" height="96" fill="#165855"/></a><text x="250" y="148" font-size="12" font-weight="700" text-anchor="middle" fill="#165855">60%</text>
+<!-- col3 페이지 50 -->
+<text x="330" y="52" font-size="11.5" text-anchor="middle">페이지</text><text x="330" y="67" font-size="11.5" text-anchor="middle">넘기기</text>
+<a href="#fn1"><rect x="308" y="170" width="44" height="80" fill="#165855"/></a><text x="330" y="164" font-size="12" font-weight="700" text-anchor="middle" fill="#165855">50%</text>
+<!-- col4 단순 선택 80 -->
+<text x="410" y="52" font-size="11.5" text-anchor="middle">메뉴 하나</text><text x="410" y="67" font-size="11.5" text-anchor="middle">고르기</text>
+<a href="#fn1"><rect x="388" y="122" width="44" height="128" fill="#165855"/></a><text x="410" y="116" font-size="12" font-weight="700" text-anchor="middle" fill="#165855">80%</text>
+<!-- col5 필수 옵션 40 -->
+<text x="490" y="52" font-size="11.5" text-anchor="middle">필수 옵션</text><text x="490" y="67" font-size="11.5" text-anchor="middle">고르기</text>
+<a href="#fn1"><rect x="468" y="186" width="44" height="64" fill="#b0632b"/></a><text x="490" y="180" font-size="12" font-weight="700" text-anchor="middle" fill="#b0632b">40%</text>
+<!-- col6 추가 옵션 20 -->
+<text x="570" y="52" font-size="11.5" text-anchor="middle">추가 옵션</text><text x="570" y="67" font-size="11.5" text-anchor="middle">넣기</text>
+<a href="#fn1"><rect x="548" y="218" width="44" height="32" fill="#b0632b"/></a><text x="570" y="212" font-size="12" font-weight="700" text-anchor="middle" fill="#b0632b">20%</text>
+<!-- col7 수량 40 -->
+<text x="650" y="52" font-size="11.5" text-anchor="middle">수량</text><text x="650" y="67" font-size="11.5" text-anchor="middle">바꾸기</text>
+<a href="#fn1"><rect x="628" y="186" width="44" height="64" fill="#b0632b"/></a><text x="650" y="180" font-size="12" font-weight="700" text-anchor="middle" fill="#b0632b">40%</text>
+<!-- col8 취소 30 -->
+<text x="730" y="52" font-size="11.5" text-anchor="middle">담은 것</text><text x="730" y="67" font-size="11.5" text-anchor="middle">빼기</text>
+<a href="#fn1"><rect x="708" y="202" width="44" height="48" fill="#b0632b"/></a><text x="730" y="196" font-size="12" font-weight="700" text-anchor="middle" fill="#b0632b">30%</text>
+<!-- col9 결제 90 -->
+<text x="810" y="52" font-size="11.5" text-anchor="middle">결제</text>
+<a href="#fn1"><rect x="788" y="106" width="44" height="144" fill="#165855"/></a><text x="810" y="100" font-size="12" font-weight="700" text-anchor="middle" fill="#165855">90%</text>
+<!-- col10 수령 -->
+<text x="890" y="52" font-size="11.5" text-anchor="middle">번호표</text><text x="890" y="67" font-size="11.5" text-anchor="middle">·수령</text>
+<rect x="858" y="150" width="64" height="100" rx="6" fill="#f4f6f4" stroke="#7a8984" stroke-dasharray="4 3"/><text x="890" y="196" font-size="11" text-anchor="middle" fill="#7a8984">근거 없음</text>
+<!-- 관찰된 막힘 -->
+<text x="20" y="280" font-size="12" font-weight="700" fill="#16201c">관찰된 막힘</text>
+<text x="90" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">뒷사람·직원</text><text x="90" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">시선 의식</text>
+<text x="250" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">위쪽 분류 바뀐</text><text x="250" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">걸 못 알아챔</text>
+<text x="330" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">시선이 분류</text><text x="330" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">영역에 머묾</text>
+<text x="410" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">고른 뒤 주문</text><text x="410" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">목록 확인 안 함</text>
+<text x="490" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">"단계 없이</text><text x="490" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">바로 고르고 싶다"</text>
+<text x="570" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">"라지는 아는데</text><text x="570" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">레귤러는 모름"</text>
+<text x="650" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">(원인 서술</text><text x="650" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">없음)</text>
+<text x="730" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">"'x'보다</text><text x="730" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">'취소' 글자"</text>
+<text x="810" y="300" font-size="10.5" text-anchor="middle" fill="#4a5a54">총액을 다시</text><text x="810" y="314" font-size="10.5" text-anchor="middle" fill="#4a5a54">확인하고 결제</text>
+<!-- 범례 -->
+<rect x="50" y="350" width="14" height="14" fill="#165855"/><text x="70" y="361" font-size="11" fill="#4a5a54">성공 50% 이상 (A, EV-01)</text>
+<rect x="250" y="350" width="14" height="14" fill="#b0632b"/><text x="270" y="361" font-size="11" fill="#4a5a54">성공 50% 미만 (A, EV-01)</text>
+<rect x="450" y="350" width="14" height="14" fill="#e6f0ec" stroke="#165855"/><text x="470" y="361" font-size="11" fill="#4a5a54">정성 관찰 (A, EV-02)</text>
+<rect x="640" y="350" width="14" height="14" fill="#f4f6f4" stroke="#7a8984" stroke-dasharray="3 2"/><text x="660" y="361" font-size="11" fill="#4a5a54">대상 집단 근거 없음</text>
+<text x="50" y="392" font-size="10.5" fill="#7a8984">단계 순서는 카페 키오스크 기준의 가정한 구조. 막대는 클릭하면 각주로 이동. 참가자는 키오스크 경험자(주 3.1회)이며 처음 쓰는 손님이 아니다.</text>
+<text x="50" y="410" font-size="10.5" fill="#7a8984">시작 화면의 팝업 방해(EV-13), 1분 자동 초기화(EV-14)는 대상 집단이 아닌 자료(C)라 칸을 채우지 않았다.</text>
+</svg>
+</figure>
+<p class="reads"><b>이 그림이 말하는 것</b> 60세 이상 10명은 같은 화면, 같은 글씨에서 결제(90%)와 단순 선택(80%)은 대체로 해냈다. 반면 옵션(20~40%), 수량 바꾸기(40%), 담은 것 빼기(30%)에서 성공률이 절반 아래로 떨어졌다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup> 글씨가 주된 원인이라면 단계별 차이가 이만큼 크게 벌어지기 어렵다. 따라서 막힘은 '읽기'보다 '흐름 구조'(무엇을 언제 묻고, 고친 결과를 어디서 확인하나)에 몰린다고 읽는다. <span class="badge b-int">[추론]</span></p>
+</div>
+
+<div class="method"><span class="tag">삼각검증</span>
+<h3>"글씨가 작다"는 독립된 근거 여러 곳에서 확인되지만, 매번 1순위는 아니고 단독으로 나오지도 않는다</h3>
+<p class="why">처음 의뢰의 전제와 그 대안들을 각각 한 문장 주장으로 고정했다. 그런 다음 서로 독립된 자료가 그 주장을 지지하는지, 범위가 달라 비교할 수 없는지, 충돌하는지를 나눴다. 같은 조사를 전한 기사 여러 건은 근거 하나로 셌다.</p>
+<div class="table-wrap"><table>
+<tr><th>주장</th><th>지지</th><th>범위가 달라 비교 불가</th><th>충돌·반례</th><th>판정</th></tr>
+<tr><td><b>C1</b> 작은 글씨·그림이 고령자의 주문을 어렵게 한다</td><td>EV-02(A) 기대 단계에서 작은 글자·비슷한 메뉴 사진. EV-05(C) 44.1%. EV-22(C) 20% 이상 "글씨가 작다"</td><td>EV-22의 분모가 불명이라 EV-05와 비교 불가</td><td>EV-01(A): 같은 글씨에서 결제 90%, 추가 옵션 20%</td><td>부분 수렴 — 실재하는 요인이지만 단계별 성패 차이를 설명하지 못함 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td><b>C2</b> 단계·흐름 구조(옵션·분류·수정)가 막힘을 만든다</td><td>EV-01(A) 옵션·취소·페이지 성공 20~50%. EV-05(C) '복잡한 단계' 51.4%. EV-06(C) 10명 중 5명 메뉴 분류 어려움. EV-12(C) 37% 장바구니 못 찾음. EV-08(C) 배치가 바뀌면 오류 증가</td><td>EV-12는 연령 미기재·대만</td><td>없음</td><td>수렴(작은 표본 안에서) <span class="badge b-int">[추론]</span></td></tr>
+<tr><td><b>C3</b> 뒤에 선 줄이 압박을 주고 수행을 떨어뜨린다</td><td>EV-03(A) 뒤 칸막이·의자로 시간 압박 감소. EV-02(A) "뒷사람이 의식된다". EV-05(C) 49.0%. EV-10(C) 미이용 이유. EV-11(C) 줄이 있으면 서둘러 고르고 덜 시킴(일반 성인)</td><td>EV-11은 고령자가 아님</td><td>EV-07(C) 미이용자 중 '뒷사람 불편' 12%(직원이 편해서 47%). EV-01 인터뷰에는 언급 없음</td><td>부분 수렴 — 이미 쓰는 사람에게는 강하고, 아예 안 쓰는 사람에게는 '직원 선호'가 더 크다 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td><b>C4</b> 낮은 자기효능감과 첫 실패가 시도 전 포기·다음 회피로 이어진다</td><td>EV-02(A) 7명 중 4명 처음 거절, 자기효능감 낮으면 쉽게 포기, 성공 경험이 수용을 이끔</td><td>—</td><td>없음(독립 자료 1건뿐)</td><td>단일 근거 — 가능성 높으나 검증 필요 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td><b>C5</b> 매장마다 다른 화면이 학습을 무너뜨린다</td><td>EV-02(A) 교육용과 실제 키오스크의 단계·구성 차이. EV-09(C) FGI "매장마다 달라 당황"</td><td>—</td><td>없음</td><td>부분 수렴 <span class="badge b-int">[추론]</span></td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 같은 응답자에게 같은 문항으로 물은 유일한 자료(EV-05)에서도 '그림·글씨'(44.1%)는 '복잡한 단계'(51.4%)와 '뒷사람 눈치'(49.0%)보다 뒤에 있다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn5">5</a></sup> 다만 약 245명 기준으로 세 비율의 차이는 7%p 안쪽이어서 순위 자체에 큰 의미를 두기는 어렵다. 이 자료가 말하는 것은 "글씨 하나만의 문제가 아니며, 세 이유가 비슷한 무게로 함께 있다"는 점이다. <span class="badge b-int">[추론]</span></p>
+</div>
+
+<div class="method"><span class="tag">다섯 번의 왜</span>
+<h3>"직원을 부른다"는 한 현상 아래에 원인 가지가 적어도 세 갈래 있다</h3>
+<p class="why">매장 보고가 말하는 현상("주문을 포기하고 직원을 부른다")에서 출발했다. 근거가 이어지는 데까지만 물었고, 하나의 근본 원인으로 합치지 않았다. 매장 보고 원문은 보지 못했으므로 출발 현상은 사용자 진술이다.</p>
+<div class="table-wrap"><table>
+<tr><th>가지</th><th>왜 1</th><th>왜 2</th><th>왜 3</th><th>끊긴 곳·확인 질문</th></tr>
+<tr><td><b>흐름</b></td><td>옵션·수정 단계에서 진행이 막힌다 — EV-01(A)</td><td>옵션이 메뉴 선택과 다른 단계로 떨어져 있고, 크기·옵션 용어가 낯설다 — EV-01 표 5(A)</td><td>고른 결과를 확인할 자리를 보지 않는다(주문 목록 미확인) — EV-01 그림 7(A)</td><td>분식 메뉴의 옵션 수와 단계 수는? → 자사 화면 필요</td></tr>
+<tr><td><b>압박</b></td><td>뒤에 선 사람을 의식해 서두른다 — EV-02, EV-03(A)</td><td>서서 하는 조건에서 더 오래 걸리고 좌절감이 크다 — EV-03(A)</td><td>[추측] 오래 걸릴수록 압박이 커져 중간에 손을 뗀다</td><td>점심 피크 시 처음 쓰는 손님의 이탈 시점은? → 이용 기록 필요</td></tr>
+<tr><td><b>자기효능감·학습</b></td><td>시작 전부터 꺼린다 — EV-02(A) 7명 중 4명</td><td>낮은 자기효능감이 쉬운 포기로 이어진다 — EV-02(A)</td><td>매장마다 화면이 달라 배운 것이 쌓이지 않는다 — EV-02(A), EV-09(C)</td><td>자사 매장 간 화면·기기 차이는? → 자사 자료 필요</td></tr>
+<tr><td><b>보기(처음 의뢰)</b></td><td>글자·그림이 작고 비슷해 보인다 — EV-02(A)</td><td>[추측] 크기를 키우면 화면당 항목이 줄어 페이지 넘김·스크롤이 늘어난다(EV-01에서 페이지 넘김 50%)</td><td>—</td><td>현재 글자 높이가 지침 하한(12mm 등)에 못 미치는가? → 자사 화면 실측 필요</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> '보기' 가지만 고치면 나머지 세 가지는 그대로 남는다. 반대로 흐름·압박·학습 가지를 고칠 때는 글씨 크기 조정도 함께 들어간다. <span class="badge b-int">[추론]</span></p>
+</div>
+</section>
+
+<section class="part" id="insights" aria-labelledby="p3"><div class="part-head"><span class="num">03</span><h2 id="p3">핵심 인사이트</h2></div>
+<div class="insights">
+<div class="insight"><span class="i">1</span><div><h3>어르신은 '읽기'보다 '고르고 고치는 흐름'에서 멈춘다</h3>
+<p>60세 이상 10명의 성공률은 결제 90%, 단순 선택 80%였고, 추가 옵션 20%, 담은 것 빼기 30%, 필수 옵션·수량 40%였다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup> 처음 쓰는 고령자 관찰에서도 10명 중 5명이 메뉴 분류를 이해하기 어려워했다(재인용). <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn6">6</a></sup> 글씨보다 '무엇을 언제 묻는가'와 '고친 결과가 어디에 보이는가'를 먼저 설계해야 한다. <span class="badge b-int">[추론]</span></p>
+<p class="but">단, 10명 규모의 카페 키오스크 연구이고 참가자는 경험자다. 분식 메뉴의 옵션 구조가 카페와 같은지 알 수 없다. 수량 바꾸기 실패의 원인은 원문에 서술되어 있지 않다.</p></div></div>
+<div class="insight"><span class="i">2</span><div><h3>점심 줄은 배경이 아니라 막힘을 포기로 바꾸는 조건이다</h3>
+<p>55~70세 참가자는 뒤를 가리는 칸막이나 의자가 있을 때 시간 압박이 줄었다. 고령 집단은 서서 할 때 완료 시간이 더 길었고, 칸막이와 의자를 함께 둔 조건에서는 기준보다 약 24% 빨랐다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a></sup> 매장 관찰에서도 고령자는 직원·뒷사람의 시선을 의식해 두려움과 부담을 말했다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup> 화면 안의 개선만으로는 줄 압박을 다 없애지 못하므로, 줄과 화면을 함께 다뤄야 한다. <span class="badge b-int">[추론]</span></p>
+<p class="but">단, EV-03은 실험실 연구이고, 대기자 효과는 저자의 해석일 뿐 직접 조작하지 않았다. 아예 키오스크를 쓰지 않는 고령자는 '뒷사람' 이유를 12%만 꼽았고 '직원이 편해서'가 47%였다(재인용, 분모 다름).<sup><a href="#fn7">7</a></sup></p></div></div>
+<div class="insight"><span class="i">3</span><div><h3>글씨의 '크기'만큼 '말'과 '버튼처럼 보이는가'가 걸린다</h3>
+<p>관찰된 고령자는 작은 글자와 함께 비슷한 메뉴 사진과 외래어 때문에 메뉴를 알아보기 어려워했다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup> 실험 참가자는 "라지는 아는데 레귤러는 모르겠다", "'x'보다 '취소'라는 글자가 직관적이다"라고 말했다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup> 글씨를 키워도 낯선 말과 기호로 된 조작은 그대로 남는다. <span class="badge b-int">[추론]</span></p>
+<p class="but">단, 글자 크기를 바꿔 가며 성공률을 잰 연구는 찾지 못했다. 그래서 크기 효과의 양은 모른다. 테두리 없는 버튼을 버튼으로 못 알아본다는 결과(EV-08)는 초록으로만 확인했다.</p></div></div>
+<div class="insight"><span class="i">4</span><div><h3>첫 번째 성공이 다음 방문을 정하고, 매장마다 같은 화면이어야 그 성공이 쌓인다</h3>
+<p>관찰 대상 7명 중 4명은 처음에 사용을 꺼려 참여를 거절했다. 자기효능감이 낮은 고령자는 쉽게 포기했고, 성공 경험을 쌓은 고령자는 계속 쓸 뜻이 커졌다. 교육용 키오스크는 실제와 단계·구성이 달라 배운 것이 그대로 옮겨지지 않았다. <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup> 전 매장에 같은 화면을 둘 수 있는 프랜차이즈는 이 조건을 통제할 수 있는 위치에 있다. <span class="badge b-int">[추론]</span></p>
+<p class="but">단, 독립된 A 근거는 1건(7명)이다. "직원 도움을 받으며 반복하다 익숙해졌다"는 FGI 진술(EV-09, C)도 있어, 도움 자체가 학습 경로일 수 있다. 이 점은 목표("직원 도움 없이")를 어떻게 정의할지와 맞물린다.</p></div></div>
+</div>
+</section>
+
+<section class="part" id="reframe" aria-labelledby="p4"><div class="part-head"><span class="num">04</span><h2 id="p4">문제 재정의와 디자인 기회</h2></div>
+<div class="method"><span class="tag">근거 기반 문제 재정의</span>
+<h3>'보기'는 다섯 렌즈 중 하나이고, 근거가 가장 두터운 것은 '흐름'과 '압박'이다</h3>
+<div class="table-wrap"><table>
+<tr><th>렌즈</th><th>문제를 이렇게 읽는다</th><th>지지·상충 근거</th><th>달라지는 결정</th></tr>
+<tr><td><b>처음 의뢰</b> (보기)</td><td>글씨가 작아서 못 읽고 포기한다</td><td>지지: EV-02(A), EV-05 44.1%(C), EV-22(C). 상충: EV-01(A) 같은 글씨에서 단계별 성공률이 20~90%로 갈림</td><td>글자·버튼 크기 확대 → 화면당 항목이 줄어 페이지·스크롤이 늘어날 위험 <span class="badge b-hyp">[추측]</span></td></tr>
+<tr><td><b>흐름</b></td><td>옵션·분류·수정처럼 고르고 고치는 단계에서 길을 잃는다</td><td>지지: EV-01(A), EV-05 51.4%(C), EV-06(C), EV-12(C), EV-08(C)</td><td>단계 순서, 옵션 묻는 방식, 담은 내용의 위치를 다시 설계</td></tr>
+<tr><td><b>압박</b></td><td>뒤의 줄 때문에 서두르다 막히면 손을 뗀다</td><td>지지: EV-03(A), EV-02(A), EV-05 49.0%(C), EV-11(C). 상충: EV-07 미이용자 12%(C)</td><td>시간 제한, 진행 상태 표시, 줄·자리 등 매장 환경까지 범위 확장 여부</td></tr>
+<tr><td><b>학습·일관성</b></td><td>첫 실패가 다음 회피를 낳고, 매장마다 화면이 달라 배운 것이 쌓이지 않는다</td><td>지지: EV-02(A), EV-09(C)</td><td>전 매장 같은 순서·같은 자리, 첫 이용 성공을 우선 지표로</td></tr>
+<tr><td><b>도움 경로</b></td><td>막혔을 때 줄을 벗어나지 않고 도움받을 길이 없다</td><td>지지: EV-02(A) "도움받으면 혼자 할 수 있을 것", EV-15(D) 직원 호출, EV-18·20(D·C) 도우미·호출벨이 법정 조치</td><td>목표를 '직원 호출 0'으로 볼지, '막혀도 혼자 끝냄'으로 볼지 — 사람의 결정</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> '보기' 렌즈를 지지하는 근거도 있지만, 대상 집단을 직접 본 근거(A)가 가장 많이 받치는 것은 '흐름'과 '압박'이다. 글씨 확대는 버리지 않고 흐름 개편 안의 한 조건으로 넣는다. <span class="badge b-int">[추론]</span></p>
+</div>
+<div class="reframe"><div class="box from"><small>처음 의뢰</small>글씨가 작아서 어르신이 주문을 포기한다 → 화면을 보기 쉽게 키우자</div><span class="arrow">→</span><div class="box to"><small>재정의</small>처음 온 60대 이상 손님이 점심 줄 앞에서도 메뉴 고르기부터 옵션·고치기·결제까지 한 흐름으로 끝내고, 막히면 줄에서 밀려나지 않고 그 자리에서 이어 갈 수 있게 한다. 글씨 크기는 그 조건 중 하나다.</div></div>
+<ul class="hmw">
+<li>어떻게 하면 처음 온 어르신이 옵션을 고르고 담은 것을 고치는 단계에서 길을 잃지 않게 할 수 있을까?<span>인사이트 1에서</span></li>
+<li>어떻게 하면 뒤에 줄이 있어도 어르신이 '시간에 쫓긴다'는 느낌 없이 끝까지 주문할 수 있을까?<span>인사이트 2에서</span></li>
+<li>어떻게 하면 어르신이 화면의 말과 조작(버튼·기호)을 처음 보고도 알아볼 수 있을까?<span>인사이트 3에서</span></li>
+<li>어떻게 하면 첫 주문의 성공 경험이 다음 방문, 다른 매장에서도 그대로 이어지게 할 수 있을까?<span>인사이트 4에서</span></li>
+<li>어떻게 하면 막혔을 때 도움을 청하는 일이 '포기'가 아니라 '주문을 이어 가는 한 단계'가 될 수 있을까?<span>인사이트 2·4에서 (목표 정의에 따라 범위가 달라짐)</span></li>
+</ul>
+</section>
+
+<section class="part" id="directions" aria-labelledby="p5"><div class="part-head"><span class="num">05</span><h2 id="p5">디자인 방향</h2></div>
+<div class="method"><span class="tag">디자인 원칙 생성</span>
+<h3>원칙은 막힘이 관찰된 단계에서 나왔고, 지침(D)만 있는 원칙은 따로 표시했다</h3>
+<p class="why">색·서체·문구·구체 치수는 정하지 않았다. 이는 레벨 2(시안)에서 정한다. 지침의 최소값은 근거로만 인용하고 시안 값으로 확정하지 않는다.</p>
+<div class="table-wrap"><table>
+<tr><th>원칙</th><th>조건과 행동</th><th>근거</th><th>예외·충돌</th></tr>
+<tr><td><b>P1</b> 한 화면에 한 결정</td><td>메뉴를 고르면 그 메뉴에 필요한 옵션을 바로 이어서, 한 번에 하나씩 묻는다. 필수 옵션은 건너뛰고 지나갈 수 없게 그 자리에서 묻는다</td><td>EV-01(A) 필수 40%·추가 20%, 표 5 "단계 없이 바로 고르고 싶다"</td><td>화면 수가 늘면 총 시간이 늘어 줄 압박과 부딪칠 수 있다. 프로모션·멤버십 팝업은 흐름을 끊는다(EV-13, C)</td></tr>
+<tr><td><b>P2</b> 담은 내용은 늘 같은 자리에</td><td>담은 메뉴와 금액을 모든 주문 화면의 같은 자리에 보이게 한다. 빼기·고치기는 기호 대신 글자로 된 조작으로 그 자리에서 한다</td><td>EV-01(A) 빼기 30%, 고른 뒤 목록 미확인, "'x'보다 '취소'". EV-12(C) 37% 장바구니 못 찾음. EV-15(D)</td><td>화면 공간을 메뉴 목록과 나눠 써야 한다</td></tr>
+<tr><td><b>P3</b> 분류 이동과 페이지 넘김을 줄인다</td><td>첫 화면에서 대표 메뉴를 바로 고를 수 있게 하고, 메뉴는 세로 목록으로 이어서 보여 준다. 분류가 바뀌면 바뀐 사실을 시선이 머무는 자리에서 알린다</td><td>EV-01(A) 분류 60%·페이지 50%, 위쪽 분류 변화를 못 알아챔. EV-06(C) 10명 중 5명 분류 어려움. EV-08(C) 세로 배열에서 오류 적음</td><td>분식은 메뉴 수가 많을 수 있다(자사 메뉴 구조 미확인). 신메뉴·프로모션을 앞에 두려는 요구와 부딪친다</td></tr>
+<tr><td><b>P4</b> 일상어로, 버튼은 버튼처럼</td><td>크기·옵션·조작 이름은 손님이 쓰는 말로 쓰고, 누를 수 있는 것은 누를 수 있게 보이게 한다(테두리·면 등 표현은 레벨 2)</td><td>EV-02(A) 외래어, EV-01(A) "레귤러는 모름". EV-08(C) 테두리 없는 버튼 미인식. EV-15(D) 일상 용어</td><td>브랜드 메뉴명과 충돌할 수 있다. 실제 문구는 레벨 2에서 정한다</td></tr>
+<tr><td><b>P5</b> 키우기 전에 줄인다</td><td>글자·버튼을 키울 때는 화면당 정보량을 먼저 줄여, 크기 때문에 페이지·스크롤이 늘지 않게 한다. 크기는 적용되는 지침 하한 이상으로 둔다</td><td>EV-02(A) 작은 글자, EV-01(A) 페이지 넘김 50%. EV-15(D) 글자 높이 12mm 이상, EV-19(D) 28cm 이하 소형 기기 7.25mm</td><td>어느 기준이 적용될지는 자사 기기 화면 크기에 달렸다(미확인)</td></tr>
+<tr><td><b>P6</b> 기다려 주는 화면</td><td>손님이 고르는 동안에는 저절로 처음 화면으로 돌아가지 않게 한다. 시간 제한이 꼭 필요하면 남은 시간을 보여 주고 한 번의 조작으로 연장하게 한다</td><td>EV-15(D) 선택 응답에 시간 제한 없음, EV-16(D) 끄기·조정·연장. EV-14(C) 1분 초기화 관찰, EV-21(C) 시간 연장 가능 기기 16.4%</td><td><b>대상 집단 관찰 근거 없음(D·C만)</b>. 자리를 비운 손님의 주문이 남아 다음 손님과 섞일 위험이 있다</td></tr>
+<tr><td><b>P7</b> 줄 압박을 화면 밖에서도 줄인다</td><td>처음 쓰는 손님이 뒤의 줄을 덜 의식하는 자리·동선(뒤를 가림, 기대거나 앉을 곳)을 화면 개편과 함께 검토한다</td><td>EV-03(A) 뒤 칸막이·의자로 시간 압박 감소, EV-02(A)</td><td>화면 개편 범위 밖일 수 있다(예산·매장 면적 미확인). 실험실 결과라 매장 효과는 모른다</td></tr>
+<tr><td><b>P8</b> 도움은 진행을 잃지 않는 경로로</td><td>어느 화면에서나 같은 자리에서 도움을 청할 수 있게 하고, 도움을 청해도 그때까지 고른 내용이 남게 한다</td><td>EV-02(A) "도움받으면 혼자 할 수 있을 것". EV-15(D) 직원 호출. EV-17·18(D), EV-20(C) 도우미·호출벨·음성 안내가 법정 조치</td><td>목표 "직원 도움 없이"와 부딪칠 수 있다 → 목표 정의가 필요하다</td></tr>
+<tr><td><b>P9</b> 전 매장 같은 순서·같은 자리</td><td>모든 매장, 모든 기기에서 단계 순서와 주요 조작의 자리를 같게 한다</td><td>EV-02(A) 교육용·실제 차이로 학습 단절, EV-09(C) "매장마다 달라 당황". EV-15(D) 레이아웃 일관</td><td>매장별 메뉴 차이, 구형 기기 혼용(EV-13, C). 자사 기기 현황은 미확인</td></tr>
+<tr><td><b>P10</b> 잘 되는 단계는 지킨다</td><td>결제 직전에 총액을 다시 보여 주는 확인 단계는 유지한다</td><td>EV-01(A) 결제 90%, 총액을 재확인한 뒤 결제</td><td>결제 단계를 줄이자는 운영 요구와 부딪칠 수 있다</td></tr>
+</table></div>
+</div>
+<div class="directions">
+<div class="direction"><span class="dn">DIR-01 · <span class="status">미채택</span></span><h3>한 흐름 주문 — 기존 주문 흐름을 다시 짜기</h3>
+<p class="concept">모든 손님이 쓰는 기본 주문 화면 하나를 '고르기 → 그 자리에서 옵션 → 담은 내용 늘 보이기 → 확인 후 결제'의 한 흐름으로 다시 짠다. 옵션·고치기 단계부터 고친다. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>인사이트 1·3, HMW 1·3. A 근거가 가장 두텁게 받치는 방향이다(EV-01, EV-02).</dd>
+<dt>무엇을·누구에게</dt><dd>주문 화면 전체 흐름 / 처음 쓰는 60대 이상 손님을 기준 사용자로 두되, 별도 모드 없이 모든 손님에게 같은 화면</dd>
+<dt>어떤 순서로</dt><dd>① 옵션·고치기(성공 20~40%) ② 분류 이동·페이지(50~60%) ③ 용어·버튼 표현 ④ 크기 조정. 결제 확인은 유지</dd>
+<dt>어떤 정보를</dt><dd>먼저 읽힐 것: 대표 메뉴 → 고른 메뉴의 옵션 → 담은 내용·금액. 뺄 것: 흐름 중간의 프로모션·멤버십 유도(운영과 협의 필요)</dd>
+<dt>설계 원칙</dt><dd><ul class="principles"><li>P1</li><li>P2</li><li>P3</li><li>P4</li><li>P5</li><li>P6</li><li>P9</li><li>P10</li></ul></dd>
+<dt>바뀌는 접점</dt><dd>메뉴 목록 화면, 옵션 화면, 장바구니·주문 목록, 결제 확인 화면</dd>
+<dt>잃는 것</dt><dd>화면 안 프로모션 노출 자리, 숙련 손님의 빠른 경로 일부. 줄 압박은 화면만으로 다 줄지 않는다(인사이트 2)</dd>
+<dt>검증할 것</dt><dd>처음 쓰는 60대 이상 손님의 도움 없는 결제 완료 비율(%) · 옵션·빼기 단계 과업 성공률(%) · 주문 1건 소요 시간(초) · 주문 1건당 직원 호출 수(회)</dd></dl>
+<p class="trace">근거 추적 · fn1·fn2·fn6 → 과업 분석·삼각검증 C2 → 인사이트 1·3 → P1~P5</p></div>
+
+<div class="direction"><span class="dn">DIR-02 · <span class="status">미채택</span></span><h3>줄 앞에서도 이어 가는 주문 — 압박과 도움 경로를 함께 다루기</h3>
+<p class="concept">DIR-01의 흐름에 더해, 시간에 쫓기지 않는 화면 동작과 진행을 잃지 않는 도움 요청을 넣는다. 매장의 줄·자리 배치까지 같은 과제로 묶는다. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>인사이트 2·4, HMW 2·5. A 근거(EV-02, EV-03)가 있지만 실험실·소규모이고, 시간 제한 원칙은 D 근거뿐이다.</dd>
+<dt>무엇을·누구에게</dt><dd>주문 화면 + 도움 요청 경로 + 매장 대기 동선 / 처음 쓰는 60대 이상 손님과 그 순간의 매장 직원</dd>
+<dt>어떤 순서로</dt><dd>① 자동 초기화·시간 제한 처리 ② 같은 자리의 도움 요청과 진행 유지 ③ 줄·자리 배치(매장 운영과 함께)</dd>
+<dt>어떤 정보를</dt><dd>먼저 읽힐 것: 지금 몇 번째 단계인지, 도움을 청하는 곳. 넣을 것: 진행 상태</dd>
+<dt>설계 원칙</dt><dd><ul class="principles"><li>P6</li><li>P7</li><li>P8</li><li>P9</li></ul></dd>
+<dt>바뀌는 접점</dt><dd>모든 주문 화면의 공통 영역, 시간 초과 화면, 직원 호출 이후 화면, 매장 키오스크 주변</dd>
+<dt>잃는 것</dt><dd>목표가 '직원 호출 0'이라면 도움 경로를 키우는 것이 목표와 어긋나 보일 수 있다. 매장 환경을 바꾸려면 화면 범위를 넘는 예산·결정이 필요하다</dd>
+<dt>검증할 것</dt><dd>줄이 있을 때와 없을 때 처음 쓰는 고령 손님의 완료율 차이(%p) · 시작 후 초기화·중도 이탈 비율(%) · 도움 요청 뒤 혼자 결제까지 마친 비율(%)</dd></dl>
+<p class="trace">근거 추적 · fn2·fn3·fn15·fn16·fn18 → 삼각검증 C3·C4 → 인사이트 2·4 → P6~P8</p></div>
+
+<div class="direction"><span class="dn">DIR-03 · <span class="status">미채택</span></span><h3>처음 손님 전용 쉬운 주문 — 별도 경로 만들기</h3>
+<p class="concept">시작 화면에서 고를 수 있는 축약 경로를 만든다. 대표 메뉴만, 옵션은 최소로, 크게 보여 주는 경로다. 기본 화면은 그대로 둔다. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>HMW 1·3. 다만 이 방향을 직접 받치는 A·B 근거는 없다. 고령자용 화면 운영 매장이 0곳이었다는 조사(EV-06, C)와 지자체의 고령 친화 키오스크 사례(C)가 있을 뿐이다. 근거가 약하다는 점을 밝히고, 비교를 위해 남긴다.</dd>
+<dt>무엇을·누구에게</dt><dd>별도 진입 경로 / 스스로 이 경로를 고르는 손님</dd>
+<dt>어떤 순서로</dt><dd>DIR-01 이후 보완으로만 검토</dd>
+<dt>어떤 정보를</dt><dd>대표 메뉴 일부만, 옵션 최소</dd>
+<dt>설계 원칙</dt><dd><ul class="principles"><li>P1</li><li>P3</li><li>P5</li></ul></dd>
+<dt>바뀌는 접점</dt><dd>시작 화면, 별도 메뉴 화면</dd>
+<dt>잃는 것</dt><dd>전체 메뉴 접근. 노화에 대한 부정적 자기인식이 시도 전 포기로 이어진다는 관찰(EV-02)이 있어, '어르신용'으로 읽히면 오히려 덜 고를 수 있다 <span class="badge b-hyp">[추측]</span>. 매장 간 같은 화면 원칙(P9)과 화면이 두 벌로 갈린다</dd>
+<dt>검증할 것</dt><dd>대상 손님의 경로 선택률(%) · 선택자와 비선택자의 도움 없는 완료율(%)</dd></dl>
+<p class="trace">근거 추적 · fn6(C)만 → 인사이트 없음 → P1·P3·P5. 근거는 DIR-01을 가장 강하게 지지하고, DIR-02는 보완 방향이며, DIR-03은 근거가 약하다.</p></div>
+</div>
+</section>
+
+<section class="part" id="next" aria-labelledby="p6"><div class="part-head"><span class="num">06</span><h2 id="p6">다음 단계</h2></div>
+<ul class="next">
+<li><b>결정</b> 목표의 뜻: '직원을 한 번도 부르지 않고 끝낸다'인가, '막혀서 도움을 받더라도 손님이 혼자 결제까지 끝낸다'인가. 이 답에 따라 DIR-02와 P8의 범위가 달라진다. (보고서를 보신 뒤 가장 먼저 여쭐 질문)</li>
+<li><b>결정</b> 개편 범위: 주문 화면만 바꾸는가, 매장의 줄·자리 배치까지 같은 과제로 보는가(P7).</li>
+<li><b>결정</b> DIR-01~03 가운데 채택·보완·반려. 채택하면 이 파일의 다음 버전에 채택 절을 열고 필요 결과물 목록(DEL)을 정한다.</li>
+<li><b>확인</b> 자사 화면 캡처(단계 수, 옵션 구조, 장바구니 위치, 팝업, 현재 시간 제한 설정, 글자 높이 실측). 받을 곳: 본사 IT·키오스크 공급사. 받으면 과업 분석의 '가정한 구조'를 자사 구조로 바꾼다.</li>
+<li><b>확인</b> 이용 기록(화면별 이탈, 자동 초기화 횟수, 직원 호출 시점)과 매장 보고 원문(어느 화면에서 직원을 불렀나). 받을 곳: 본사 데이터·운영팀. 대기 중인 과제 T8.</li>
+<li><b>확인</b> 기기 기종·화면 크기(28cm 기준), 매장 면적·소상공인 해당 여부, 직원 상주 여부 → 장애인차별금지법 시행령·지능정보화 기본법 적용 판정. 받을 곳: 법무·가맹 관리.</li>
+<li><b>확인</b> 한국소비자원 2020 고령소비자 비대면 거래 실태조사 원 보고서. 받을 곳: 소비자원 누리집·정보공개 청구. 열면 EV-05·06이 C에서 B·A로 올라갈 수 있다.</li>
+<li><b>이어서</b> 채택 뒤 레벨 2(visual-design-drafting)에서 시안 제작. 색·서체·문구·치수는 그 단계에서 정한다.</li>
+</ul>
+</section>
+
+<section class="appendix" id="appendix" aria-labelledby="ap"><h2 id="ap">APPENDIX</h2>
+<details><summary>각주 · 원문 위치</summary><div><ol class="fn">
+<li id="fn1">EV-01 · A · 신원·김현경 외, 「A Study on the Eye Tracking to Improve the Usability of Kiosks for Seniors」, 대한인간공학회지 42(3):269–287, 2023-06. https://www.jesk.or.kr/archive/detail/331 · 3.1절, 4.1.1–4.1.8절, 그림 7·9·11·15·17, 표 5. PDF는 읽히지 않아 상세 페이지 본문으로 확인.</li>
+<li id="fn2">EV-02 · A · 정민경·유은, 「고령자의 심리적 요인을 고려한 키오스크 사용경험 개선 제안」, Archives of Design Research 35(3):113–127, 2022-08. https://aodr.org/_PR/view/?aidx=33897&amp;bidx=3034 · 5.1절·표 4·표 5(참여자 C), 6.1·6.3·6.4절.</li>
+<li id="fn3">EV-03 · A · Chung, H., Park, W., 「Enhancing the Usability of Self-service Kiosks for Older Adults: Effects of Using Privacy Partitions and Chairs」, arXiv:2105.07445, 2021. https://arxiv.org/pdf/2105.07445 · Table 1(p.14), p.20–22, Table 3(p.22), p.30, p.33, p.36. 사전 출판본.</li>
+<li id="fn4">EV-04 · B · 김세진, 「노인의 여가 및 정보화 현황」, 보건복지포럼 2021.10, 표 5(31쪽). 원자료 이윤경 외(2020) 『2020년도 노인실태조사』. https://kihasa.re.kr/api/kihasa/file/download?seq=17406</li>
+<li id="fn5">EV-05 · C(재인용) · 한국소비자원 2020 고령소비자 설문. 정책브리핑 2020-10-23 https://www.korea.kr/news/policyNewsView.do?newsId=148879041 ; IT비즈뉴스 https://www.itbiznews.com/news/articleView.html?idxno=19399 · 원 보고서를 찾지 못함. 분모 245명은 추론값.</li>
+<li id="fn6">EV-06 · C(재인용) · 한국소비자원 2020 관찰조사. IT비즈뉴스(위), 비즈워치 2020-10-19 https://news.bizwatch.co.kr/article/mobile/2020/10/19/0004</li>
+<li id="fn7">EV-07 · C(재인용) · 한국소비자원 시장조사국, 노컷뉴스 2020-12-24 https://www.nocutnews.co.kr/news/5469879 · 비대면 거래 미경험 고령자 100명.</li>
+<li id="fn8">EV-08 · C(초록만) · 홍승윤·최종훈, 한국콘텐츠학회논문지 19(4):556–563, 2019. https://koreascience.kr/article/JAKO201914456457359.page?lang=ko</li>
+<li id="fn9">EV-09 · C · 황남희 외, 연구보고서 2020-46, 한국보건사회연구원, 2020-12. https://www.kihasa.re.kr/api/kihasa/file/download?seq=15802 · 166–167쪽(FGI), 표 4-17~4-24.</li>
+<li id="fn10">EV-10 · C · 서울특별시 「서울시민 디지털역량 실태조사」 발표(2022-05). https://news.seoul.go.kr/gov/archives/540969</li>
+<li id="fn11">EV-11 · C(대상 아님) · Lee, W., Lu, L., Journal of Hospitality &amp; Tourism Research 49(3):433–448, 2023. https://ira.lib.polyu.edu.hk/bitstream/10397/114031/1/Lee_Lined_Up_Examining.pdf · Study 1·2 결과.</li>
+<li id="fn12">EV-12 · C · Lee, Yen, Zheng, AHFE 2023. https://openaccess.cms-conferences.org/publications/book/978-1-958651-86-5/article/978-1-958651-86-5_31 · 초록.</li>
+<li id="fn13">EV-13 · C(재인용) · 한국접근성평가연구원 평가(2024-08~), 브라보마이라이프 https://bravo.etoday.co.kr/view/atc_view/15909</li>
+<li id="fn14">EV-14 · C(대상 아님) · 김경훈 외, 정보관리학회지 41(3):331–358, 2024. https://www.accesson.kr/kosim/assets/pdf/45147/journal-41-3-331.pdf · p.342.</li>
+<li id="fn15">EV-15 · D · 「무인정보단말기 UI 가이드」(발행기관 미표기). https://designdb.com/usr/upload/board/zboardphotogallery176/20250102020609692_8437.0.pdf · p.32, 34, 35, 37, 39, 40.</li>
+<li id="fn16">EV-16 · D · W3C WCAG 2.2 Understanding SC 2.2.1. https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html</li>
+<li id="fn17">EV-17 · D · 보건복지부 장애인차별금지법 시행령 개정, 정책브리핑 2023-03-28. https://www.korea.kr/news/policyNewsView.do?newsId=148913234</li>
+<li id="fn18">EV-18 · D(보도로 확인) · 지능정보화 기본법 시행, 뉴시스 2025-03-26. https://mobile.newsis.com/view/NISX20250326_0003113812</li>
+<li id="fn19">EV-19 · D(보도로 확인) · 과기정통부 고시 개정안, 뉴시스 2025-07-17. https://mobile.newsis.com/view/NISX20250717_0003255224</li>
+<li id="fn20">EV-20 · C · 매일신문 2026-10-13. https://www.imaeil.com/page/view/2026101310051138714</li>
+<li id="fn21">EV-21 · C(재인용) · 한국정보화진흥원 2019 실태, 비즈워치 2020-10-19(fn6과 같은 기사).</li>
+<li id="fn22">EV-22 · C(재인용) · YTN 2022-11-24 https://www.ytn.co.kr/_ln/0102_202211241202364528</li>
+</ol></div></details>
+<details><summary>방법별 상세 표</summary><div>
+<h3>EV-01 고령 집단 과업별 결과 (60세 이상 10명)</h3>
+<div class="table-wrap"><table><tr><th>과업</th><th>성공률</th><th>시간(초)</th><th>터치 수</th><th>쉬움 점수(0–100)</th></tr>
+<tr><td>1 단순 선택</td><td>80%</td><td>12.5</td><td>3.7</td><td>90</td></tr>
+<tr><td>2 메뉴 분류 변경</td><td>60%</td><td>16.7</td><td>3.8</td><td>74</td></tr>
+<tr><td>3 페이지 넘김</td><td>50%</td><td>22.7</td><td>4.7</td><td>78</td></tr>
+<tr><td>4 필수 옵션</td><td>40%</td><td>19.9</td><td>—</td><td>68</td></tr>
+<tr><td>5 추가 옵션</td><td>20%</td><td>33.3</td><td>5.4</td><td>72</td></tr>
+<tr><td>6 수량 변경</td><td>40%</td><td>15.9</td><td>4.3</td><td>84</td></tr>
+<tr><td>7 주문 목록에서 취소</td><td>30%</td><td>28.7</td><td>—</td><td>64</td></tr>
+<tr><td>8 결제</td><td>90%</td><td>9.0</td><td>3.7</td><td>92</td></tr></table></div>
+<p>'—'는 확인한 본문에 값이 없어 비운 칸이다. 젊은 집단의 추가 옵션 성공률은 50%였다. 따라서 추가 옵션 과업은 연령과 무관하게 어려운 과업일 수 있다. <span class="badge b-int">[추론]</span></p>
+<h3>EV-04 식당 기계 주문 (2020 노인실태조사)</h3>
+<div class="table-wrap"><table><tr><th>연령</th><th>이용률</th><th>이용자 중 불편</th></tr>
+<tr><td>전체</td><td>58.1%</td><td>64.2%</td></tr><tr><td>65–69세</td><td>74.9%</td><td>53.6%</td></tr><tr><td>70–74세</td><td>59.4%</td><td>65.9%</td></tr><tr><td>75–79세</td><td>51.4%</td><td>75.2%</td></tr><tr><td>80–84세</td><td>38.9%</td><td>79.8%</td></tr><tr><td>85세 이상</td><td>29.6%</td><td>79.9%</td></tr></table></div>
+<h3>비교할 수 없는 수치 (분모가 다름)</h3>
+<ul><li>EV-05 '뒷사람 눈치' 49.0%(이용자 약 245명)와 EV-07 '뒷사람에게 불편 줄까 봐' 12%(미이용자): 응답자와 문항이 달라 맞비교하지 않는다.</li>
+<li>EV-05 '그림·글씨' 44.1%와 EV-22 '글씨가 작다' 20% 이상: EV-22의 분모가 불명이다.</li>
+<li>EV-04 불편 64.2%와 EV-05 비율: 조사·문항·표본이 다르다.</li></ul>
+</div></details>
+<details><summary>검증과 남은 한계</summary><div><ul>
+<li>열지 못한 원문: koreascience.kr PDF 5편(WebFetch는 robots 차단, curl은 에이전트 프록시 403). 같은 사이트의 초록 페이지는 승인 요청이 필요했는데 응답이 없어 재시도하지 않았다. 한국소비자원 2020 원 보고서는 주소를 찾지 못했다. KIHASA 리포지터리는 JavaScript가 필요했다. 한국경제 기사는 사이트 오류, 다음 뉴스는 robots 차단이었다. JESK PDF는 이진 데이터로만 읽혀 상세 페이지로 대신했다.</li>
+<li>'처음 쓰는' 고령자를 단계별로 센 1차 원문은 확보하지 못했다(EV-06은 재인용). EV-01은 경험자 연구다.</li>
+<li>분식 업종을 다룬 연구는 찾지 못했다. 카페·버거 결과를 옮겨 쓴 것이라 메뉴 구조 차이가 결과를 바꿀 수 있다.</li>
+<li>글자 크기를 조작해 성공률을 잰 고령자 연구를 찾지 못했다. 따라서 크기 확대의 효과 크기는 모른다.</li>
+<li>뺀 방법: 여정 지도·경험 지도(단계별 감정 근거가 부족해 과업 분석으로 한정), 기존 사용자 기록 카드들(자사 기록 없음), 경쟁사 비교(자사 화면 없이 비교 기준을 세울 수 없음).</li>
+<li>자기 점검: 문제 정의·인사이트마다 A 근거 있음 / 맞비교는 같은 분모 안에서만 함 / 과업 그림의 채운 칸은 A 근거만 씀, 근거 없는 칸은 비움 / 재인용 수치는 원 조사 추적을 시도했고 실패 사실을 적음.</li>
+</ul></div></details>
+<details><summary>적용한 방법</summary><div><ul>
+<li>문헌·기존자료 조사 → 대상 집단 1차 연구와 이유 조사를 찾기 위해 → 출처별 근거표(evidence-index.md) → 총괄이 순차 수행(하위 에이전트 없음) → 완료</li>
+<li>과업 분석 → '어디서 막히나'를 단계로 보기 위해 → 단계별 성공률·막힘 그림 → EV-01·02 기반, 순서는 가정한 구조 → 부분 완료</li>
+<li>삼각검증 → 처음 의뢰 전제를 독립 자료로 검증하기 위해 → 주장별 수렴·불일치 표 → 완료</li>
+<li>다섯 번의 왜 → 현상 아래 원인 가지를 나누기 위해 → 가지별 원인·공백 표 → 완료</li>
+<li>어떻게 하면 질문 → 인사이트를 열린 질문으로 → HMW 5개 → 완료</li>
+<li>디자인 원칙 생성 → 막힘에서 행동 규칙으로 → 원칙 10개(P6은 D·C 근거뿐) → 완료, 채택 대기</li>
+</ul></div></details>
+<details><summary>과제 상태</summary><div>
+<p>T1 대상 집단 1차 연구 — 완료 · T2 '글씨' 전제 검증 — 부분 완료(원 보고서 미열람) · T3 단계별 막힘 — 부분 완료(시작 화면·수령 단계 근거 없음) · T4 줄 압박 — 완료 · T5 지침·법령 — 부분 완료(고시·법령 원문 미열람) · T6 원인 가지 — 완료 · T7 재정의·원칙·방향 — 완료(채택 대기) · T8 자사 화면·이용 기록 분석 — 대기(자사 자료를 기다림)</p>
+</div></details>
+</section>
+
+</main></body></html>

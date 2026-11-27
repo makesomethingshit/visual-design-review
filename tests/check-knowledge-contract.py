@@ -268,7 +268,7 @@ def check_level_chain() -> None:
           "Drafting and review must name the planning skill as their input or boundary step")
     workflow = read(DRAFTING / "references/workflow/level-2.md")
     for step in ("## 1. 인계 자산 로드", "## 2. 조형 번역", "## 3. 복수 시안 생성",
-                 "## 4. 선택·확정 및 인계", "review-v1.md", "design-handoff",
+                 "## 4. 선택·확정 및 인계", "review-v1.html", "design-handoff",
                  "reference-analysis", "근거 ID"):
         check(step in workflow, f"Level 2 workflow missing {step}")
 

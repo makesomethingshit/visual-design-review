@@ -78,7 +78,7 @@ def check_workflow_contract() -> None:
         check(deliverable in text, f"workflow does not map deliverables: {deliverable}")
     check("opt-in" in text and "활성화를 선언하지 않는다" in text,
           "workflow must keep the preset activation guard explicit")
-    check("review-v1.md" in text, "workflow must open the named level 1 review file")
+    check("review-v1.html" in text, "workflow must open the named level 1 review file")
     check("brief-vN.md" in text and "브리프 전용 경로" in text,
           "workflow must read the level 1 brief file, including the brief-only route")
 
