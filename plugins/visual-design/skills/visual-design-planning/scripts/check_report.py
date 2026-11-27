@@ -3,7 +3,8 @@
 Checks section order, leftover template comments and placeholders, claim-tag
 names and variant spellings, footnote links with evidence IDs and grades,
 evidence IDs against evidence-index.md, and the adoption section's basis line
-and five fields. It does not judge the quality of the analysis.
+and five fields. Markup inside HTML comments is ignored, except that leftover
+template guidance comments are reported. It does not judge the quality of the analysis.
 
 Prints a JSON result. Exit 0 for PASS, 1 for FAIL, 2 when the input cannot be
 read (BLOCKED).
@@ -41,7 +42,12 @@ def visible_text(fragment: str) -> str:
 
 def check(page: str, evidence: str | None = None) -> dict:
     problems: list[str] = []
-    body = page.split("<body", 1)[-1]
+    raw = page.split("<body", 1)[-1]
+    for match in TEMPLATE_COMMENT.finditer(raw):
+        problems.append(f"템플릿 주석이 남아 있음: {match.group(0)[:30]}")
+    # Commented-out markup (such as the template's disabled adoption section)
+    # is not part of the report, so every structural check below ignores it.
+    body = re.sub(r"<!--.*?-->", " ", raw, flags=re.S)
 
     found = [s for s in re.findall(r'<(?:section|header)\b[^>]*\bid="([a-z]+)"', body)
              if s in SECTIONS]
@@ -49,8 +55,6 @@ def check(page: str, evidence: str | None = None) -> dict:
     if found != expected:
         problems.append(f"절 순서·누락: 기대 {expected}, 실제 {found}")
 
-    for match in TEMPLATE_COMMENT.finditer(body):
-        problems.append(f"템플릿 주석이 남아 있음: {match.group(0)[:30]}")
     text = visible_text(body)
     for match in sorted(set(PLACEHOLDER.findall(text))):
         problems.append(f"자리표시가 남아 있음: {match}")
@@ -78,9 +82,12 @@ def check(page: str, evidence: str | None = None) -> dict:
 
     for match in re.finditer(re.escape("[측정/기록]"), body):
         around = body[max(0, match.start() - WINDOW):match.end() + WINDOW]
-        if not (re.search(r'href="#fn\d+"', around) or EV.search(around)):
+        # A value computed only from what the user said cites 사용자 확정
+        # instead of an evidence entry (report-format.md, computed values).
+        if not (re.search(r'href="#fn\d+"', around) or EV.search(around)
+                or "사용자 확정" in visible_text(around)):
             line = visible_text(body[max(0, match.start() - 80):match.end()]).strip()
-            problems.append(f"[측정/기록] 주변에 각주·근거 ID가 없음: …{line[-60:]}")
+            problems.append(f"[측정/기록] 주변에 각주·근거 ID·사용자 확정 출처가 없음: …{line[-60:]}")
 
     if evidence is not None:
         known = set(EV.findall(evidence))

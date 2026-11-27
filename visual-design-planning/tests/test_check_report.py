@@ -61,6 +61,18 @@ class CheckReportTest(unittest.TestCase):
         far = page("<p>" + "가" * 400 + '<span class="badge b-rec">[측정/기록]</span></p>')
         self.assertTrue(any("주변에 각주" in p for p in self.problems(far)))
 
+    def test_user_confirmed_calculation_needs_no_evidence_id(self) -> None:
+        calc = page("<p>" + "가" * 400 + '마감까지 34일 <span class="badge b-rec">[측정/기록]</span>'
+                    "(오늘~마감일, 사용자 확정 일정에서 계산)</p>")
+        self.assertEqual(self.problems(calc), [])
+
+    def test_commented_out_markup_is_ignored(self) -> None:
+        template_adoption = ADOPTION.replace("brief-v2.md", "brief-vN.md").replace("<h3>근거 ID</h3>", "")
+        disabled = page("<!-- 채택 뒤에만 아래 절을 연다.\n" + template_adoption + "\n-->")
+        self.assertEqual(self.problems(disabled), [])
+        hidden = page('<!-- <span class="badge b-int">해석</span> <a href="#fn9">9</a> -->')
+        self.assertEqual(self.problems(hidden), [])
+
     def test_section_order_and_adoption_fields(self) -> None:
         swapped = page().replace('id="insights"', 'id="tmp"').replace('id="methods"', 'id="insights"')
         self.assertTrue(any("절 순서" in p for p in self.problems(swapped)))
