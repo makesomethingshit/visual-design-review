@@ -339,6 +339,22 @@ class WorkflowContractTest(unittest.TestCase):
             self.assertIn(excluded, boundary, f"제외 항목 '{excluded}'가 없다")
         self.assertIn("디자인 원칙도", lifecycle, "채택 원칙을 제작 제약으로 넘기는 규칙이 없다")
 
+    def test_analysis_standards(self) -> None:
+        """분석의 질을 정하는 규칙이 문서에 있고 흐름 곳곳에서 불리는지."""
+        std = read(WORKFLOW / "analysis-standards.md")
+        grades = re.findall(r"^\| `([A-D])` \|", std, re.M)
+        self.assertEqual(grades, ["A", "B", "C", "D"], "근거 등급 A~D가 없다")
+        for rule in ("A부터 찾는다", "원 조사까지 추적", "독립된 연구·조사·방법의 수",
+                     "`A` 또는 `B` 근거를 하나 이상", "맞비교하지 않는다",
+                     "\"근거 없음\"으로 비우고", "몇 명 중 몇 명", "자기 점검"):
+            self.assertIn(rule, std, f"분석 기준에 '{rule}' 규칙이 없다")
+        self.assertIn("analysis-standards.md", self.skill)
+        for name in ("lead-state-lifecycle.md", "report-format.md"):
+            self.assertIn("(analysis-standards.md)", read(WORKFLOW / name), f"{name}가 분석 기준을 가리키지 않는다")
+        for step in ("5. ", "6. "):
+            line = next(l for l in self.level1.splitlines() if l.startswith(step))
+            self.assertIn("(analysis-standards.md)", line, f"레벨 1 {step.strip()}단계가 분석 기준을 적용하지 않는다")
+
     def test_forbidden_scope(self) -> None:
         self.assertIn("새 인터뷰·설문·현장조사", self.skill)
         self.assertIn("시제품·실험", self.skill)
