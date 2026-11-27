@@ -6,7 +6,7 @@ description: >
   existing evidence, and prepare findings for the designer's decision.
   시각디자인 기획, 디자인 의뢰 정리, 기존 자료 조사·분석, 디자인 방향 검토 자료 작성에 사용한다.
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # 시각디자인 기획 · 레벨 1
@@ -21,6 +21,7 @@ metadata:
 - 조사·조건 대안의 채택·보완·반려와 최종 승인·채택은 사람이 결정한다. 레벨 1이 시각·표현 방향을 대신 확정하지 않으며, 채택이 명시되기 전까지 인계 방향은 미결이다.
 - 조사와 취합은 `references/workflow/analysis-standards.md`를 따른다. 대상 집단을 직접 관찰한 1차 연구부터 찾고, 근거마다 등급(A 직접 관찰·B 원자료·C 재인용·D 지침)을 붙이며, 문제 정의와 인사이트는 A·B 근거를 가져야 한다. 분모가 다른 수치는 맞비교하지 않고, 근거 없는 단계 구조를 만들지 않는다.
 - 검토 결과는 템플릿(`assets/report-template.html`)을 채운 HTML 보고서 `review-vN.html`로 쓴다. 문제 정의, 핵심 수치, 방법별 그림, 인사이트, 재정의와 HMW, 디자인 원칙과 방향, 다음 단계, 각주를 담는다(형식은 `references/workflow/report-format.md`).
+- 보고서를 넘기기 전에 `scripts/check_report.py`로 절 순서·템플릿 잔여·태그 이름·각주 연결과 근거 등급·채택 절 필드를 검사하고 `FAIL`이 없을 때까지 고친다.
 - 사람이 채택하면 `review-vN.html` 안에 채택 절(`<section id="adoption">`)을 열고 첫 줄에 기준 브리프 버전을 적은 뒤 채택 방향·필요 결과물·근거 ID·제작 제약·남은 쟁점을 적어 인계한다. `필요 결과물`은 조사·삼각검증을 마친 뒤 문제를 풀기 위해 실제로 제작해야 할 디자인 결과물 목록(`DEL-xx`)으로, 항목마다 품목·매체·목적·우선순위·연결 근거 ID를 적고 만들지는 않는다. 별도 `handoff.md`를 만들지 않는다. 시안·조판 제작은 `visual-design-drafting`(레벨 2)이 이 채택 절을 인계서로 읽어 이어받고, 레벨 1은 인계 절까지 쓴다.
 
 완성된 작품의 비평·레퍼런스 역분석·수식 기반 제작 명세는 `visual-design-review` 스킬의 범위다. 같은 플러그인에 함께 배포되지만 지식과 판정 절차는 서로 섞지 않는다.
