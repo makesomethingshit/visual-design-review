@@ -16,7 +16,7 @@ metadata:
 
 ## 실행 순서
 
-1. **인계 자산 로드 & 정합 확인** — `review-vN.md`의 채택 방향·필요 결과물·근거 ID·제약·미결을 `evidence-index.md`·`lead-state.md`와 대조해 `10-intake.md`에 옮기고, `필요 결과물`(`DEL-xx`)을 시안 트랙(`draft-a/`, `draft-b/`)에 매핑한 뒤 `READY`/`PARTIAL`/`DIRECT`/`BLOCKED`를 판정한다. 형식은 [인계 기록 계약](references/contracts/draft-intake.md).
+1. **인계 자산 로드 & 정합 확인** — `review-vN.html` 채택 절의 채택 방향·필요 결과물·근거 ID·제약·미결을 `evidence-index.md`·`lead-state.md`와 대조해 `10-intake.md`에 옮기고, `필요 결과물`(`DEL-xx`)을 시안 트랙(`draft-a/`, `draft-b/`)에 매핑한 뒤 `READY`/`PARTIAL`/`DIRECT`/`BLOCKED`를 판정한다. 형식은 [인계 기록 계약](references/contracts/draft-intake.md).
 2. **조형 번역 & 시안 설계 스펙** — 근거를 그리드·타이포 위계·혼식·컬러·자산·레퍼런스 재사용으로 옮겨 `20-translation.md`에 값·단위·식·출처 상태로 적는다. 영역별 기준은 [조형 번역 기준](references/form-translation.md).
 3. **복수 시안 생성 & 근거 매핑** — 같은 원고·판형·자산으로 차이 축이 다른 A/B(필요 시 C)를 실제 파일로 만들고, 값마다 근거 ID를 `30-evidence-map.md`에 연결한다. 형식은 [근거 매핑 계약](references/contracts/evidence-map.md).
 4. **선택·수정 루프 & 레벨 3 인계** — 사람의 선택과 수정을 `40-selection.md`에 기록하고, 확정 시안을 `design-handoff` 형식의 `handoff-v1.md`로 닫아 체크리스트를 통과시킨 뒤 넘긴다. 형식은 [인계 계약](references/contracts/draft-handoff.md).

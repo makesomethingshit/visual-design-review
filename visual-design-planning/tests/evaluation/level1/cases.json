@@ -43,7 +43,7 @@
       "runs/<run-id>/lead-state.md",
       "runs/<run-id>/evidence-index.md",
       "runs/<run-id>/brief-v1.md",
-      "runs/<run-id>/review-v1.md"
+      "runs/<run-id>/review-v1.html"
     ],
     "brief_items": [
       "목표",
@@ -65,6 +65,17 @@
       "[추론]",
       "[추측]",
       "미확인"
+    ],
+    "report_sections": [
+      "cover",
+      "situation",
+      "methods",
+      "insights",
+      "reframe",
+      "directions",
+      "next",
+      "adoption",
+      "appendix"
     ]
   },
   "cases": [
@@ -104,7 +115,7 @@
             "합의된 기대 출력으로 과제를 나누고 과제 ID·완료 기준을 붙였다",
             "방법 카드의 상대 경로와 근거 ID를 배정에 넣었다",
             "자료가 없는 항목을 [추측]·미수행으로 남기고 수치를 만들지 않았다",
-            "검토용 결과를 review-v1.md에 두고 첫 1~2문장에 답과 한계를 썼다"
+            "검토용 결과를 review-v1.html에 두고 첫 1~2문장에 답과 한계를 썼다"
           ]
         }
       ],
@@ -182,7 +193,7 @@
           "runs/<run-id>/lead-state.md",
           "runs/<run-id>/evidence-index.md",
           "runs/<run-id>/brief-v1.md",
-          "runs/<run-id>/review-v1.md"
+          "runs/<run-id>/review-v1.html"
         ],
         "handoff_fields": [],
         "forbidden": [
@@ -360,7 +371,7 @@
           "runs/<run-id>/lead-state.md",
           "runs/<run-id>/evidence-index.md",
           "runs/<run-id>/brief-v1.md",
-          "runs/<run-id>/review-v1.md"
+          "runs/<run-id>/review-v1.html"
         ],
         "handoff_fields": [],
         "forbidden": [
@@ -419,14 +430,20 @@
         {
           "id": "E2-8",
           "check": "검토용 결과 형식",
-          "pass": "review-v1.md 첫 1~2문장에 합의한 질문의 답과 판단을 바꿀 한계를 쓰고, 완료 기준 대조·상충·공백을 남겼다",
-          "fail_example": "제목과 배경 설명으로 시작하고 결론이 마지막에 숨음"
+          "pass": "review-v1.html 표지 요약 첫 1~2문장에 합의한 질문의 답과 판단을 바꿀 한계를 쓰고, 부록에 완료 기준 대조·상충·공백을 남겼다",
+          "fail_example": "제목과 배경 설명으로 시작함, 완료 기준 대조 없음"
         },
         {
           "id": "E2-9",
           "check": "브리프 기록",
           "pass": "brief-v1.md의 목표·판단기준에 2.4%→4% 전환 목표를 사용자 확정으로 적고, 자료에서 확인한 항목에는 EV ID를 붙였다",
           "fail_example": "브리프 없이 바로 분석 결과를 씀, 자료에서 추론한 대상 특성을 사용자 확정으로 적음"
+        },
+        {
+          "id": "E2-10",
+          "check": "보고서 구성",
+          "pass": "review-v1.html이 템플릿의 절(cover·situation·methods·insights·reframe·directions·next·appendix)을 순서대로 갖추고, 수행한 분석마다 그림이나 표와 '이 그림이 말하는 것', 인사이트마다 단서, 렌즈 비교표·재정의·HMW, 원칙 표와 근거 추적이 있는 방향 카드, 원문 위치를 밝힌 각주를 담았다",
+          "fail_example": "마크다운 파일이나 절을 뺀 HTML, 그림 없이 결론만 나열, 각주 없는 수치, 근거 추적 없는 방향 카드"
         }
       ],
       "materials": {
@@ -564,7 +581,7 @@
           "runs/<run-id>/lead-state.md",
           "runs/<run-id>/evidence-index.md",
           "runs/<run-id>/brief-v1.md",
-          "runs/<run-id>/review-v1.md"
+          "runs/<run-id>/review-v1.html"
         ],
         "handoff_fields": [
           "채택 방향",
@@ -643,14 +660,20 @@
         {
           "id": "E3-10",
           "check": "과제 방향 범위",
-          "pass": "DIR 후보와 채택 방향을 정보 단위·순서·위계 등급(예: 작가별 묶음, 3단계 도판 중요도)으로 적고, 도판의 실제 크기·비율·그리드·서체·판면 배치는 레벨 2로 남겼다",
-          "fail_example": "채택 절에 도판 크기를 mm·비율로 확정하거나 그리드·서체를 정함"
+          "pass": "DIR 후보와 디자인 원칙을 정보 단위·순서·위계와 근거 있는 동작·배치 규칙으로 적고, 도판의 실제 치수(mm·비율)·색·서체·톤은 레벨 2로 남겼다",
+          "fail_example": "채택 절에 도판 크기를 mm·비율로 확정하거나 서체·색을 정함"
         },
         {
           "id": "E3-11",
           "check": "기준 브리프",
           "pass": "채택 절 첫 줄에 기준 브리프 버전(brief-vN.md)을 적었고, 그 브리프 파일이 실행 폴더에 있다",
           "fail_example": "채택 절이 브리프를 가리키지 않거나 가리킨 브리프 파일이 없음"
+        },
+        {
+          "id": "E3-12",
+          "check": "보고서 구성",
+          "pass": "review-v1.html이 템플릿의 절(cover·situation·methods·insights·reframe·directions·next·appendix)을 순서대로 갖추고, 수행한 분석마다 그림이나 표와 '이 그림이 말하는 것', 인사이트마다 단서, 렌즈 비교표·재정의·HMW, 원칙 표와 근거 추적이 있는 방향 카드, 원문 위치를 밝힌 각주를 담았다",
+          "fail_example": "마크다운 파일이나 절을 뺀 HTML, 그림 없이 결론만 나열, 각주 없는 수치, 근거 추적 없는 방향 카드"
         }
       ],
       "materials": {
@@ -689,7 +712,7 @@
           "checks": [
             "브리프 전용 경로로 판정했다",
             "brief-v1.md에 12항목과 상태를 남겼다",
-            "과제 분할·조사·review-v1.md·채택 절을 만들지 않고 멈췄다",
+            "과제 분할·조사·review-v1.html·채택 절을 만들지 않고 멈췄다",
             "톤·색·서체·문구 후보를 만들지 않았다"
           ]
         }
@@ -716,7 +739,7 @@
           "runs/<run-id>/brief-v1.md"
         ],
         "must_not_create": [
-          "runs/<run-id>/review-v1.md",
+          "runs/<run-id>/review-v1.html",
           "## 채택 절",
           "과제 분할",
           "하위 리서치 배정"
@@ -760,8 +783,8 @@
         {
           "id": "E4-5",
           "check": "짧은 경로",
-          "pass": "과제 분할·조사·review-v1.md·채택 절을 만들지 않고 브리프를 전달한 뒤 멈췄다",
-          "fail_example": "과제 ID와 방법 카드를 배정하거나 review-v1.md를 만듦"
+          "pass": "과제 분할·조사·review-v1.html·채택 절을 만들지 않고 브리프를 전달한 뒤 멈췄다",
+          "fail_example": "과제 ID와 방법 카드를 배정하거나 review-v1.html를 만듦"
         },
         {
           "id": "E4-6",

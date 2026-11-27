@@ -30,7 +30,7 @@ STEP_KEYWORDS = {
     4: ("리서치", "배정"),
     5: ("분석", "병렬"),
     6: ("취합", "미수행"),
-    7: ("review-v1.md",),
+    7: ("review-v1.html",),
 }
 
 # 인계 5필드의 기준 표기. lead-state-lifecycle.md의 '인계 기록' 절이 유일한 기준이다.
@@ -44,7 +44,7 @@ BRIEF_ITEMS = ("목표", "배경", "대상", "메시지", "결과물", "환경",
                "제약", "일정", "예산", "판단기준", "미확인")
 BRIEF_STATUSES = ("사용자 확정", "[측정/기록]", "[추론]", "[추측]", "미확인")
 # 과제 방향(DIR)에 넣지 않는 시각·표현 결정.
-VISUAL_DECISIONS = ("문구", "톤", "이미지", "색", "서체", "그리드", "판면 배치", "크기", "스타일")
+VISUAL_DECISIONS = ("문구", "톤", "이미지 스타일", "색", "서체", "구체 치수", "그리드", "스타일")
 # 통일 전 표기. 필드 이름으로 다시 쓰지 않는다.
 OLD_FIELD_LABELS = ("채택한 방향", "채택된 방향", "미결 쟁점")
 # cases.json의 status 허용값. 실행 후 상태를 갱신해도 계약 검사가 깨지지 않아야 한다.
@@ -153,7 +153,7 @@ class WorkflowContractTest(unittest.TestCase):
     def test_run_folder_and_versioning(self) -> None:
         text = read(WORKFLOW / "lead-state-lifecycle.md")
         for token in ("runs/exhibition-01", "lead-state.md", "evidence-index.md",
-                      "review-v1.md", "review-v2.md", "확인"):
+                      "review-v1.html", "review-v2.html", "확인"):
             self.assertIn(token, text, f"실행 기록 규칙에 '{token}'가 없다")
         self.assertIn("근거 ID", read(WORKFLOW / "task-exchange.md"))
         self.assertIn("evidence-index.md", read(ROOT / "docs/architecture.html"))
@@ -224,8 +224,8 @@ class WorkflowContractTest(unittest.TestCase):
     def test_handoff_lives_in_the_review_adoption_section(self) -> None:
         lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
         for name, text in (("level-1.md", self.level1), ("lead-state-lifecycle.md", lifecycle)):
-            self.assertIn("## 채택", text, f"{name}에 채택 절 규칙이 없다")
-            self.assertIn("review-vN.md", text, f"{name}가 채택 절 파일명을 밝히지 않는다")
+            self.assertIn('<section id="adoption">', text, f"{name}에 채택 절 규칙이 없다")
+            self.assertIn("review-vN.html", text, f"{name}가 채택 절 파일명을 밝히지 않는다")
             self.assertIn("번호가 가장 높은", text,
                           f"{name}가 레벨 2가 여는 리뷰 파일을 밝히지 않는다")
             self.assertIn("handoff.md", text, f"{name}가 별도 인계 파일을 언급하지 않는다")
@@ -269,7 +269,7 @@ class WorkflowContractTest(unittest.TestCase):
 
     def test_dir_is_a_task_direction(self) -> None:
         lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
-        boundary = self.section(lifecycle, "## 과제 방향(`DIR`)과 시각·표현 방향의 경계")
+        boundary = self.section(lifecycle, "## 과제 방향(`DIR`)·디자인 원칙과 시각·표현 방향의 경계")
         for scope in ("무엇을", "누구에게", "어떤 순서로", "어떤 정보를"):
             self.assertIn(scope, boundary, f"과제 방향 범위 '{scope}'가 없다")
         for decision in VISUAL_DECISIONS:
@@ -280,7 +280,7 @@ class WorkflowContractTest(unittest.TestCase):
 
     def test_brief_only_path(self) -> None:
         path = self.section(self.level1, "## 브리프만 요청한 경우")
-        for token in ("1·2단계", "brief-v1.md", "review-vN.md", "멈춘다", "DIRECT",
+        for token in ("1·2단계", "brief-v1.md", "review-vN.html", "멈춘다", "DIRECT",
                       "visual-design-drafting"):
             self.assertIn(token, path, f"브리프 전용 경로에 '{token}'이 없다")
         self.assertIn("브리프만 요청한 경우", read(WORKFLOW / "context-align.md"),
@@ -308,6 +308,37 @@ class WorkflowContractTest(unittest.TestCase):
         step7 = next(line for line in self.level1.splitlines() if line.startswith("7. "))
         self.assertIn("절차 보고", step7, "답변 첫머리 규칙이 대화 답변에 걸리지 않는다")
 
+    def test_report_format_contract(self) -> None:
+        """HTML 검토 보고서의 절 순서가 형식 문서·템플릿·평가 범위에서 같은지."""
+        fmt = read(WORKFLOW / "report-format.md")
+        rows = re.findall(r"^\| (\d+) \| `([a-z]+)` \|", fmt, re.M)
+        ids = [name for _, name in rows]
+        self.assertEqual([int(n) for n, _ in rows], list(range(1, len(rows) + 1)))
+        self.assertEqual(ids, load_cases()["scope"]["report_sections"], "형식 문서와 평가 범위의 절이 다르다")
+        template = read(ROOT / "visual-design-planning/assets/report-template.html")
+        found = re.findall(r'id="(%s)"' % "|".join(ids), template)
+        self.assertEqual(found, ids, "템플릿의 절 id 순서가 형식 문서와 다르다")
+        self.assertNotIn("<script", template, "템플릿은 스크립트 없이 완결해야 한다")
+        self.assertIsNone(re.search(r'(?:src|href)="https?://', template), "템플릿이 외부 자원을 부른다")
+        for badge in ("b-rec\">[측정/기록]", "b-int\">[추론]", "b-hyp\">[추측]", "b-user\">사용자 확정"):
+            self.assertIn(badge.replace("\\", ""), template, f"템플릿 배지 {badge}가 태그 이름과 다르다")
+        adoption = template.split('<section class="part" id="adoption"', 1)[1].split("</section>", 1)[0]
+        self.assertIn("기준 브리프: brief-vN.md", adoption)
+        self.assertEqual(re.findall(r"<h3>([^<]+)</h3>", adoption), list(HANDOFF_FIELDS),
+                         "템플릿 채택 절의 필드 이름·순서가 인계 계약과 다르다")
+        for name in ("level-1.md", "lead-state-lifecycle.md"):
+            self.assertIn("(report-format.md)", read(WORKFLOW / name), f"{name}가 보고서 형식을 가리키지 않는다")
+        self.assertIn("assets/report-template.html", self.skill)
+
+    def test_principles_boundary(self) -> None:
+        lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
+        boundary = self.section(lifecycle, "## 과제 방향(`DIR`)·디자인 원칙과 시각·표현 방향의 경계")
+        for allowed in ("같은 자리", "세로 목록", "가장 크게"):
+            self.assertIn(allowed, boundary, f"허용 원칙 예시 '{allowed}'가 없다")
+        for excluded in ("색", "서체", "톤", "구체 치수", "문구"):
+            self.assertIn(excluded, boundary, f"제외 항목 '{excluded}'가 없다")
+        self.assertIn("디자인 원칙도", lifecycle, "채택 원칙을 제작 제약으로 넘기는 규칙이 없다")
+
     def test_forbidden_scope(self) -> None:
         self.assertIn("새 인터뷰·설문·현장조사", self.skill)
         self.assertIn("시제품·실험", self.skill)
@@ -323,7 +354,7 @@ class WorkflowContractTest(unittest.TestCase):
             self.assertIn(tag, exchange, f"주장 구분 '{tag}'가 task-exchange.md에 없다")
             self.assertIn(tag, self.level1,
                           f"7단계가 '{tag}'를 검토 보고서에 적용하지 않는다")
-        self.assertIn("review-vN.md", exchange, "태그 규칙이 총괄 자신의 보고서를 가리키지 않는다")
+        self.assertIn("review-vN.html", exchange, "태그 규칙이 총괄 자신의 보고서를 가리키지 않는다")
         self.assertIn("총괄", exchange)
 
 
@@ -507,7 +538,7 @@ class FixtureContractTest(unittest.TestCase):
         self.assertEqual(case["turns"][0]["expected_steps"], [1, 2])
         self.assertEqual(case["tasks_after_agreement"], [])
         self.assertIn("runs/<run-id>/brief-v1.md", case["expected"]["deliverables"])
-        self.assertIn("runs/<run-id>/review-v1.md", case["expected"]["must_not_create"])
+        self.assertIn("runs/<run-id>/review-v1.html", case["expected"]["must_not_create"])
         self.assertTrue(case["expected"]["unknown_items"])
         self.assertIn("브리프만", case["turns"][0]["text"])
 

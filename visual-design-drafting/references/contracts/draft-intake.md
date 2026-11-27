@@ -49,7 +49,7 @@
 
 | 항목 | 결과 | 근거 위치·비고 |
 | --- | --- | --- |
-| 판형·매체·마감 | `OK` | `review-v2.md#채택-제약`, C-01 |
+| 판형·매체·마감 | `OK` | `review-v2.html#adoption`, C-01 |
 | 실제 원고 | `ASSUMED` | 원고 미제공. 예시 원고 320자, `EXAMPLE-COPY` |
 | 자산 | `CONFLICT` | 로고는 있으나 사용 범위 미확인 → U-02 |
 
@@ -72,7 +72,7 @@ run: /work/exhibition-01/runs/exhibition-01/drafts
 project: 전시 안내물 (A2 포스터 + 3단 리플릿)
 handoff_status: PARTIAL - 안내문 원고 미확정, 판형·위계 근거는 확보
 level1_run: /work/exhibition-01/runs/exhibition-01
-source_review: review-v2.md
+source_review: review-v2.html
 id_origin: LEVEL1
 decision: {adopted_at: "2026-11-20", by: USER, rejected: [DIR-02 "정보 과밀, 1차 대상 아님"]}
 brief:
@@ -93,13 +93,13 @@ deliverables:
   - {id: DEL-01, item: 전시 안내 포스터, medium: "A2 오프셋 인쇄", purpose: 입구에서 열린 전시와 시간을 먼저 인지, priority: 1, evidence: [EV-04, EV-07], draft_track: [draft-a, draft-b]}
   - {id: DEL-02, item: 3단 리플릿, medium: "A4 3단 접지", purpose: 관람 동선과 작품 위치 안내, priority: 2, evidence: [EV-07], draft_track: [draft-a, draft-b]}
 constraints:
-  - {id: C-01, item: 포스터 판형, value: "420x594", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
+  - {id: C-01, item: 포스터 판형, value: "420x594", unit: mm, origin: USER, source: "review-v2.html#adoption"}
   - {id: C-02, item: 필수 문구, value: "기관명·후원 로고·접근성 안내", origin: USER, source: "brief-v2.md#필수조건"}
-  - {id: C-03, item: 리플릿 판형·단 수, value: "148x210, 3단", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
-  - {id: C-04, item: 리플릿 여백·거터, value: "12/12/5", unit: mm, origin: USER, source: "review-v2.md#채택-제약"}
+  - {id: C-03, item: 리플릿 판형·단 수, value: "148x210, 3단", unit: mm, origin: USER, source: "review-v2.html#adoption"}
+  - {id: C-04, item: 리플릿 여백·거터, value: "12/12/5", unit: mm, origin: USER, source: "review-v2.html#adoption"}
 evidence:
-  - {id: EV-04, claim: 문의의 62%가 운영 시간, source_locator: "review-v2.md#표1", level: 기존 문의 기록, limit: 표본 1개월}
-  - {id: EV-07, claim: 입구에서 3초 안에 시간을 찾지 못함, source_locator: "review-v2.md#관찰", level: 관찰 기록, limit: 관찰자 1명}
+  - {id: EV-04, claim: 문의의 62%가 운영 시간, source_locator: "review-v2.html#fn4", level: 기존 문의 기록, limit: 표본 1개월}
+  - {id: EV-07, claim: 입구에서 3초 안에 시간을 찾지 못함, source_locator: "review-v2.html#fn7", level: 관찰 기록, limit: 관찰자 1명}
 unresolved:
   - {id: U-01, issue: 안내문 원고 최종본, decider: USER, effect_on_draft: 본문 줄 수·수용량 미확정}
   - {id: U-02, issue: 후원 로고 사용 범위, decider: USER, effect_on_draft: 하단 띠 배치 후보만 가능}
