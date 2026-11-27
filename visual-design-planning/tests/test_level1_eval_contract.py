@@ -329,6 +329,11 @@ class WorkflowContractTest(unittest.TestCase):
         for name in ("level-1.md", "lead-state-lifecycle.md"):
             self.assertIn("(report-format.md)", read(WORKFLOW / name), f"{name}가 보고서 형식을 가리키지 않는다")
         self.assertIn("assets/report-template.html", self.skill)
+        self.assertIn("완료 기준 대조", fmt, "보고서 부록에 완료 기준 대조가 없다")
+        self.assertIn("<summary>완료 기준 대조</summary>", template, "템플릿 부록에 완료 기준 대조가 없다")
+        self.assertIn("채택 전 문구를 그대로 남기지 않는다", fmt)
+        self.assertIn("자기 말(예: \"B안\")", read(WORKFLOW / "lead-state-lifecycle.md"),
+                      "사람이 자기 말로 채택할 때의 처리 규칙이 없다")
 
     def test_principles_boundary(self) -> None:
         lifecycle = read(WORKFLOW / "lead-state-lifecycle.md")
@@ -348,7 +353,8 @@ class WorkflowContractTest(unittest.TestCase):
                      "`A` 또는 `B` 근거를 하나 이상", "맞비교하지 않는다",
                      "\"근거 없음\"으로 비우고", "몇 명 중 몇 명", "자기 점검",
                      "대상 조건에 맞는 근거부터", "교란 요인", "출처끼리 결과가 다르면",
-                     "반박하는 근거도 찾고"):
+                     "반박하는 근거도 찾고", "레벨 1이 하지 않는 일", "도달 수 비",
+                     "자료를 엮은 해석이므로 `[추론]`"):
             self.assertIn(rule, std, f"분석 기준에 '{rule}' 규칙이 없다")
         self.assertIn("analysis-standards.md", self.skill)
         for name in ("lead-state-lifecycle.md", "report-format.md"):
