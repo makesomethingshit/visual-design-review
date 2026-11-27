@@ -105,6 +105,8 @@ class CheckReportTest(unittest.TestCase):
                          "<style>@import url('https://example.com/a.css');</style>",
                          '<p style="background:url(//example.com/a.png)">x</p>'):
             self.assertTrue(any("외부 자원" in p for p in self.problems(page(external))), external)
+        head_script = page().replace("</head>", "<script>alert('test')</script></head>")
+        self.assertTrue(any("스크립트" in p for p in self.problems(head_script)))
         quoted_badge = page("<p>단계 <span class='badge b-int'>해석</span></p>")
         self.assertTrue(any("배지 이름" in p for p in self.problems(quoted_badge)))
 

@@ -87,7 +87,8 @@ def check(page: str, evidence: str | None = None) -> dict:
         label = visible_text(badge).strip()
         if label not in TAGS:
             problems.append(f"배지 이름이 태그와 다름: {label}")
-    if re.search(r"<script\b", body) or EXTERNAL.search(page):
+    whole = re.sub(r"<!--.*?-->", " ", page, flags=re.S)
+    if re.search(r"<script\b", whole, flags=re.I) or EXTERNAL.search(whole):
         problems.append("스크립트나 외부 자원이 있음")
 
     refs = sorted(set(re.findall(FN_REF, body)), key=lambda x: int(x[2:]))
