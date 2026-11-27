@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>성수동 빵집 '오후의 빵' 로고·포스터 — 무엇부터 정할까 · 디자인 기획 보고서</title>
+<style>
+:root{color-scheme:light;--ink:#16201c;--sub:#4a5a54;--muted:#7a8984;--line:#dfe6e2;--paper:#fbfbf8;--card:#fff;--accent:#165855;--accent-soft:#e6f0ec;--warn:#b0632b;--warn-soft:#f8ece2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 "Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}
+main{max-width:980px;margin:auto;padding:0 24px 80px}
+a{color:var(--accent);text-underline-offset:.15em}
+h1,h2,h3,h4{letter-spacing:-.025em;line-height:1.25;margin:0}
+p{margin:0 0 .9em}
+/* 표지 */
+.cover{padding:72px 0 40px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.cover h1{font-size:clamp(2.1rem,5.4vw,3.6rem);margin:.35em 0 .5em;font-weight:800}
+.problem{font-size:clamp(1.2rem,2.6vw,1.55rem);font-weight:700;line-height:1.45;padding:22px 26px;background:var(--accent);color:#fff;border-radius:14px;margin:0 0 22px}
+.problem small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.12em;opacity:.75;margin-bottom:6px}
+.summary{font-size:1.08rem;color:var(--sub);max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted);margin-top:18px}
+.meta b{color:var(--sub);font-weight:600}
+/* 섹션 */
+section.part{padding:56px 0 8px}
+.part-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.num{font-size:2.4rem;font-weight:800;color:var(--accent);opacity:.25;line-height:1}
+.part-head h2{font-size:1.6rem}
+.lead{font-size:1.06rem;color:var(--sub);max-width:68ch;margin-bottom:22px}
+/* 수치 카드 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.stat .v{font-size:2rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1.1}
+.stat .l{font-size:.9rem;color:var(--sub);margin-top:6px}
+/* 방법 블록 */
+.method{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:0 0 22px}
+.method .tag{display:inline-block;font-size:.75rem;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+.method h3{font-size:1.25rem;margin-bottom:6px}
+.method .why{color:var(--sub);margin-bottom:16px}
+figure{margin:0;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:720px;height:auto}
+figure svg a{cursor:pointer}
+.method .table-wrap+.reads,.method figure+.reads{margin-top:14px}
+.reads{margin-top:14px;padding:14px 18px;background:var(--accent-soft);border-radius:10px;font-size:.98rem}
+.reads b{color:var(--accent)}
+/* 인사이트 */
+.insights{display:grid;gap:14px}
+.insight{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.insight .i{font-size:1.5rem;font-weight:800;color:var(--accent)}
+.insight h3{font-size:1.15rem;margin-bottom:6px}
+.insight p{color:var(--sub);margin:0}
+.insight .but{margin-top:8px;padding-left:10px;border-left:3px solid var(--warn);color:var(--sub)}
+/* 재정의·기회 */
+.reframe{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:22px}
+.reframe .box{border-radius:12px;padding:18px 20px}
+.reframe .from{background:#eef0ee;color:var(--sub)}
+.reframe .to{background:var(--accent);color:#fff;font-weight:700}
+.reframe .box small{display:block;font-size:.72rem;letter-spacing:.1em;opacity:.75;margin-bottom:6px}
+.reframe .arrow{align-self:center;font-size:1.6rem;color:var(--accent)}
+.hmw{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.hmw li{background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:14px 18px;font-weight:600}
+.hmw li span{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:4px}
+/* 방향 카드 */
+.directions{display:grid;gap:18px}
+.method+.directions{margin-top:4px}
+.direction{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:14px;padding:24px 26px}
+.direction .dn{font-size:.78rem;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.direction h3{font-size:1.35rem;margin:.2em 0 .4em}
+.direction .concept{font-size:1.06rem;margin-bottom:14px}
+.direction dl{display:grid;grid-template-columns:120px 1fr;gap:8px 16px;margin:0}
+.direction dt{font-size:.85rem;font-weight:700;color:var(--muted)}
+.direction dd{margin:0}
+.principles{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.principles li{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-size:.9rem;font-weight:600}
+.trace{margin-top:16px;font-size:.84rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+/* 다음 단계 */
+.next{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.next li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.next li b{color:var(--accent);margin-right:6px}
+/* 배지·각주 */
+.badge{display:inline-block;font-size:.68rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:.12em}
+.b-rec{background:#e3ece8;color:#165855}.b-int{background:#eae6f4;color:#4b3f7a}.b-hyp{background:var(--warn-soft);color:var(--warn)}.b-user{background:#eef0ee;color:var(--sub)}
+sup a{text-decoration:none;font-size:.72rem;font-weight:700;padding:0 1px}
+/* 표 */
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:.93rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.8rem;color:var(--muted);font-weight:700;background:#f4f6f4}
+/* 채택 */
+.adoption{background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:26px;margin-top:8px}
+.adoption .basis{font-weight:700;color:var(--accent)}
+.adoption h3{font-size:1.1rem;margin:22px 0 10px}
+.status{display:inline-block;font-size:.75rem;font-weight:700;border-radius:4px;padding:1px 7px;background:#eef0ee;color:var(--sub)}
+.status.on{background:var(--accent);color:#fff}
+/* 부록 */
+.appendix{margin-top:64px;border-top:2px solid var(--ink);padding-top:18px}
+.appendix h2{font-size:1rem;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details>div{padding:12px 0;font-size:.93rem}
+details h3{font-size:.95rem;margin:18px 0 8px}
+details h3:first-child{margin-top:0}
+details ul{margin:0;padding-left:1.2em}
+details li{margin-bottom:4px}
+ol.fn{padding-left:1.4em;font-size:.88rem;color:var(--sub)}
+ol.fn li{margin-bottom:6px}
+@media (max-width:640px){.reframe{grid-template-columns:1fr}.reframe .arrow{transform:rotate(90deg);justify-self:center}.direction dl{grid-template-columns:1fr}.insight{grid-template-columns:1fr}}
+@media print{body{background:#fff}.method,.direction,.insight,.stat{break-inside:avoid}}
+</style>
+</head>
+<body><main>
+<header class="cover" id="cover">
+<p class="kicker">Design Planning Report · visual-design-planning Level 1</p>
+<h1>'오후의 빵' 로고·포스터: 무엇부터 정할까</h1>
+<p class="problem"><small>PROBLEM STATEMENT</small>20~30대가 주 고객인 성수동 '오후의 빵'에서 오후 시간대 손님이 줄었다 <span class="badge b-user">사용자 확정</span>. 이 감소가 가게를 알리는 방식(로고·포스터)으로 풀 문제인지는 아직 근거가 없다 <span class="badge b-hyp">[추측]</span>.</p>
+<p class="summary">먼저 정할 것은 ① 오후 손님이 언제부터 얼마나 줄었는지를 가게 결제 기록으로 확인하고 포스터가 맡을 일(오후에 들를 이유를 알리는 것인지)을 정하는 것, ② 그다음 지금 로고를 살릴지 새로 할지를 정하는 것, ③ 마지막으로 포스터에 넣을 정보와 순서를 정하는 것이다 <span class="badge b-int">[추론]</span>. 다만 이번 조사에서는 대상 손님을 직접 관찰한 자료(A)나 원자료(B)를 하나도 열지 못했다. 그래서 이 순서는 일정과 결과물의 선후 관계에서 나온 판단이고, 손님 감소의 원인이나 로고 교체의 효과는 판정하지 않았다.</p>
+<div class="meta"><span><b>의뢰</b> 로고(유지·교체 판단 포함)·A2 포스터 2장·인스타 게시물</span><span><b>대상</b> 20~30대 손님, 오후 시간대</span><span><b>조사</b> 2026-11-27</span><span><b>자료</b> 공개 보도 4건(C), 서지만 확인 1건(C), 가이드 제목 1건(D)</span><span><b>방법</b> 문헌·기존자료 조사, 핵심 사실</span><span><b>기준 브리프</b> brief-v2.md</span><span><b>실행 경로</b> runs/ohuui-ppang-01/</span></div>
+</header>
+
+<section class="part" id="situation" aria-labelledby="p1"><div class="part-head"><span class="num">01</span><h2 id="p1">상황 한눈에</h2></div>
+<p class="lead">성수 상권 전체는 공개 보도 기준으로 줄지 않았지만, 시간대·연령대 수치는 찾지 못해 이 가게의 오후 감소와 연결할 수 없다 <span class="badge b-int">[추론]</span>. 아래 수치는 모두 재인용(C)이고 분모가 서로 달라 나란히 비교하지 않는다.</p>
+<div class="stats">
+<div class="stat"><div class="v">34일</div><div class="l">대화일 2026-11-27부터 희망 마감 2026-12-31까지. 사용자 확정 일정에서 계산 <span class="badge b-user">사용자 확정</span></div></div>
+<div class="stat"><div class="v">+82%</div><div class="l">성수 방문객 증가율(지난해 대비, 외국인 방문객 기준으로 보도). 쿠시먼앤드웨이크필드 보고서 재인용, 등급 C <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">36.0%</div><div class="l">성수역 도보상권 커피전문점 소비액 중 20대 여성 비중. NH농협카드 보고서 재인용, 기간 미상, 등급 C <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup></div></div>
+<div class="stat"><div class="v">35%→26%</div><div class="l">서울 팝업 중 성동구 비중, 2026 상반기. 스위트스팟 자료 재인용, 등급 C <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a></sup></div></div>
+</div>
+</section>
+
+<section class="part" id="methods" aria-labelledby="p2"><div class="part-head"><span class="num">02</span><h2 id="p2">문제 들여다보기</h2></div>
+<div class="method"><span class="tag">문헌·기존자료 조사</span>
+<h3>공개 자료로는 성수 상권 전체 흐름만 보이고, 오후 시간대·베이커리·20~30대 조건을 함께 담은 자료는 열지 못했다</h3>
+<p class="why">오후 감소가 이 가게만의 일인지 상권 전체의 일인지에 따라 포스터가 맡을 일이 달라지므로 먼저 골랐다. 시간대·연령대 원자료(서울 열린데이터광장 상권 추정매출)는 접근이 막혀 보도 재인용(C)만 남았다.</p>
+<figure><div class="table-wrap"><table>
+<tr><th>확인할 것</th><th>찾은 자료</th><th>등급</th><th>이 가게 판단에 쓸 수 있나</th></tr>
+<tr><td>성수 상권 방문객 흐름</td><td>외국인 방문객 지난해 대비 82% 증가, 매출 상위 10개 브랜드 2023년 대비 175% 증가 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></td><td>C</td><td>배경으로만. 시간대·연령대·업종 없음</td></tr>
+<tr><td>성수 소비층 연령</td><td>성수역 도보상권 핵심 소비층 20대 여성, 커피전문점 소비액 36.0% <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup></td><td>C</td><td>사용자 관찰(20~30대가 많음)과 방향은 같지만 베이커리 분리 없음, 2024년 보도</td></tr>
+<tr><td>상권 구조 변화</td><td>성동구 팝업 468건, 서울 내 비중 35%→26%, 연무장길 임대료 5년 전 대비 3배 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a></sup></td><td>C</td><td>배경으로만</td></tr>
+<tr><td>성수역 이용</td><td>일평균 승하차 순위 2018년 42위 → 2024년 13위 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn4">4</a></sup></td><td>C</td><td>순위만. 시간대 없음</td></tr>
+<tr><td>오후 시간대 매출·유동인구</td><td>근거 없음 — 원자료 접근 실패</td><td>—</td><td>판정 불가</td></tr>
+<tr><td>이 가게의 시간대별 결제 기록</td><td>근거 없음 — 사용자 제공 대기</td><td>—</td><td>제공되면 B 등급 원자료</td></tr>
+</table></div></figure>
+<p class="reads"><b>이 그림이 말하는 것</b> 성수 상권은 공개 보도로는 커지고 있다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 그래서 "상권이 죽어서 오후 손님이 줄었다"는 읽기는 지지받지 못하지만, 시간대 자료가 없어 배제할 수도 없다 <span class="badge b-int">[추론]</span>.</p>
+</div>
+<div class="method"><span class="tag">핵심 사실</span>
+<h3>로고 유지·교체 판단과 제작 조건에 필요한 사실은 아직 대부분 확인 전이다</h3>
+<p class="why">로고 결정과 인쇄 발주가 마감 안에 들어가려면 무엇이 확인됐고 무엇이 비었는지부터 알아야 해서 골랐다. 공식 도움말·표준·학술 원문은 접근이 막혔다.</p>
+<figure><div class="table-wrap"><table>
+<tr><th>사실</th><th>상태</th><th>출처</th><th>판단에 미치는 영향</th></tr>
+<tr><td>포스터 A2, 2장, 가게 앞·근처 카페, 인쇄는 외부 업체</td><td>확인됨 <span class="badge b-user">사용자 확정</span></td><td>사용자 발화 2</td><td>인쇄본은 두 장소에서 보는 거리·조명이 다를 수 있음 <span class="badge b-int">[추론]</span></td></tr>
+<tr><td>로고가 포스터·인스타에 들어간다</td><td>조건부 <span class="badge b-int">[추론]</span></td><td>결과물 구성에서 추론</td><td>로고 결정이 포스터 제작보다 먼저 끝나야 함</td></tr>
+<tr><td>로고 교체가 기존 고객 평가에 미치는 영향</td><td>미확인</td><td>1차 연구 후보 서지만 확인, 내용 미열람<sup><a href="#fn5">5</a></sup></td><td>확인 전까지 근거로 쓰지 않음</td></tr>
+<tr><td>A2 치수, 인스타 게시 비율</td><td>미확인</td><td>표준·공식 도움말 접근 실패, 2차 가이드 제목만 확인<sup><a href="#fn6">6</a></sup></td><td>레벨 2 전에 인쇄 업체와 공식 도움말로 확인</td></tr>
+<tr><td>인쇄 납기·단가, 예산에 인쇄비 포함 여부</td><td>미확인</td><td>—</td><td>마감에서 거꾸로 계산할 때 필요</td></tr>
+</table></div></figure>
+<p class="reads"><b>이 그림이 말하는 것</b> 지금 확정된 제작 조건은 사용자가 말한 값뿐이다 <span class="badge b-user">사용자 확정</span>. 로고 판단에는 현 로고 파일과 로고가 쓰인 곳 목록이 먼저 필요하다 <span class="badge b-int">[추론]</span>.</p>
+</div>
+</section>
+
+<section class="part" id="insights" aria-labelledby="p3"><div class="part-head"><span class="num">03</span><h2 id="p3">핵심 인사이트</h2></div>
+<p class="lead">대상 손님을 직접 관찰한 자료(A)나 원자료(B)가 없어 인사이트로 올린 항목은 없다. 아래는 확인할 가설이다.</p>
+<div class="table-wrap"><table>
+<tr><th>가설</th><th>내용</th><th>확인에 필요한 것</th></tr>
+<tr><td>H-1</td><td>오후 손님 감소는 오후에 들를 이유가 손님에게 보이지 않아서 생겼을 수 있다 <span class="badge b-hyp">[추측]</span></td><td>가게 결제 기록의 시간대별 건수(최근 6~12개월), 오후 진열·소진 상황</td></tr>
+<tr><td>H-2</td><td>감소가 로고·포스터와 무관한 요인(주변 카페·팝업 이동, 메뉴, 빵 소진 시각)에서 왔을 수 있다 <span class="badge b-hyp">[추측]</span></td><td>결제 기록, 사용자가 짐작하는 이유, 상권 시간대 원자료</td></tr>
+<tr><td>H-3</td><td>3년 동안 단골이 지금 로고로 가게를 알아본다면 전면 교체는 그 알아봄을 잃을 수 있다 <span class="badge b-hyp">[추측]</span></td><td>현 로고 파일, 공개 리뷰·태그 게시물에서 로고·간판이 언급·노출되는지, EV-05 원문</td></tr>
+</table></div>
+</section>
+
+<section class="part" id="reframe" aria-labelledby="p4"><div class="part-head"><span class="num">04</span><h2 id="p4">문제 재정의와 디자인 기회</h2></div>
+<div class="method"><span class="tag">근거 기반 문제 재정의</span>
+<h3>"예쁜 새 로고·포스터"보다 "오후에 들를 이유를 알리는 일"이 먼저일 수 있지만, 아직 가설이다</h3>
+<div class="table-wrap"><table>
+<tr><th>렌즈</th><th>문제를 이렇게 읽는다</th><th>지지·상충 근거</th><th>달라지는 결정</th></tr>
+<tr><td><b>처음 의뢰</b></td><td>단장에 맞춰 로고·포스터를 요즘 감성으로 예쁘고 따뜻하게 새로 만든다 <span class="badge b-user">사용자 확정</span></td><td>지지: 사용자 의뢰. 상충: 손님 감소와 연결하는 근거 없음</td><td>로고 전면 교체가 중심</td></tr>
+<tr><td><b>오후 방문 이유</b></td><td>오후 시간대에 들를 이유를 20~30대 손님에게 알리는 문제 <span class="badge b-hyp">[추측]</span></td><td>지지: 사용자 관찰(오후 감소) <span class="badge b-user">사용자 확정</span>. 상충: 시간대 자료 없음</td><td>포스터·인스타의 첫 정보가 오후에 관한 사실이 됨</td></tr>
+<tr><td><b>상권 변화</b></td><td>성수가 외부 방문객·팝업 중심으로 바뀌며 동네 동선이 달라진 문제 <span class="badge b-hyp">[추측]</span></td><td>지지: 방문객 증가·팝업 분산 보도(C)<sup><a href="#fn1">1</a></sup><sup><a href="#fn3">3</a></sup>. 상충: 상권 전체 성장은 감소 설명이 아님</td><td>근처 카페 게시·인스타의 비중이 커짐</td></tr>
+<tr><td><b>로고 자산 보존</b></td><td>3년간 쌓인 알아봄을 지키면서 단장을 알리는 문제 <span class="badge b-hyp">[추측]</span></td><td>지지·상충 모두 아직 없음(EV-05 미열람)<sup><a href="#fn5">5</a></sup></td><td>로고는 보완, 노력은 포스터에</td></tr>
+</table></div>
+<p class="reads"><b>이 표가 말하는 것</b> 어느 렌즈도 A·B 근거가 없다. 가게 결제 기록이 오면 오후 방문 이유 렌즈와 상권 변화 렌즈를 가를 수 있다 <span class="badge b-int">[추론]</span>.</p>
+</div>
+<div class="reframe"><div class="box from"><small>처음 의뢰</small>단장하면서 로고·포스터를 예쁘고 따뜻하게 새로 만들고 싶다</div><span class="arrow">→</span><div class="box to"><small>재정의</small>줄어든 오후 손님에게 들를 이유를 알리되, 3년간 쌓인 가게의 알아봄을 잃지 않으려면 무엇을 바꾸고 무엇을 남길까 (<span class="badge b-hyp">[추측]</span>)</div></div>
+<ul class="hmw"><li>어떻게 하면 가게 앞과 근처 카페를 지나는 20~30대가 오후에 들를 이유를 바로 알 수 있을까?<span>가설 H-1에서</span></li><li>어떻게 하면 로고·포스터로 풀 수 없는 원인을 제작 전에 걸러낼 수 있을까?<span>가설 H-2에서</span></li><li>어떻게 하면 단장 소식을 알리면서 단골이 알아보던 요소를 지킬 수 있을까?<span>가설 H-3에서</span></li></ul>
+</section>
+
+<section class="part" id="directions" aria-labelledby="p5"><div class="part-head"><span class="num">05</span><h2 id="p5">디자인 방향</h2></div>
+<div class="method"><span class="tag">디자인 원칙 생성</span>
+<h3>관찰된 막힘 근거가 없어, 원칙은 결과물의 선후 관계에서 나온 것 하나만 둔다</h3>
+<div class="table-wrap"><table>
+<tr><th>원칙</th><th>조건과 행동</th><th>근거</th><th>예외·충돌</th></tr>
+<tr><td>로고 먼저 확정</td><td>로고가 포스터·인스타에 들어가면, 로고 유지·보완·교체를 포스터 시안 전에 확정한다 <span class="badge b-int">[추론]</span></td><td>결과물 구성 <span class="badge b-user">사용자 확정</span>과 34일 일정에서 추론. 관찰 근거 없음</td><td>로고 결정이 늦어지면 포스터를 로고 없이 먼저 만들 수 있으나 두 번 손봐야 함</td></tr>
+</table></div>
+</div>
+<div class="directions">
+<div class="direction"><span class="dn">DIR-01 · <span class="status">미채택</span></span><h3>오후 방문 이유 우선, 로고는 점검 후 결정</h3>
+<p class="concept">무엇을: 포스터 A2 2장과 인스타 게시물로 오후 시간대 문제를 다루고, 로고는 현 자산을 점검해 유지·보완·교체 중 고른다. 누구에게: 오후에 오던·올 수 있는 20~30대. 순서: 결제 기록 확인 → 로고 결정 → 포스터 정보. 정보: 오후에 관한 사실을 가게 이름보다 먼저 읽히게 할지 레벨 2에서 검토. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>가설 H-1·H-3, HMW 1·3</dd><dt>설계 원칙</dt><dd><ul class="principles"><li>로고 먼저 확정</li></ul></dd><dt>바뀌는 접점</dt><dd>가게 앞, 근처 카페, 인스타</dd><dt>검증할 것</dt><dd>게시 전후 같은 기간 오후 시간대 결제 건수(가게 기록, 새 조사 불필요). 현재 기준값은 사용자 기록 제공 후 확인</dd><dt>잃는 것</dt><dd>"새 로고"라는 단장 신호가 약해질 수 있음</dd></dl>
+<p class="trace">근거 추적 · 사용자 발화 2 → 문헌·기존자료 조사 블록 → H-1·H-3 → 로고 먼저 확정</p></div>
+<div class="direction"><span class="dn">DIR-02 · <span class="status">미채택</span></span><h3>로고 전면 교체를 단장의 중심으로</h3>
+<p class="concept">무엇을: 새 로고를 만들어 간판·포장·포스터·인스타를 함께 바꾼다. 누구에게: 20~30대 손님 전체. 순서: 로고 → 포스터·인스타. 정보: 단장 소식을 먼저. <span class="badge b-hyp">[추측]</span></p>
+<dl><dt>왜</dt><dd>사용자의 처음 의뢰 <span class="badge b-user">사용자 확정</span></dd><dt>설계 원칙</dt><dd><ul class="principles"><li>로고 먼저 확정</li></ul></dd><dt>바뀌는 접점</dt><dd>간판·포장 등 로고가 쓰인 모든 곳(목록 미확인)</dd><dt>검증할 것</dt><dd>게시 전후 같은 기간 시간대별 결제 건수(가게 기록)</dd><dt>잃는 것</dt><dd>단골의 알아봄(H-3, 미확인), 간판·포장 교체비가 200만 원 안에 드는지 미확인</dd></dl>
+<p class="trace">근거 추적 · 사용자 발화 1 → 처음 의뢰 렌즈 → 로고 먼저 확정</p></div>
+</div>
+</section>
+
+<section class="part" id="next" aria-labelledby="p6"><div class="part-head"><span class="num">06</span><h2 id="p6">다음 단계</h2></div>
+<ul class="next"><li><b>결정</b>로고를 바꾸고 싶은 이유(아쉬운 점이 있는지, 단장에 맞춘 교체인지) — 로고 유지·보완·교체 판단의 출발점</li><li><b>결정</b>우선할 손님: 기존 단골·동네 주민과 외부 방문객 중 어느 쪽이 먼저인지</li><li><b>확인</b>가게 결제(POS·카드 단말) 기록의 시간대별 건수, 최근 6~12개월 — 사장님 보유 자료</li><li><b>확인</b>현 로고 파일과 로고가 쓰인 곳(간판·포장·스티커·인스타 프로필) 사진 — 사장님 보유 자료</li><li><b>확인</b>인쇄 업체의 A2 납기·단가, 예산에 인쇄비 포함 여부 — 인쇄 업체·사장님</li><li><b>확인</b>열지 못한 공개 자료: 서울 열린데이터광장 상권 추정매출(시간대·연령대), EV-05 원문, 인스타그램 공식 도움말 — 접근 허용 후 재시도</li><li><b>이어서</b>방향을 고르시면 채택 절을 붙여 레벨 2(visual-design-drafting)로 넘기고 시안을 만든다</li></ul>
+</section>
+
+<section class="appendix" id="appendix" aria-labelledby="ap"><h2 id="ap">APPENDIX</h2>
+<details><summary>각주 · 원문 위치</summary><div><ol class="fn">
+<li id="fn1">쿠시먼앤드웨이크필드 코리아 '알던동네 다른동네 시즌4-성수편', 한국경제 2026-06-06(https://www.hankyung.com/article/2026060607347)·세계일보 2026-06-08(https://www.segye.com/newsView/20260608519541) 본문 재인용. 원 보고서 미열람. EV-01, 등급 C</li>
+<li id="fn2">NH농협카드 성수역 도보상권 분석, SBS Biz 2024-03-25(https://biz.sbs.co.kr/amp/article/20000163165) 본문 재인용. 원 보고서 미열람. EV-02, 등급 C</li>
+<li id="fn3">비즈워치 2026-10-21(https://news.bizwatch.co.kr/article/real_estate/2026/10/20/0023/) 본문, 스위트스팟 자료 재인용. EV-03, 등급 C</li>
+<li id="fn4">서울시 미디어허브 2025-03-19(https://mediahub.seoul.go.kr/archives/2013775), 서울교통공사 2024년 수송통계 재인용. EV-04, 등급 C</li>
+<li id="fn5">Walsh, Winterich, Mittal (2010), Journal of Product &amp; Brand Management. 검색 결과에서 서지만 확인, 초록·원문 미열람. EV-05, 등급 C</li>
+<li id="fn6">Buffer "Instagram's Grid Just Changed", 메타 인스타그램 사이즈 가이드(ampm). 제목만 확인, 본문 미열람. EV-06, 등급 D</li>
+</ol></div></details>
+<details><summary>방법별 상세 표</summary><div><p>본문 두 표가 원자료 전부다. 근거 상세는 runs/ohuui-ppang-01/evidence-index.md.</p></div></details>
+<details><summary>완료 기준 대조</summary><div><div class="table-wrap"><table><tr><th>과제</th><th>완료 기준</th><th>충족</th><th>빠진 것·상충·공백</th></tr>
+<tr><td>T-01 성수 상권 시간대·연령대 흐름</td><td>오후 시간대·20~30대·베이커리 또는 음식 업종 수치와 출처·시점</td><td>부분</td><td>시간대 수치 없음, 보도 재인용만</td></tr>
+<tr><td>T-02 가게 시간대별 결제 기록</td><td>최근 6~12개월 시간대별 건수</td><td>대기</td><td>사용자 자료 제공 필요</td></tr>
+<tr><td>T-03 로고 유지·교체 판단 근거</td><td>현 로고 자산 목록 + 로고 교체 영향 1차 연구 원문</td><td>부분</td><td>자산 목록 대기, 연구 원문 미열람</td></tr>
+<tr><td>T-04 제작 정량 조건</td><td>A2 치수·인스타 비율 공식 출처, 인쇄 납기</td><td>미충족</td><td>공식 원문 접근 실패, 납기는 업체 확인</td></tr>
+<tr><td>T-05 20~30대 빵집 발견 경로 1차 연구</td><td>대상 조건에 맞는 1차 연구 원문</td><td>미충족</td><td>학술 DB 접근 실패</td></tr>
+</table></div></div></details>
+<details><summary>검증과 남은 한계</summary><div><ul>
+<li>문제 정의·인사이트에 A·B 근거 없음 → 인사이트 0개, 가설로 둠.</li>
+<li>맞비교한 수치 없음. 상황 수치는 분모가 달라 따로 둠.</li>
+<li>재인용 수치는 원 보고서까지 추적하지 못함(접근 차단·도구 한도).</li>
+<li>대상 조건(20~30대·오후·빵집)에 맞는 1차 연구 검색은 학술 DB 접근 실패로 수행하지 못함.</li>
+<li>"상권 쇠퇴가 원인이 아니다"는 배제하지 않았다(시간대 자료 없음).</li>
+<li>검증 지표는 가게 결제 기록으로 잴 수 있는 것만 적음. 새 설문·실험은 레벨 1 밖.</li>
+<li>check_report.py 결과는 lead-state.md에 기록.</li>
+</ul></div></details>
+<details><summary>적용한 방법</summary><div><ul>
+<li>문헌·기존자료 조사(01-desk-research/literature-existing-materials.md) → 상권 흐름과 오후 감소의 위치 확인 → 출처별 근거표 → 총괄 순차 수행 → 부분 완료</li>
+<li>핵심 사실(01-desk-research/key-facts.md) → 로고 판단·제작 조건의 확인 상태 정리 → 사실 목록 → 총괄 순차 수행 → 부분 완료</li>
+</ul></div></details>
+<details><summary>과제 상태</summary><div><p>T-01 부분 완료 · T-02 대기 · T-03 부분 완료 · T-04 미수행(원문 접근 실패) · T-05 미수행(원문 접근 실패)</p></div></details>
+</section>
+
+</main></body></html>

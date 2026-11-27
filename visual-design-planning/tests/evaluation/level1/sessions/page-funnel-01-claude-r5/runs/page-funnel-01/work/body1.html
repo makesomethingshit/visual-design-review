@@ -1,0 +1,103 @@
+<body><main>
+
+<header class="cover" id="cover">
+<p class="kicker">Design Planning Report · visual-design-planning Level 1</p>
+<h1>페이지 유료 전환 퍼널 · 무엇부터 손댈 것인가</h1>
+<p class="problem"><small>PROBLEM STATEMENT</small>무료 체험을 시작·진행·종료하는 페이지 사용자가 판단 시점에 "언제 과금되는지, 체험이 언제 끝나는지, 끝나면 무엇이 남는지, 한 달에 얼마인지"를 알 수 없어 구독 판단에서 막힌다.</p>
+<p class="summary">먼저 손댈 곳은 <b>무료 체험의 끝(종료일 인지·종료 후 상태·월 기준 가격 비교)</b>이고, 다음이 <b>체험 시작의 카드 등록·과금 시점 안내</b>다 — 사용성 녹취와 티켓 표본이 같은 지점을 가리킨다 <span class="badge b-int">[추론]</span>. 다만 이벤트 로그로는 어느 단계가 가장 많이 새는지 가릴 수 없고(사용자 ID 없는 월별 집계), 말씀하신 2.4%는 제공 로그에서 재현되지 않으며(가입→구독 도달 수 비 17.2%), 개선이 4%에 닿을지도 이 자료로는 판정할 수 없다<sup><a href="#fn1">1</a></sup> <span class="badge b-rec">[측정/기록]</span>.</p>
+<div class="meta"><span><b>의뢰</b> 유료 전환 퍼널 개선의 우선순위와 근거</span><span><b>대상</b> 가입~구독 판단 단계의 페이지 사용자</span><span><b>조사</b> 2026-11-27 · 제공 자료만(새 조사 없음)</span><span><b>자료</b> Amplitude 집계 2025-05~10 · 사용성 녹취 12건 2025-11 · 티켓 표본 40/240 · 설문 표본 32/512 2025-03</span><span><b>방법</b> 웹 행동 데이터 분석 · 원격 조사 기록 검토 · 내용 분석 · 설문 검토 · 여정 지도 · 삼각검증 · HMW · 원칙 생성</span><span><b>기준 브리프</b> brief-v1.md</span><span><b>실행 경로</b> runs/page-funnel-01/</span></div>
+</header>
+
+<section class="part" id="situation" aria-labelledby="p1"><div class="part-head"><span class="num">01</span><h2 id="p1">상황 한눈에</h2></div>
+<p class="lead">로그는 규모와 채널 차이를, 녹취·티켓은 막히는 지점을 보여 준다. 아래 수치는 분모가 서로 다르므로 카드끼리 맞비교하지 않는다.</p>
+<div class="stats">
+<div class="stat"><div class="v">17.2%</div><div class="l">가입→구독 도달 수 비. 2025-05~10 subscribe 3,308 ÷ signup 19,266(월별 도달 수 합, 코호트 아님). 사용자 확정 2.4%와 불일치 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">±0.1%p</div><div class="l">6개월 동안 월별 단계 도달 수 비의 변동 폭. 2025-08 체험 7→14일 변경·7월 수집 장애에도 흔적 없음 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a>,<a href="#fn2">2</a></sup></div></div>
+<div class="stat"><div class="v">12.0%</div><div class="l">paid_social 가입→구독 도달 수 비(761 ÷ 6,341). 가입의 32.9%를 차지하는 채널 중 가장 낮음(organic 19.0%, referral 25.0%) <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup></div></div>
+<div class="stat"><div class="v">3 / 3</div><div class="l">사용성 테스트의 체험 종료 후 미구독 참가자 3명 전원이 종료 시점 정보(종료일·종료 후 서재 상태)에서 막힘. 2025-11, 등급 A <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn3">3</a>,<a href="#fn6">6</a></sup></div></div>
+<div class="stat"><div class="v">5 / 12</div><div class="l">사용성 참가자 중 요금제를 한 달 기준으로 바로 비교하지 못한 사람 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn4">4</a></sup></div></div>
+<div class="stat"><div class="v">8 / 40</div><div class="l">티켓 무작위 표본 중 '무료 체험' 범주(종료 알림 3·카드 등록 막힘 3·기간 표기 불일치 2). 2025-05~10 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn11">11</a></sup></div></div>
+</div>
+</section>
+
+<section class="part" id="methods" aria-labelledby="p2"><div class="part-head"><span class="num">02</span><h2 id="p2">문제 들여다보기</h2></div>
+
+<div class="method"><span class="tag">기존 웹 행동 데이터 분석</span>
+<h3>로그는 "어느 단계가 가장 새는가"를 가려 주지 못하고, 2.4%도 재현되지 않는다</h3>
+<p class="why">퍼널 수치의 출발점이라 먼저 열었다. 추출본은 월·채널·단계별 도달 사용자 수 집계이고 사용자 ID가 없어, 같은 사람의 단계 이동(코호트 전환율)을 셀 수 없다. 그래서 아래 비율은 '도달 수 비'이며 단계끼리 크기 순위를 매기지 않는다<sup><a href="#fn1">1</a>,<a href="#fn18">18</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>채널(가입 비중)</th><th>signup</th><th>first_book</th><th>trial_end</th><th>subscribe</th><th>first_book÷signup</th><th>trial_end÷first_book</th><th>subscribe÷trial_end ※</th><th>subscribe÷signup</th></tr>
+<tr><td>organic_search (47.0%)</td><td>9,060</td><td>5,618</td><td>2,537</td><td>1,722</td><td>62.0%</td><td>45.2%</td><td>67.9%</td><td>19.0%</td></tr>
+<tr><td>paid_social (32.9%)</td><td>6,341</td><td>3,488</td><td>1,396</td><td>761</td><td>55.0%</td><td>40.0%</td><td>54.5%</td><td>12.0%</td></tr>
+<tr><td>referral (11.9%)</td><td>2,295</td><td>1,629</td><td>804</td><td>574</td><td>71.0%</td><td>49.4%</td><td>71.4%</td><td>25.0%</td></tr>
+<tr><td>content_blog (8.1%)</td><td>1,570</td><td>911</td><td>392</td><td>251</td><td>58.0%</td><td>43.0%</td><td>64.0%</td><td>16.0%</td></tr>
+<tr><td><b>합계</b></td><td>19,266</td><td>11,646</td><td>5,129</td><td>3,308</td><td>60.4%</td><td>44.0%</td><td>64.5%</td><td>17.2%</td></tr>
+</table></div>
+<p class="why" style="margin-top:10px">※ subscribe가 trial_end의 부분집합인지(체험 중 구독 포함 여부) 정의에 없다. 이 열은 참고용이며 다른 열과 같은 단계 전환으로 읽지 않는다<sup><a href="#fn2">2</a></sup>. 체험 시작·카드 등록 이벤트는 추출본에 없다.</p>
+<p class="reads"><b>이 그림이 말하는 것</b> 같은 단계 정의 안에서 paid_social은 세 도달 수 비가 모두 가장 낮고 referral은 모두 가장 높다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn1">1</a></sup>. 그러나 월별 비율이 6개월 내내 ±0.1%p 안에서 같고 8월 체험 기간 변경·7월 수집 장애가 보이지 않아, 집계 방식(고정 비율 산출 여부)을 확인하기 전에는 이 수치로 단계 우선순위나 개선 효과를 판단하지 않는 것이 안전하다 <span class="badge b-int">[추론]</span> EV-01, EV-02.</p>
+</div>
+
+<div class="method"><span class="tag">진행자 동반 원격 조사 기록 검토</span>
+<h3>12명의 막힘은 체험의 시작과 끝, 그리고 요금제 비교에 몰려 있다</h3>
+<p class="why">대상 집단을 직접 관찰한 유일한 1차 기록(A)이라 막힘의 위치를 정하는 중심 근거로 썼다. 세션 요약과 발화 3~4개만 있고 과업별 성공·실패 수와 힌트 사용 여부는 기록되지 않았으며, 관찰 메모는 진행자 1명이 썼다<sup><a href="#fn10">10</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>막힘 코드(과업)</th><th>무료 6명</th><th>체험 종료 후 미구독 3명</th><th>월 구독 3명</th><th>계</th><th>근거</th></tr>
+<tr><td>요금제를 한 달 기준으로 비교 못 함·가격이 화면마다 다름(③)</td><td>P02 [15:44], P05 [17:33], P12 [05:37]</td><td>P03 [13:20], P06 [16:50]</td><td>—</td><td>5/12</td><td><sup><a href="#fn4">4</a></sup></td></tr>
+<tr><td>체험 종료일·종료 알림을 찾지 못함(③)</td><td>P02 [09:18]</td><td>P03 [04:02], P09 [03:35]·[11:12]</td><td>—</td><td>3/12</td><td><sup><a href="#fn3">3</a></sup></td></tr>
+<tr><td>체험 시작 시 카드 등록·과금 시점·해지 조건 모름(②)</td><td>P01 [12:05], P08 [12:58], P12 [10:02]</td><td>—</td><td>—</td><td>3/12</td><td><sup><a href="#fn5">5</a></sup></td></tr>
+<tr><td>체험 종료 후 서재가 남는지 모름·결제 화면 선노출(③)</td><td>—</td><td>P06 관찰·[04:19], P03 [19:11]·[08:37]</td><td>—</td><td>2/12</td><td><sup><a href="#fn6">6</a></sup></td></tr>
+<tr><td>무료 범위(어디까지·몇 권) 모름(①②)</td><td>P01 [07:40], P05 [11:26]</td><td>—</td><td>—</td><td>2/12</td><td><sup><a href="#fn7">7</a></sup></td></tr>
+<tr><td>첫 책 찾기 혼동(카드 구분·부분 검색·표지·"뭘 읽을지")(①)</td><td>P01, P02, P05, P10</td><td>—</td><td>—</td><td>4/12</td><td><sup><a href="#fn9">9</a></sup></td></tr>
+<tr><td>동기화 불신·구독 중 체험 배너·결제 수단 변경(④·구독 후)</td><td>—</td><td>—</td><td>P04, P07, P11</td><td>3/12</td><td><sup><a href="#fn8">8</a></sup></td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 체험 종료 후 미구독 3명은 전원이 체험의 끝(종료일·종료 후 상태·월 가격)에서 막혔고, 무료 사용자 6명 중 3명은 체험 시작의 카드·과금 조건에서 멈칫했다 <span class="badge b-rec">[측정/기록]</span> EV-03~EV-06. 반대로 P09는 "비싸다기보다 몇 권 읽을지 몰라서" 망설였다고 말해, 가격 자체보다 가치 판단 정보가 문제일 수 있다는 반례가 있다<sup><a href="#fn4">4</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">내용 분석</span>
+<h3>티켓 표본에서 전환 전 단계 문의는 '체험 조건'과 '요금제 차이'로 모인다</h3>
+<p class="why">사용성 테스트와 독립된 자연 발생 기록이라 교차 확인용으로 골랐다. 무작위 표본 40건(전수 240건)이고, 고유 본문 16종이 각 2~3회 반복돼 실제 반복 문의인지 발췌 과정의 복제인지 확인이 필요하다<sup><a href="#fn14">14</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>범주(건/40)</th><th>본문 코드(건)</th><th>퍼널 위치</th><th>근거</th></tr>
+<tr><td>무료 체험 8</td><td>체험 시작 카드 등록 화면에서 막힘 3 · 종료 알림 못 받음 3 · 7일/14일 표기가 화면마다 다름 2</td><td>체험 시작·체험 중·체험 종료</td><td><sup><a href="#fn11">11</a></sup></td></tr>
+<tr><td>결제·가격 8</td><td>월/연 차이("화면에는 할인율만") 3 · 해지 후 결제 3 · 카드 만료 결제수단 변경 2</td><td>구독 결정 3 / 구독 후 5</td><td><sup><a href="#fn12">12</a></sup></td></tr>
+<tr><td>동기화 8 · 검색 8 · UI 혼동 4 · 계정 2 · 기타 2</td><td>위치·서재·북마크 동기화, 부분 제목 검색·완독 필터·자동완성, 밝기·카드 구분, 로그인 방식</td><td>단계 미상(대부분 사용 중 문제)</td><td><sup><a href="#fn13">13</a></sup></td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 전환 전 단계로 위치를 특정할 수 있는 티켓은 11건(무료 체험 8 + 월/연 차이 3)이고, 모두 체험 시작·종료와 요금제 비교에 걸린다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn11">11</a>,<a href="#fn12">12</a></sup>. 7일/14일 표기 불일치는 2025-07-02, 즉 체험 기간 변경(08-01) 전에도 접수됐다<sup><a href="#fn11">11</a>,<a href="#fn2">2</a></sup>. 동기화·검색은 건수가 많지만 전환 전 문제인지 알 수 없다.</p>
+</div>
+
+<div class="method"><span class="tag">기존 설문 자료 검토 · 기존 설문 응답 조사</span>
+<h3>설문은 하나의 우세한 망설임 이유를 보여 주지 않고, 표본 자체에 무결성 문제가 있다</h3>
+<p class="why">구독 의향과 망설임 이유를 직접 묻는 유일한 자료라 열었다. 2025-03 실시로 체험 기간이 7일이던 때이며, 앱 내 배너로 모집한 기존 사용자만 응답했다<sup><a href="#fn15">15</a></sup>.</p>
+<div class="table-wrap"><table>
+<tr><th>문항</th><th>현재 질문과의 정렬</th><th>표본 32건 결과</th><th>재사용 판단</th></tr>
+<tr><td>Q6 망설임 이유</td><td>직접 관련</td><td>무응답 7, 무료 책 부족 5, 동기화 불안·읽을 시간 부족·결제 수단·가격·기타 각 4</td><td>분포만 참고. 우세 이유 없음</td></tr>
+<tr><td>Q4 가격 적정(1=매우 비쌈)</td><td>관련</td><td>평균 2.44</td><td>가격 인식 참고. '비교 가능성'은 묻지 않음</td></tr>
+<tr><td>Q3 체험 충분</td><td>부분(7일 시절)</td><td>평균 3.44</td><td>현재 14일 체험에 그대로 쓰지 않음</td></tr>
+<tr><td>Q2 경로 × plan × Q7</td><td>채널 비교에 쓸 수 있어 보이나</td><td>세 변수가 1:1로 완전히 겹침(지인 추천=무료=필기 8건 등), 32건 중 10건이 실시 기간 밖 날짜</td><td>교차 분석 제외. 원자료 확인 필요</td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 가격을 비싸게 느끼는 경향(Q4 평균 2.44, 척도 중앙 3보다 0.56 낮음)은 있으나 '가격'을 가장 큰 망설임으로 고른 응답은 32건 중 4건이다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn16">16</a></sup>. 표본의 날짜·교차 구조 이상 때문에 설문은 보조 근거로만 쓴다<sup><a href="#fn17">17</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">여정 지도</span>
+<h3>대상 집단 기록이 겹치는 구간은 '체험 시작 → 체험 종료 → 구독 결정'이고, 그 구간은 로그에 이벤트가 비어 있다</h3>
+<p class="why">네 자료의 막힘을 한 흐름 위에 놓아 어디에 근거가 몰리고 어디가 비는지 보려고 그렸다. 단계 순서는 이벤트 정의와 과업 순서에서 가정했고, 근거 없는 칸은 채우지 않았다<sup><a href="#fn2">2</a>,<a href="#fn10">10</a></sup>.</p>
+<figure>
+JOURNEY_SVG
+</figure>
+<p class="reads"><b>이 그림이 말하는 것</b> 사용성·티켓 두 독립 자료가 모두 기록을 가진 칸은 체험 시작, 체험 중, 체험 종료, 구독 결정이다 <span class="badge b-int">[추론]</span> EV-03~EV-06, EV-11, EV-12. 그런데 로그에는 체험 시작 이벤트가 없어, 가장 근거가 몰린 구간의 규모를 지금은 잴 수 없다 <span class="badge b-rec">[측정/기록]</span><sup><a href="#fn2">2</a></sup>.</p>
+</div>
+
+<div class="method"><span class="tag">삼각검증</span>
+<h3>독립 자료 두 종 이상이 수렴하는 주장은 세 가지다</h3>
+<p class="why">녹취(A)·티켓(B)·설문(B)·로그(B)는 대상·시점·측정 방식이 달라, 주장마다 각 자료가 실제로 기록한 범위만 대조했다. 수렴은 제한된 범위의 지지이며 원인을 증명하지 않는다.</p>
+<div class="table-wrap"><table>
+<tr><th>주장</th><th>사용성 녹취(A)</th><th>티켓 표본(B)</th><th>설문 표본(B)</th><th>로그(B)</th><th>판정</th></tr>
+<tr><td>체험 종료일·종료 후 상태를 모른다</td><td>3/12 + 종료 후 상태 2/3<sup><a href="#fn3">3</a>,<a href="#fn6">6</a></sup></td><td>알림 3 · 기간 표기 2<sup><a href="#fn11">11</a></sup></td><td>Q8 '체험 길이' 4(뜻 불명)<sup><a href="#fn16">16</a></sup></td><td>위치 특정 불가</td><td>수렴(A+B)</td></tr>
+<tr><td>요금제를 한 달 기준으로 비교하지 못한다</td><td>5/12<sup><a href="#fn4">4</a></sup></td><td>월/연 차이 3<sup><a href="#fn12">12</a></sup></td><td>Q4 평균 2.44 / Q6 가격 4<sup><a href="#fn16">16</a></sup></td><td>해당 없음</td><td>수렴(A+B), 설문과 부분 상충</td></tr>
+<tr><td>체험 시작의 카드 등록·과금 시점이 불투명하다</td><td>3/12<sup><a href="#fn5">5</a></sup></td><td>카드 등록 막힘 3<sup><a href="#fn11">11</a></sup></td><td>Q6 결제 수단 4<sup><a href="#fn16">16</a></sup></td><td>이벤트 없음</td><td>수렴(A+B)</td></tr>
+<tr><td>동기화 불안이 구독을 막는다</td><td>구독자 3/3만(전환 후)<sup><a href="#fn8">8</a></sup></td><td>동기화 8(단계 미상)<sup><a href="#fn13">13</a></sup></td><td>Q6 동기화 불안 4<sup><a href="#fn16">16</a></sup></td><td>해당 없음</td><td>불일치: 전환 전 근거는 설문뿐</td></tr>
+<tr><td>paid_social 유입이 약하다</td><td>채널 정보 없음</td><td>채널 정보 없음</td><td>Q2 사용 불가<sup><a href="#fn17">17</a></sup></td><td>도달 수 비 최저<sup><a href="#fn1">1</a></sup></td><td>단일 자료, 이유 미확인</td></tr>
+</table></div>
+<p class="reads"><b>이 그림이 말하는 것</b> 체험의 끝·요금제 비교·체험 시작 세 주장은 녹취와 티켓이 독립적으로 같은 곳을 가리킨다 <span class="badge b-int">[추론]</span> EV-03~EV-06, EV-11, EV-12. 동기화와 채널 문제는 근거가 한 종류이거나 전환 후 문제라 우선순위 근거로는 약하다.</p>
+</div>
+</section>
